@@ -1,0 +1,40 @@
+name: Deploy in master branch
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    env:
+      REPOSITORY_NAME: web-admin
+      REPOSITORY_BRANCH: master
+      REPOSITORY_USERNAME: ${{ secrets.REPOSITORY_USERNAME }}
+      REPOSITORY_ACCESS_TOKEN: ${{ secrets.REPOSITORY_ACCESS_TOKEN }}
+      REMOTE_REPOSITORY: https://${{ secrets.REPOSITORY_USERNAME }}:${{ secrets.REPOSITORY_ACCESS_TOKEN }}@github.com/Gamifyio/web-admin.git
+      SERVER_HOST: ${{ secrets.SERVER_HOST }}
+      SERVER_USER: ${{ secrets.SERVER_USER }}
+      PASSPHRASE: ${{ secrets.PASSPHRASE }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      ENV_MAINNET_CONTENT: ${{ secrets.ENV_MAINNET_CONTENT }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out Repo 
+        uses: actions/checkout@v2
+
+      - name: Setup SSH to server
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: "
+            cd /${{ env.SERVER_USER }}/app-preprod/${{ env.REPOSITORY_NAME }} && 
+            git checkout ${{ env.REPOSITORY_BRANCH }} &&
+            git pull ${{ env.REMOTE_REPOSITORY }} ${{ env.REPOSITORY_BRANCH }} &&
+            rm -rf .env && touch .env && echo ${{ env.ENV_MAINNET_CONTENT }} >> .env &&
+            cd /${{ env.SERVER_USER }}/app-preprod && 
+            docker-compose down &&
+            docker-compose up --build -d
+          "
+          host: ${{ env.SERVER_HOST }}
+          username: ${{ env.SERVER_USER }}
+          passphrase: ${{ env.PASSPHRASE }}
+          privateKey: ${{ env.PRIVATE_KEY }}
