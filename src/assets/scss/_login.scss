@@ -1,0 +1,45 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 100vh;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+
+  &.signin {
+    align-items: flex-start;
+  }
+
+  &__heading {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  &__description {
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+.signin {
+  &__heading {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  &__description {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  &__address {
+    font-size: 14px;
+    text-decoration: underline;
+    margin-bottom: 10px;
+  }
+}
