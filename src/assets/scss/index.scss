@@ -16,7 +16,7 @@
     flex: 1 1 auto;
     overflow: hidden;
     padding-top: 64px;
-    padding-left: 256px;
+    // padding-left: 256px;
   }
 
   &__container {
@@ -51,9 +51,10 @@
   }
 
   &__left {
-    width: 256px;
+    width: 100%;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   &__right {
