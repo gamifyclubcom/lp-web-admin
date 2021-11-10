@@ -48,7 +48,9 @@ const Wallet: React.FC<Props> = ({ address, tokens }) => {
                       <BsStar />
                     </div>
                     <span className="item__token-name">SOLANA</span>
-                    <span className="item__amount">{balance.formatted} SOL</span>
+                    <span className="item__amount">
+                      {balance.formatted} SOL
+                    </span>
                   </div>
                   {listTokens}
                 </div>

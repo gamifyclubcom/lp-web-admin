@@ -6,7 +6,11 @@ import Pool from './Pool';
 import * as poolAPI from '../../api/pool';
 import * as Types from '../../types';
 import { useAlert, useConnection } from '../../hooks';
-import { handdlePoolDataToCreatePoolV3, handdlePoolDataToCreatePoolV4, handlePoolData } from './helper';
+import {
+  handdlePoolDataToCreatePoolV3,
+  handdlePoolDataToCreatePoolV4,
+  handlePoolData,
+} from './helper';
 import { sleep } from '../../shared/helper';
 import { PublicKey } from '@solana/web3.js';
 import { Actions } from '@gamify/onchain-program-sdk';
@@ -31,11 +35,20 @@ const CreatePool = () => {
       const payerPub = publicKey;
       const platform = (await poolAPI.fetchLatestPlatform()) as any;
       const poolData = handlePoolData(data) as any;
-      const initPool = handdlePoolDataToCreatePoolV4(data, payerPub, new PublicKey(platform.publicKey)) as any;
+      const initPool = handdlePoolDataToCreatePoolV4(
+        data,
+        payerPub,
+        new PublicKey(platform.publicKey)
+      ) as any;
 
       const action = new Actions(connection);
-      const { poolTokenXAccount, poolTokenYAccount, poolAccount, transaction, unsignedTransaction } =
-        await action.initPoolV4(initPool);
+      const {
+        poolTokenXAccount,
+        poolTokenYAccount,
+        poolAccount,
+        transaction,
+        unsignedTransaction,
+      } = await action.initPoolV4(initPool);
 
       const signedTxWithWallet = await signTransaction!(unsignedTransaction);
       const sign = signedTxWithWallet.signatures[0];

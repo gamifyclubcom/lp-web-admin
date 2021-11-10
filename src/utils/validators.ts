@@ -9,56 +9,72 @@ const ERROR_MESSAGE_REQUIRED = 'This is a required field.';
 const ERROR_MESSAGE_DATE_TIME = 'Invalid date-time format.';
 const ERROR_MESSAGE_NUMBER = 'Invalid number format.';
 const ERROR_MESSAGE_POSITIVE_NUMBER = 'This field must be greater than 0';
-const ERROR_MESSAGE_NOT_NEGATIVE_NUMBER = 'This field is required greater than or equal to 0.';
-const ERROR_MESSAGE_MAX_TOTAL_SUPPLY = 'This field can not be greater than total supply';
-const ERROR_MESSAGE_MAX_INDIVIDUAL_ALLOCATION = 'This field can not be greater than total raise';
-const ERROR_MESSAGE_MAX_ALLOCATION_ROUND = 'This field can not be greater than total raise';
-const ERROR_MESSAGE_VOTING_START_MIN_VALUE = 'This time field must be later than pool start time';
-const ERROR_MESSAGE_VOTING_END_MIN_VALUE = 'This time field must be later than voting start time';
-const ERROR_MESSAGE_JOIN_POOL_START_MIN_VALUE = 'This time field must be later than voting end time';
-const ERROR_MESSAGE_JOIN_POOL_END_MIN_VALUE = 'This time field must be later than join pool start time';
-const ERROR_MESSAGE_CLAIM_AT_MIN_VALUE = 'This time field must be later than join pool end time';
+const ERROR_MESSAGE_NOT_NEGATIVE_NUMBER =
+  'This field is required greater than or equal to 0.';
+const ERROR_MESSAGE_MAX_TOTAL_SUPPLY =
+  'This field can not be greater than total supply';
+const ERROR_MESSAGE_MAX_INDIVIDUAL_ALLOCATION =
+  'This field can not be greater than total raise';
+const ERROR_MESSAGE_MAX_ALLOCATION_ROUND =
+  'This field can not be greater than total raise';
+const ERROR_MESSAGE_VOTING_START_MIN_VALUE =
+  'This time field must be later than pool start time';
+const ERROR_MESSAGE_VOTING_END_MIN_VALUE =
+  'This time field must be later than voting start time';
+const ERROR_MESSAGE_JOIN_POOL_START_MIN_VALUE =
+  'This time field must be later than voting end time';
+const ERROR_MESSAGE_JOIN_POOL_END_MIN_VALUE =
+  'This time field must be later than join pool start time';
+const ERROR_MESSAGE_CLAIM_AT_MIN_VALUE =
+  'This time field must be later than join pool end time';
 const ERROR_MESSAGE_STRING_LENGTH_255 = 'It is not longer than 255 characters';
 const ERROR_MESSAGE_INVALID_URL = 'This field must be a valid URL';
 const ERROR_MESSAGE_LIMIT_VALUE = 'Value must be between 0 and 100';
-const ERROR_MESSAGE_SPECIAL_CHARACTER = 'This field does not contain special characters.';
+const ERROR_MESSAGE_SPECIAL_CHARACTER =
+  'This field does not contain special characters.';
 const ERROR_MEESAGE_CORRECT_WEBSITE = 'Please input the correct website.';
-const ERROR_MESSAGE_POOL_START_MIN_VALUE = 'This time field must be later than now';
+const ERROR_MESSAGE_POOL_START_MIN_VALUE =
+  'This time field must be later than now';
 const ERROR_MESSAGE_EARLY_DURATION =
   'This field must be shorter than the duration between join pool start time and join pool end time.';
 const ERROR_MESSAGE_FCFS_STAKE_DURATION =
   'This field must be shorter than the duration between join pool start time and join pool end time minus duration of ISOL Exclusive round.';
 const ERROR_MESSAGE_INVALIDE_ADDRESS = 'Please enter the correct SOL address';
-const ERROR_MESSAGE_DECIMALS = 'The number of decimal digits does not exceed two';
-const ERROR_MESSAGE_MAX_CLAIMABLE_PERCENTAGE = 'This field can not be greater than 100';
-const ERROR_MESSAGE_VOTING_PHASE_MAX_VALUE = 'Duration of voting phase cannot be greater than max voting days setting';
+const ERROR_MESSAGE_DECIMALS =
+  'The number of decimal digits does not exceed two';
+const ERROR_MESSAGE_MAX_CLAIMABLE_PERCENTAGE =
+  'This field can not be greater than 100';
+const ERROR_MESSAGE_VOTING_PHASE_MAX_VALUE =
+  'Duration of voting phase cannot be greater than max voting days setting';
 
 export const poolValidator = yup.object().shape({
-  logo: yup.string().test('checkImageLink', 'This field must be a valid URL', (value) => {
-    return new Promise(function (resolve, reject) {
-      if (!value) {
-        return resolve(true);
-      }
-      let timeout = 5000;
-      const img = new Image();
-      img.src = value;
-      let timer: any;
-      img.onerror = img.onabort = function () {
-        clearTimeout(timer);
-        resolve(false);
-      };
-      img.onload = function () {
-        clearTimeout(timer);
-        resolve(true);
-      };
-      timer = setTimeout(function () {
-        // reset .src to invalid URL so it stops previous
-        // loading, but doens't trigger new load
-        img.src = '//!!!!/noexist.jpg';
-        resolve(false);
-      }, timeout);
-    });
-  }),
+  logo: yup
+    .string()
+    .test('checkImageLink', 'This field must be a valid URL', (value) => {
+      return new Promise(function (resolve, reject) {
+        if (!value) {
+          return resolve(true);
+        }
+        let timeout = 5000;
+        const img = new Image();
+        img.src = value;
+        let timer: any;
+        img.onerror = img.onabort = function () {
+          clearTimeout(timer);
+          resolve(false);
+        };
+        img.onload = function () {
+          clearTimeout(timer);
+          resolve(true);
+        };
+        timer = setTimeout(function () {
+          // reset .src to invalid URL so it stops previous
+          // loading, but doens't trigger new load
+          img.src = '//!!!!/noexist.jpg';
+          resolve(false);
+        }, timeout);
+      });
+    }),
   contract_address: yup.string(),
   name: yup
     .string()
@@ -66,7 +82,10 @@ export const poolValidator = yup.object().shape({
     .max(255, ERROR_MESSAGE_STRING_LENGTH_255)
     .matches(/^[^!@#$%^&*(),.?":{}|<>]+$/, ERROR_MESSAGE_SPECIAL_CHARACTER),
   tag_line: yup.string().max(255, ERROR_MESSAGE_STRING_LENGTH_255),
-  website: yup.string().url(ERROR_MESSAGE_INVALID_URL).required(ERROR_MESSAGE_REQUIRED),
+  website: yup
+    .string()
+    .url(ERROR_MESSAGE_INVALID_URL)
+    .required(ERROR_MESSAGE_REQUIRED),
   audit_link: yup.string().notRequired().url(ERROR_MESSAGE_INVALID_URL),
   liquidity_percentage: yup
     .number()
@@ -83,7 +102,10 @@ export const poolValidator = yup.object().shape({
       if (!!value) {
         const schema = yup
           .string()
-          .matches(/http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/, ERROR_MEESAGE_CORRECT_WEBSITE);
+          .matches(
+            /http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/,
+            ERROR_MEESAGE_CORRECT_WEBSITE
+          );
         return schema.isValidSync(value);
       }
       return true;
@@ -114,7 +136,9 @@ export const poolValidator = yup.object().shape({
     .test('checkInvaliAddress', ERROR_MESSAGE_INVALIDE_ADDRESS, (value) => {
       return new Promise(async (resolve) => {
         try {
-          const acc = await getConnection().getAccountInfo(new PublicKey(value || ''));
+          const acc = await getConnection().getAccountInfo(
+            new PublicKey(value || '')
+          );
           if (acc) {
             resolve(true);
           }
@@ -152,7 +176,7 @@ export const poolValidator = yup.object().shape({
       message: ERROR_MESSAGE_JOIN_POOL_START_MIN_VALUE,
       test: (value, context) => {
         // You can access the price field with `this.parent`.
-        if (value && context.parent.voting_end) {
+        if (value && context.parent.voting_phase_is_active) {
           return value.getTime() > context.parent.voting_end.getTime();
         }
         return true;
@@ -200,19 +224,23 @@ export const poolValidator = yup.object().shape({
   token_address: yup
     .string()
     .required(ERROR_MESSAGE_REQUIRED)
-    .test('checkTokenValid', 'Please input a correct token address', (value) => {
-      return new Promise(async (resolve) => {
-        try {
-          const token = await getTokenInfo(getConnection(), value || '');
-          if (token) {
-            resolve(true);
+    .test(
+      'checkTokenValid',
+      'Please input a correct token address',
+      (value) => {
+        return new Promise(async (resolve) => {
+          try {
+            const token = await getTokenInfo(getConnection(), value || '');
+            if (token) {
+              resolve(true);
+            }
+            resolve(false);
+          } catch (error) {
+            resolve(false);
           }
-          resolve(false);
-        } catch (error) {
-          resolve(false);
-        }
-      });
-    }),
+        });
+      }
+    ),
   token_name: yup.string().required(ERROR_MESSAGE_REQUIRED),
   token_symbol: yup.string().required(ERROR_MESSAGE_REQUIRED),
   token_decimals: yup
@@ -232,10 +260,15 @@ export const poolValidator = yup.object().shape({
       return ov === '' ? undefined : cv;
     })
     .positive(ERROR_MESSAGE_POSITIVE_NUMBER)
-    .max(yup.ref('max_allocation_all_phases'), ERROR_MESSAGE_MAX_INDIVIDUAL_ALLOCATION)
+    .max(
+      yup.ref('max_allocation_all_phases'),
+      ERROR_MESSAGE_MAX_INDIVIDUAL_ALLOCATION
+    )
     .required(ERROR_MESSAGE_REQUIRED)
     .typeError(ERROR_MESSAGE_NUMBER),
-  is_checked_fee_information: yup.boolean().oneOf([true], ERROR_MESSAGE_REQUIRED),
+  is_checked_fee_information: yup
+    .boolean()
+    .oneOf([true], ERROR_MESSAGE_REQUIRED),
   early_phase_max_total_alloc: yup
     .number()
     .transform((cv, ov) => {
@@ -247,7 +280,10 @@ export const poolValidator = yup.object().shape({
         sche
           .required(ERROR_MESSAGE_REQUIRED)
           .positive(ERROR_MESSAGE_POSITIVE_NUMBER)
-          .max(yup.ref('max_allocation_all_phases'), ERROR_MESSAGE_MAX_ALLOCATION_ROUND),
+          .max(
+            yup.ref('max_allocation_all_phases'),
+            ERROR_MESSAGE_MAX_ALLOCATION_ROUND
+          ),
     })
     .typeError(ERROR_MESSAGE_NUMBER),
   early_join_duration: yup
@@ -271,7 +307,9 @@ export const poolValidator = yup.object().shape({
               if (value && context.parent.join_pool_end) {
                 return (
                   value <=
-                  (context.parent.join_pool_end.getTime() - context.parent.join_pool_start.getTime()) / (60 * 1000)
+                  (context.parent.join_pool_end.getTime() -
+                    context.parent.join_pool_start.getTime()) /
+                    (60 * 1000)
                 );
               }
               return true;
@@ -292,7 +330,11 @@ export const poolValidator = yup.object().shape({
       message: ERROR_MESSAGE_MAX_TOTAL_SUPPLY,
       test: (value, context) => {
         // You can access the price field with `this.parent`.
-        if (value && context.parent.token_ratio && context.parent.token_total_supply) {
+        if (
+          value &&
+          context.parent.token_ratio &&
+          context.parent.token_total_supply
+        ) {
           return new Decimal(value)
             .mul(context.parent.token_ratio)
             .lessThanOrEqualTo(context.parent.token_total_supply);
@@ -350,14 +392,18 @@ export const poolValidator = yup.object().shape({
                 if (value && context.parent.join_pool_end) {
                   return (
                     value + context.parent.early_join_duration <=
-                    (context.parent.join_pool_end.getTime() - context.parent.join_pool_start.getTime()) / (60 * 1000)
+                    (context.parent.join_pool_end.getTime() -
+                      context.parent.join_pool_start.getTime()) /
+                      (60 * 1000)
                   );
                 }
               }
               if (value && context.parent.join_pool_end) {
                 return (
                   value <=
-                  (context.parent.join_pool_end.getTime() - context.parent.join_pool_start.getTime()) / (60 * 1000)
+                  (context.parent.join_pool_end.getTime() -
+                    context.parent.join_pool_start.getTime()) /
+                    (60 * 1000)
                 );
               }
               return true;
@@ -375,7 +421,10 @@ export const poolValidator = yup.object().shape({
       then: (sche) =>
         sche
           .positive(ERROR_MESSAGE_POSITIVE_NUMBER)
-          .max(yup.ref('max_allocation_all_phases'), ERROR_MESSAGE_MAX_INDIVIDUAL_ALLOCATION)
+          .max(
+            yup.ref('max_allocation_all_phases'),
+            ERROR_MESSAGE_MAX_INDIVIDUAL_ALLOCATION
+          )
           .required(ERROR_MESSAGE_REQUIRED)
           .typeError(ERROR_MESSAGE_NUMBER),
     }),
@@ -407,7 +456,10 @@ export const poolValidator = yup.object().shape({
         sche
           .required(ERROR_MESSAGE_REQUIRED)
           .positive(ERROR_MESSAGE_POSITIVE_NUMBER)
-          .max(yup.ref('max_allocation_all_phases'), ERROR_MESSAGE_MAX_ALLOCATION_ROUND),
+          .max(
+            yup.ref('max_allocation_all_phases'),
+            ERROR_MESSAGE_MAX_ALLOCATION_ROUND
+          ),
     })
     .typeError(ERROR_MESSAGE_NUMBER),
   exclusive_join_duration: yup
@@ -431,7 +483,9 @@ export const poolValidator = yup.object().shape({
               if (value && context.parent.join_pool_end) {
                 return (
                   value <=
-                  (context.parent.join_pool_end.getTime() - context.parent.join_pool_start.getTime()) / (60 * 1000)
+                  (context.parent.join_pool_end.getTime() -
+                    context.parent.join_pool_start.getTime()) /
+                    (60 * 1000)
                 );
               }
               return true;
@@ -450,7 +504,11 @@ export const poolValidator = yup.object().shape({
       message: ERROR_MESSAGE_VOTING_START_MIN_VALUE,
       test: (value, context) => {
         // You can access the price field with `this.parent`.
-        if (value && context.parent.pool_start) {
+        if (
+          context.parent.pool_start.voting_phase_is_active &&
+          value &&
+          context.parent.pool_start
+        ) {
           return value.getTime() > context.parent.pool_start.getTime();
         }
         return true;
@@ -467,7 +525,11 @@ export const poolValidator = yup.object().shape({
       message: ERROR_MESSAGE_VOTING_END_MIN_VALUE,
       test: (value, context) => {
         // You can access the price field with `this.parent`.
-        if (value && context.parent.voting_start) {
+        if (
+          context.parent.pool_start.voting_phase_is_active &&
+          value &&
+          context.parent.voting_start
+        ) {
           return value.getTime() > context.parent.voting_start.getTime();
         }
         return true;
@@ -480,9 +542,14 @@ export const poolValidator = yup.object().shape({
       message: ERROR_MESSAGE_VOTING_PHASE_MAX_VALUE,
       test: (value, context) => {
         // You can access the price field with `this.parent`.
-        if (value && context.parent.max_voting_days) {
+        if (
+          context.parent.pool_start.voting_phase_is_active &&
+          value &&
+          context.parent.max_voting_days
+        ) {
           return (
-            value.getTime() - context.parent.voting_start.getTime() < context.parent.max_voting_days * 3600 * 1000 * 24
+            value.getTime() - context.parent.voting_start.getTime() <
+            context.parent.max_voting_days * 3600 * 1000 * 24
           );
         }
         return true;
@@ -499,31 +566,33 @@ export const adminValidator = yup.object().shape({
 });
 
 export const poolOffchainValidator = yup.object().shape({
-  logo: yup.string().test('checkImageLink', 'This field must be a valid URL', (value) => {
-    return new Promise(function (resolve, reject) {
-      if (!value) {
-        return resolve(true);
-      }
-      let timeout = 5000;
-      const img = new Image();
-      img.src = value;
-      let timer: any;
-      img.onerror = img.onabort = function () {
-        clearTimeout(timer);
-        resolve(false);
-      };
-      img.onload = function () {
-        clearTimeout(timer);
-        resolve(true);
-      };
-      timer = setTimeout(function () {
-        // reset .src to invalid URL so it stops previous
-        // loading, but doens't trigger new load
-        img.src = '//!!!!/noexist.jpg';
-        resolve(false);
-      }, timeout);
-    });
-  }),
+  logo: yup
+    .string()
+    .test('checkImageLink', 'This field must be a valid URL', (value) => {
+      return new Promise(function (resolve, reject) {
+        if (!value) {
+          return resolve(true);
+        }
+        let timeout = 5000;
+        const img = new Image();
+        img.src = value;
+        let timer: any;
+        img.onerror = img.onabort = function () {
+          clearTimeout(timer);
+          resolve(false);
+        };
+        img.onload = function () {
+          clearTimeout(timer);
+          resolve(true);
+        };
+        timer = setTimeout(function () {
+          // reset .src to invalid URL so it stops previous
+          // loading, but doens't trigger new load
+          img.src = '//!!!!/noexist.jpg';
+          resolve(false);
+        }, timeout);
+      });
+    }),
   contract_address: yup.string(),
   name: yup
     .string()
@@ -531,7 +600,10 @@ export const poolOffchainValidator = yup.object().shape({
     .max(255, ERROR_MESSAGE_STRING_LENGTH_255)
     .matches(/^[^!@#$%^&*(),.?":{}|<>]+$/, ERROR_MESSAGE_SPECIAL_CHARACTER),
   tag_line: yup.string().max(255, ERROR_MESSAGE_STRING_LENGTH_255),
-  website: yup.string().url(ERROR_MESSAGE_INVALID_URL).required(ERROR_MESSAGE_REQUIRED),
+  website: yup
+    .string()
+    .url(ERROR_MESSAGE_INVALID_URL)
+    .required(ERROR_MESSAGE_REQUIRED),
   audit_link: yup.string().notRequired().url(ERROR_MESSAGE_INVALID_URL),
   liquidity_percentage: yup
     .number()
@@ -548,7 +620,10 @@ export const poolOffchainValidator = yup.object().shape({
       if (!!value) {
         const schema = yup
           .string()
-          .matches(/http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/, ERROR_MEESAGE_CORRECT_WEBSITE);
+          .matches(
+            /http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/,
+            ERROR_MEESAGE_CORRECT_WEBSITE
+          );
         return schema.isValidSync(value);
       }
       return true;
@@ -648,7 +723,9 @@ export const poolOnchainValidator = yup.object().shape({
               if (value && context.parent.join_pool_end) {
                 return (
                   value <=
-                  (context.parent.join_pool_end.getTime() - context.parent.join_pool_start.getTime()) / (60 * 1000)
+                  (context.parent.join_pool_end.getTime() -
+                    context.parent.join_pool_start.getTime()) /
+                    (60 * 1000)
                 );
               }
               return true;
@@ -700,7 +777,10 @@ export const poolOnchainValidator = yup.object().shape({
       return ov === '' ? undefined : cv;
     })
     .positive(ERROR_MESSAGE_POSITIVE_NUMBER)
-    .max(yup.ref('max_allocation_all_phases'), ERROR_MESSAGE_MAX_INDIVIDUAL_ALLOCATION)
+    .max(
+      yup.ref('max_allocation_all_phases'),
+      ERROR_MESSAGE_MAX_INDIVIDUAL_ALLOCATION
+    )
     .required(ERROR_MESSAGE_REQUIRED)
     .typeError(ERROR_MESSAGE_NUMBER),
   early_phase_max_total_alloc: yup
@@ -714,7 +794,10 @@ export const poolOnchainValidator = yup.object().shape({
         sche
           .required(ERROR_MESSAGE_REQUIRED)
           .positive(ERROR_MESSAGE_POSITIVE_NUMBER)
-          .max(yup.ref('max_allocation_all_phases'), ERROR_MESSAGE_MAX_ALLOCATION_ROUND),
+          .max(
+            yup.ref('max_allocation_all_phases'),
+            ERROR_MESSAGE_MAX_ALLOCATION_ROUND
+          ),
     })
     .typeError(ERROR_MESSAGE_NUMBER),
   max_allocation_all_phases: yup
@@ -730,7 +813,11 @@ export const poolOnchainValidator = yup.object().shape({
       message: ERROR_MESSAGE_MAX_TOTAL_SUPPLY,
       test: (value, context) => {
         // You can access the price field with `this.parent`.
-        if (value && context.parent.token_ratio && context.parent.token_total_supply) {
+        if (
+          value &&
+          context.parent.token_ratio &&
+          context.parent.token_total_supply
+        ) {
           return new Decimal(value)
             .mul(context.parent.token_ratio)
             .lessThanOrEqualTo(context.parent.token_total_supply);
@@ -783,14 +870,18 @@ export const poolOnchainValidator = yup.object().shape({
                   return (
                     value + context.parent.early_join_duration ||
                     0 <=
-                      (context.parent.join_pool_end.getTime() - context.parent.join_pool_start.getTime()) / (60 * 1000)
+                      (context.parent.join_pool_end.getTime() -
+                        context.parent.join_pool_start.getTime()) /
+                        (60 * 1000)
                   );
                 }
               }
               if (value && context.parent.join_pool_end) {
                 return (
                   value <=
-                  (context.parent.join_pool_end.getTime() - context.parent.join_pool_start.getTime()) / (60 * 1000)
+                  (context.parent.join_pool_end.getTime() -
+                    context.parent.join_pool_start.getTime()) /
+                    (60 * 1000)
                 );
               }
               return true;
@@ -808,7 +899,10 @@ export const poolOnchainValidator = yup.object().shape({
       then: (sche) =>
         sche
           .positive(ERROR_MESSAGE_POSITIVE_NUMBER)
-          .max(yup.ref('max_allocation_all_phases'), ERROR_MESSAGE_MAX_INDIVIDUAL_ALLOCATION)
+          .max(
+            yup.ref('max_allocation_all_phases'),
+            ERROR_MESSAGE_MAX_INDIVIDUAL_ALLOCATION
+          )
           .required(ERROR_MESSAGE_REQUIRED)
           .typeError(ERROR_MESSAGE_NUMBER),
     }),
@@ -839,7 +933,10 @@ export const poolOnchainValidator = yup.object().shape({
         sche
           .required(ERROR_MESSAGE_REQUIRED)
           .positive(ERROR_MESSAGE_POSITIVE_NUMBER)
-          .max(yup.ref('max_allocation_all_phases'), ERROR_MESSAGE_MAX_ALLOCATION_ROUND),
+          .max(
+            yup.ref('max_allocation_all_phases'),
+            ERROR_MESSAGE_MAX_ALLOCATION_ROUND
+          ),
     })
     .typeError(ERROR_MESSAGE_NUMBER),
   exclusive_join_duration: yup
@@ -863,7 +960,9 @@ export const poolOnchainValidator = yup.object().shape({
               if (value && context.parent.join_pool_end) {
                 return (
                   value <=
-                  (context.parent.join_pool_end.getTime() - context.parent.join_pool_start.getTime()) / (60 * 1000)
+                  (context.parent.join_pool_end.getTime() -
+                    context.parent.join_pool_start.getTime()) /
+                    (60 * 1000)
                 );
               }
               return true;
@@ -882,7 +981,11 @@ export const poolOnchainValidator = yup.object().shape({
       message: ERROR_MESSAGE_VOTING_START_MIN_VALUE,
       test: (value, context) => {
         // You can access the price field with `this.parent`.
-        if (value && context.parent.pool_start) {
+        if (
+          context.parent.pool_start.voting_phase_is_active &&
+          value &&
+          context.parent.pool_start
+        ) {
           return value.getTime() > context.parent.pool_start.getTime();
         }
         return true;
@@ -899,7 +1002,11 @@ export const poolOnchainValidator = yup.object().shape({
       message: ERROR_MESSAGE_VOTING_END_MIN_VALUE,
       test: (value, context) => {
         // You can access the price field with `this.parent`.
-        if (value && context.parent.voting_start) {
+        if (
+          context.parent.pool_start.voting_phase_is_active &&
+          value &&
+          context.parent.voting_start
+        ) {
           return value.getTime() > context.parent.voting_start.getTime();
         }
         return true;
@@ -912,9 +1019,14 @@ export const poolOnchainValidator = yup.object().shape({
       message: ERROR_MESSAGE_VOTING_PHASE_MAX_VALUE,
       test: (value, context) => {
         // You can access the price field with `this.parent`.
-        if (value && context.parent.max_voting_days) {
+        if (
+          context.parent.pool_start.voting_phase_is_active &&
+          value &&
+          context.parent.max_voting_days
+        ) {
           return (
-            value.getTime() - context.parent.voting_start.getTime() < context.parent.max_voting_days * 24 * 3600 * 1000
+            value.getTime() - context.parent.voting_start.getTime() <
+            context.parent.max_voting_days * 24 * 3600 * 1000
           );
         }
         return true;
@@ -929,7 +1041,9 @@ export const poolChangeAdminValidator = yup.object().shape({
     .test('checkInvaliAddress', ERROR_MESSAGE_INVALIDE_ADDRESS, (value) => {
       return new Promise(async (resolve) => {
         try {
-          const acc = await getConnection().getAccountInfo(new PublicKey(value || ''));
+          const acc = await getConnection().getAccountInfo(
+            new PublicKey(value || '')
+          );
           if (acc) {
             resolve(true);
           }
@@ -941,14 +1055,18 @@ export const poolChangeAdminValidator = yup.object().shape({
     }),
 });
 
-const ERROR_UPDATE_MILESTONE_HAPPENDED = 'Cannot update milestone that has happened';
+const ERROR_UPDATE_MILESTONE_HAPPENDED =
+  'Cannot update milestone that has happened';
 const ERROR_UPDATE_PAST_TIME = `This field cannot be updated before the current time`;
-const ERROR_UPDATE_WHITELIST_DURATION_HAPPENDED = 'Cannot update this field because whitelist round has happened';
-const ERROR_UPDATE_DURATION_HAPPENDED = 'Cannot update this field because exclusive round has happened';
+const ERROR_UPDATE_WHITELIST_DURATION_HAPPENDED =
+  'Cannot update this field because whitelist round has happened';
+const ERROR_UPDATE_DURATION_HAPPENDED =
+  'Cannot update this field because exclusive round has happened';
 const ERROR_UPDATE_EXCLUSIVE_DURATION_PAST_TIME = `Cannot update this field because the end time of exclusive round will be in past`;
 const ERROR_UPDATE_EARLY_DURATION_PAST_TIME = `Cannot update this field because the end time of whitelist round will be in past`;
 
-const ERROR_UPDATE_FCFS_STAKE_DURATION_HAPPENDED = 'Cannot update this field because fcfs stake round has happened';
+const ERROR_UPDATE_FCFS_STAKE_DURATION_HAPPENDED =
+  'Cannot update this field because fcfs stake round has happened';
 const ERROR_UPDATE_FCFS_STAKE_DURATION_PAST_TIME = `Cannot update this field because the end time of fcfs round will be in past`;
 
 export const poolSettimeValidator = yup.object().shape({
@@ -964,7 +1082,8 @@ export const poolSettimeValidator = yup.object().shape({
       test: (value, context) => {
         if (value) {
           return (
-            value.getTime() === new Date(context.parent.join_pool_start).getTime() ||
+            value.getTime() ===
+              new Date(context.parent.join_pool_start).getTime() ||
             new Date(context.parent.join_pool_start).getTime() > Date.now()
           );
         }
@@ -978,7 +1097,11 @@ export const poolSettimeValidator = yup.object().shape({
       message: ERROR_UPDATE_PAST_TIME,
       test: (value, context) => {
         if (value) {
-          return value.getTime() === new Date(context.parent.join_pool_start).getTime() || value.getTime() > Date.now();
+          return (
+            value.getTime() ===
+              new Date(context.parent.join_pool_start).getTime() ||
+            value.getTime() > Date.now()
+          );
         }
         return true;
       },
@@ -995,7 +1118,10 @@ export const poolSettimeValidator = yup.object().shape({
       test: (value, context) => {
         // You can access the price field with `this.parent`.
         if (value && context.parent.new_join_pool_start) {
-          return value.getTime() > new Date(context.parent.new_join_pool_start).getTime();
+          return (
+            value.getTime() >
+            new Date(context.parent.new_join_pool_start).getTime()
+          );
         }
         return true;
       },
@@ -1008,7 +1134,8 @@ export const poolSettimeValidator = yup.object().shape({
       test: (value, context) => {
         if (value) {
           return (
-            value.getTime() === new Date(context.parent.join_pool_end).getTime() ||
+            value.getTime() ===
+              new Date(context.parent.join_pool_end).getTime() ||
             new Date(context.parent.join_pool_end).getTime() > Date.now()
           );
         }
@@ -1022,7 +1149,11 @@ export const poolSettimeValidator = yup.object().shape({
       message: ERROR_UPDATE_PAST_TIME,
       test: (value, context) => {
         if (value) {
-          return value.getTime() === new Date(context.parent.join_pool_end).getTime() || value.getTime() > Date.now();
+          return (
+            value.getTime() ===
+              new Date(context.parent.join_pool_end).getTime() ||
+            value.getTime() > Date.now()
+          );
         }
         return true;
       },
@@ -1039,7 +1170,10 @@ export const poolSettimeValidator = yup.object().shape({
       test: (value, context) => {
         // You can access the price field with `this.parent`.
         if (value && context.parent.new_join_pool_end) {
-          return value.getTime() > new Date(context.parent.new_join_pool_end).getTime();
+          return (
+            value.getTime() >
+            new Date(context.parent.new_join_pool_end).getTime()
+          );
         }
         return true;
       },
@@ -1066,7 +1200,10 @@ export const poolSettimeValidator = yup.object().shape({
       message: ERROR_UPDATE_PAST_TIME,
       test: (value, context) => {
         if (value) {
-          return value.getTime() === new Date(context.parent.claim_at).getTime() || value.getTime() > Date.now();
+          return (
+            value.getTime() === new Date(context.parent.claim_at).getTime() ||
+            value.getTime() > Date.now()
+          );
         }
         return true;
       },
@@ -1092,7 +1229,8 @@ export const poolSettimeValidator = yup.object().shape({
               if (value) {
                 return (
                   value === +context.parent.early_join_duration ||
-                  new Date(context.parent.join_pool_start).getTime() + +context.parent.early_join_duration * 60 * 1000 >
+                  new Date(context.parent.join_pool_start).getTime() +
+                    +context.parent.early_join_duration * 60 * 1000 >
                     Date.now()
                 );
               }
@@ -1110,7 +1248,8 @@ export const poolSettimeValidator = yup.object().shape({
               if (value) {
                 return (
                   value <=
-                  (context.parent.new_join_pool_end.getTime() - context.parent.new_join_pool_start.getTime()) /
+                  (context.parent.new_join_pool_end.getTime() -
+                    context.parent.new_join_pool_start.getTime()) /
                     (60 * 1000)
                 );
               }
@@ -1126,7 +1265,8 @@ export const poolSettimeValidator = yup.object().shape({
               if (value) {
                 return (
                   value === context.parent.early_join_duration ||
-                  context.parent.new_join_pool_start.getTime() + context.parent.new_early_join_duration * 60 * 1000 >
+                  context.parent.new_join_pool_start.getTime() +
+                    context.parent.new_early_join_duration * 60 * 1000 >
                     Date.now()
                 );
               }
@@ -1186,7 +1326,8 @@ export const poolSettimeValidator = yup.object().shape({
                 if (value && context.parent.new_join_pool_end) {
                   return (
                     value + context.parent.new_early_join_duration <=
-                    (context.parent.new_join_pool_end.getTime() - context.parent.new_join_pool_start.getTime()) /
+                    (context.parent.new_join_pool_end.getTime() -
+                      context.parent.new_join_pool_start.getTime()) /
                       (60 * 1000)
                   );
                 }
@@ -1194,7 +1335,8 @@ export const poolSettimeValidator = yup.object().shape({
               if (value && context.parent.new_join_pool_end) {
                 return (
                   value <=
-                  (context.parent.new_join_pool_end.getTime() - context.parent.new_join_pool_start.getTime()) /
+                  (context.parent.new_join_pool_end.getTime() -
+                    context.parent.new_join_pool_start.getTime()) /
                     (60 * 1000)
                 );
               }
@@ -1270,7 +1412,8 @@ export const poolSettimeValidator = yup.object().shape({
               if (value) {
                 return (
                   value <=
-                  (context.parent.new_join_pool_end.getTime() - context.parent.new_join_pool_start.getTime()) /
+                  (context.parent.new_join_pool_end.getTime() -
+                    context.parent.new_join_pool_start.getTime()) /
                     (60 * 1000)
                 );
               }

@@ -27,7 +27,11 @@ interface Props {
   setLoading: (state: boolean) => void;
 }
 
-const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }) => {
+const PoolParticipants: React.FC<Props> = ({
+  pool,
+  loading = false,
+  setLoading,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const { connection } = useConnection();
@@ -36,7 +40,9 @@ const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }
 
   const handleExport = async (contract_address: string) => {
     const res = (await poolAPI.exportJoinedUsersList(contract_address)) as any;
-    const fileName = `joined-users-${moment(new Date()).format('yyyyMMdd-hhmmss')}.csv`;
+    const fileName = `joined-users-${moment(new Date()).format(
+      'yyyyMMdd-hhmmss'
+    )}.csv`;
     const fileType = 'application/vnd.ms-excel;charset=utf-8;';
     const blob = new Blob([res], { type: fileType });
     const file = new File([blob], fileName, { type: fileType });
@@ -49,14 +55,18 @@ const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }
 
     const fetchTokenToDecimal = async () => {
       const action = new Actions(connection);
-      const decimal = await action.getTokenDecimals(new PublicKey(pool.token_x));
+      const decimal = await action.getTokenDecimals(
+        new PublicKey(pool.token_x)
+      );
       setTokenToDecimal(decimal);
     };
 
     const fetchData = async () => {
       await fetchTokenToDecimal();
       const action = new Actions(connection);
-      const poolData = await action.readPool(new PublicKey(pool.contract_address));
+      const poolData = await action.readPool(
+        new PublicKey(pool.contract_address)
+      );
       setPoolData(poolData as IPoolV4ContractData);
     };
 
@@ -84,7 +94,9 @@ const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }
                     disabled
                     required
                     label={'Total joined users'}
-                    value={poolData?.campaign?.exclusive_phase.number_joined_user}
+                    value={
+                      poolData?.campaign?.exclusive_phase.number_joined_user
+                    }
                     fullWidth
                   />
                 </Grid>
@@ -96,7 +108,9 @@ const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }
                     disabled
                     required
                     label={'Total raised SOL'}
-                    value={new Decimal(poolData?.campaign?.exclusive_phase.max_total_alloc || 0)
+                    value={new Decimal(
+                      poolData?.campaign?.exclusive_phase.max_total_alloc || 0
+                    )
                       .div(poolData?.rate || 1)
                       .toDecimalPlaces(tokenToDecimal)
                       .toNumber()}
@@ -111,7 +125,9 @@ const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }
                     disabled
                     required
                     label={'Total sold amount'}
-                    value={new Decimal(poolData?.campaign?.exclusive_phase.sold_allocation || 0)
+                    value={new Decimal(
+                      poolData?.campaign?.exclusive_phase.sold_allocation || 0
+                    )
                       .div(poolData?.rate || 1)
                       .toDecimalPlaces(tokenToDecimal)
                       .toNumber()}
@@ -136,7 +152,9 @@ const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }
                     disabled
                     required
                     label={'Total joined users'}
-                    value={poolData?.campaign?.fcfs_stake_phase?.number_joined_user}
+                    value={
+                      poolData?.campaign?.fcfs_stake_phase?.number_joined_user
+                    }
                     fullWidth
                   />
                 </Grid>
@@ -148,7 +166,9 @@ const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }
                     disabled
                     required
                     label={'Total raised SOL'}
-                    value={new Decimal(poolData?.campaign?.fcfs_stake_phase?.max_total_alloc || 0)
+                    value={new Decimal(
+                      poolData?.campaign?.fcfs_stake_phase?.max_total_alloc || 0
+                    )
                       .div(poolData?.rate || 1)
                       .toDecimalPlaces(tokenToDecimal)
                       .toNumber()}
@@ -163,7 +183,9 @@ const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }
                     disabled
                     required
                     label={'Total sold amount'}
-                    value={new Decimal(poolData?.campaign?.fcfs_stake_phase?.sold_allocation || 0)
+                    value={new Decimal(
+                      poolData?.campaign?.fcfs_stake_phase?.sold_allocation || 0
+                    )
                       .div(poolData?.rate || 1)
                       .toDecimalPlaces(tokenToDecimal)
                       .toNumber()}
@@ -198,7 +220,9 @@ const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }
                 disabled
                 required
                 label={'Total raised SOL'}
-                value={new Decimal(poolData?.campaign?.public_phase.max_total_alloc || 0)
+                value={new Decimal(
+                  poolData?.campaign?.public_phase.max_total_alloc || 0
+                )
                   .div(poolData?.rate || 1)
                   .toDecimalPlaces(tokenToDecimal)
                   .toNumber()}
@@ -213,7 +237,9 @@ const PoolParticipants: React.FC<Props> = ({ pool, loading = false, setLoading }
                 disabled
                 required
                 label={'Total sold amount'}
-                value={new Decimal(poolData?.campaign?.public_phase.sold_allocation || 0)
+                value={new Decimal(
+                  poolData?.campaign?.public_phase.sold_allocation || 0
+                )
                   .div(poolData?.rate || 1)
                   .toDecimalPlaces(tokenToDecimal)
                   .toNumber()}

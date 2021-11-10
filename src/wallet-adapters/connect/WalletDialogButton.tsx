@@ -3,12 +3,12 @@ import React, { FC, MouseEventHandler, useCallback } from 'react';
 import { useWalletDialog } from '@solana/wallet-adapter-material-ui';
 
 export const WalletDialogButton: FC<ButtonProps> = ({
-                                                      children = 'Select Wallet',
-                                                      color = 'primary',
-                                                      variant = 'contained',
-                                                      onClick,
-                                                      ...props
-                                                    }) => {
+  children = 'Select Wallet',
+  color = 'primary',
+  variant = 'contained',
+  onClick,
+  ...props
+}) => {
   const { setOpen } = useWalletDialog();
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(

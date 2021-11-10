@@ -47,7 +47,10 @@ export const UIProvider: React.FC = ({ children }) => {
     });
   };
 
-  const checkOpen = (variant: 'modal' | 'drawer', type: EModalType): boolean => {
+  const checkOpen = (
+    variant: 'modal' | 'drawer',
+    type: EModalType
+  ): boolean => {
     if (variant === 'modal' && (type as EModalType)) {
       return modal.type === type;
     }

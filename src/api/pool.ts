@@ -11,18 +11,30 @@ import * as _ from 'lodash';
 import { PublicKey } from '@solana/web3.js';
 import { Decimal } from 'decimal.js';
 
-export const fetchPool = async (id: string): Promise<Request.PoolTransformedResponse> => {
+export const fetchPool = async (
+  id: string
+): Promise<Request.PoolTransformedResponse> => {
   const data = (await axios.get(`admin/pools/${id}`)) as any;
-  const onchainPool = await new Actions(getConnection()).readPool(new PublicKey(data.contract_address));
+  const onchainPool = await new Actions(getConnection()).readPool(
+    new PublicKey(data.contract_address)
+  );
   const clone: any = _.clone(onchainPool);
   clone.campaign.claim_at = onchainPool.campaign.claim_at.toISOString();
-  clone.campaign.early_join_phase.start_at = onchainPool.campaign.early_join_phase.start_at.toISOString();
-  clone.campaign.early_join_phase.end_at = onchainPool.campaign.early_join_phase.end_at.toISOString();
-  clone.campaign.public_phase.start_at = onchainPool.campaign.public_phase.start_at.toISOString();
-  clone.campaign.public_phase.end_at = onchainPool.campaign.public_phase.end_at.toISOString();
+  clone.campaign.early_join_phase.start_at =
+    onchainPool.campaign.early_join_phase.start_at.toISOString();
+  clone.campaign.early_join_phase.end_at =
+    onchainPool.campaign.early_join_phase.end_at.toISOString();
+  clone.campaign.public_phase.start_at =
+    onchainPool.campaign.public_phase.start_at.toISOString();
+  clone.campaign.public_phase.end_at =
+    onchainPool.campaign.public_phase.end_at.toISOString();
   if ((onchainPool.campaign as any).exclusive_phase) {
-    clone.campaign.exclusive_phase.start_at = (onchainPool.campaign as any).exclusive_phase.start_at.toISOString();
-    clone.campaign.exclusive_phase.end_at = (onchainPool.campaign as any).exclusive_phase.end_at.toISOString();
+    clone.campaign.exclusive_phase.start_at = (
+      onchainPool.campaign as any
+    ).exclusive_phase.start_at.toISOString();
+    clone.campaign.exclusive_phase.end_at = (
+      onchainPool.campaign as any
+    ).exclusive_phase.end_at.toISOString();
     if ((onchainPool.campaign as any).exclusive_phase.snapshot_at) {
       clone.campaign.exclusive_phase.snapshot_at = (
         onchainPool.campaign as any
@@ -30,8 +42,12 @@ export const fetchPool = async (id: string): Promise<Request.PoolTransformedResp
     }
   }
   if ((onchainPool.campaign as any).fcfs_stake_phase) {
-    clone.campaign.fcfs_stake_phase.start_at = (onchainPool.campaign as any).fcfs_stake_phase.start_at.toISOString();
-    clone.campaign.fcfs_stake_phase.end_at = (onchainPool.campaign as any).fcfs_stake_phase.end_at.toISOString();
+    clone.campaign.fcfs_stake_phase.start_at = (
+      onchainPool.campaign as any
+    ).fcfs_stake_phase.start_at.toISOString();
+    clone.campaign.fcfs_stake_phase.end_at = (
+      onchainPool.campaign as any
+    ).fcfs_stake_phase.end_at.toISOString();
   }
   if ((onchainPool as any).voting) {
     clone.voting.start_at = (onchainPool as any).voting.start_at.toISOString();
@@ -46,13 +62,17 @@ export const fetchPool = async (id: string): Promise<Request.PoolTransformedResp
   return tranformData(data);
 };
 
-export const syncPool = async (id: string): Promise<Request.PoolTransformedResponse> => {
+export const syncPool = async (
+  id: string
+): Promise<Request.PoolTransformedResponse> => {
   console.log('sync onchain...');
   const data = await axios.post(`admin/pools/${id}/sync`);
   return tranformData(data);
 };
 
-export const fetchPools = async (params?: Request.PoolsRequest): Promise<Request.PoolsResponse> => {
+export const fetchPools = async (
+  params?: Request.PoolsRequest
+): Promise<Request.PoolsResponse> => {
   const res = (await axios.get('admin/pools', {
     params: { ...params },
   })) as any;
@@ -85,28 +105,37 @@ export const fetchPools = async (params?: Request.PoolsRequest): Promise<Request
       is_active: el.data?.is_active,
       root_admin: el.data?.admins.root_admin,
       max_allocation_all_phases: round(
-        new Decimal(el.data?.campaign.max_allocation_all_phases).div(el.data?.rate).toNumber(),
+        new Decimal(el.data?.campaign.max_allocation_all_phases)
+          .div(el.data?.rate)
+          .toNumber(),
         el.token_to_decimals || 9
       ),
       claim_at: el.data?.campaign.claim_at,
       early_phase_max_total_alloc: round(
-        new Decimal(el.data?.campaign.early_join_phase.max_total_alloc).div(el.data?.rate).toNumber(),
+        new Decimal(el.data?.campaign.early_join_phase.max_total_alloc)
+          .div(el.data?.rate)
+          .toNumber(),
         el.token_to_decimals || 9
       ),
       public_phase_max_individual_alloc: round(
-        new Decimal(el.data?.campaign.public_phase.max_individual_alloc).div(el.data?.rate).toNumber(),
+        new Decimal(el.data?.campaign.public_phase.max_individual_alloc)
+          .div(el.data?.rate)
+          .toNumber(),
         el.token_to_decimals || 9
       ),
       version: el.data.version,
       fcfs_stake_phase_is_active: el.data?.campaign.fcfs_stake_phase?.is_active,
-      fcfs_stake_phase_multiplication_rate: el.data?.campaign.fcfs_stake_phase?.multiplication_rate || 0,
+      fcfs_stake_phase_multiplication_rate:
+        el.data?.campaign.fcfs_stake_phase?.multiplication_rate || 0,
       exclusive_join_duration:
         (new Date(el.data.campaign.exclusive_phase?.end_at).getTime() -
           new Date(el.data.campaign.exclusive_phase?.start_at).getTime()) /
         (60 * 1000),
       exclusive_phase_is_active: el.data.campaign.exclusive_phase?.is_active,
       exclusive_phase_max_total_alloc: round(
-        new Decimal(el.data?.campaign.exclusive_phase?.max_total_alloc || 0).div(el.data?.rate).toNumber(),
+        new Decimal(el.data?.campaign.exclusive_phase?.max_total_alloc || 0)
+          .div(el.data?.rate)
+          .toNumber(),
         el.token_to_decimals || 9
       ),
     };
@@ -114,27 +143,37 @@ export const fetchPools = async (params?: Request.PoolsRequest): Promise<Request
   return res;
 };
 
-export const createPool = (params: Request.CreatePoolRequest): Promise<any> => axios.post('pools', params);
-export const commitCreatePool = (params: Request.CreatePoolRequest & { contract_address: string }): Promise<any> =>
-  axios.post('admin/pools/commit', params);
+export const createPool = (params: Request.CreatePoolRequest): Promise<any> =>
+  axios.post('pools', params);
+export const commitCreatePool = (
+  params: Request.CreatePoolRequest & { contract_address: string }
+): Promise<any> => axios.post('admin/pools/commit', params);
 
 export const addUserToWhitelist = (
   params: Request.AddUserToWhitelistRequest
-): Promise<Request.AddUserToWhitelistResponse> => axios.post('whitelists/add/batch', params);
+): Promise<Request.AddUserToWhitelistResponse> =>
+  axios.post('whitelists/add/batch', params);
 
-export const removeUserToWhitelist = (params: Request.RemoveUserToWhitelistRequest): Promise<any> =>
-  axios.post('whitelists/remove', params);
+export const removeUserToWhitelist = (
+  params: Request.RemoveUserToWhitelistRequest
+): Promise<any> => axios.post('whitelists/remove', params);
 
-export const indexWhitelistedUsers = (params: any): Promise<any> => axios.get('whitelists/index', { params });
+export const indexWhitelistedUsers = (params: any): Promise<any> =>
+  axios.get('whitelists/index', { params });
 
-export const confirmWhitelistedUser = (params: Request.AddUserToWhitelistRequest): Promise<any> =>
-  axios.post('whitelists/confirm', params);
+export const confirmWhitelistedUser = (
+  params: Request.AddUserToWhitelistRequest
+): Promise<any> => axios.post('whitelists/confirm', params);
 
-export const updateOffchainPool = (params: Request.UpdatePoolRequest): Promise<Request.UpdatePoolResponse> => {
+export const updateOffchainPool = (
+  params: Request.UpdatePoolRequest
+): Promise<Request.UpdatePoolResponse> => {
   return axios.put(`admin/pools/${params.id}/off-chain`, params);
 };
 
-export const updateOnchainPool = (params: Request.UpdatePoolRequest): Promise<Request.UpdatePoolResponse> => {
+export const updateOnchainPool = (
+  params: Request.UpdatePoolRequest
+): Promise<Request.UpdatePoolResponse> => {
   return axios.put(`admin/pools/${params.id}/on-chain`, params);
 };
 
@@ -142,11 +181,15 @@ export const changePoolAdmin = (params: Request.ChangePoolAdmin): any => {
   return axios.post(`admin/pools/change-admin`, params);
 };
 
-export const activatePool = (id: string): Promise<Request.UpdatePoolResponse> => {
+export const activatePool = (
+  id: string
+): Promise<Request.UpdatePoolResponse> => {
   return axios.post(`admin/pools/${id}/activate`);
 };
 
-export const fetchParticipants = (params: Request.ParticipantsRequest): Promise<Request.ParticipantsResponse> => {
+export const fetchParticipants = (
+  params: Request.ParticipantsRequest
+): Promise<Request.ParticipantsResponse> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve({
@@ -189,21 +232,28 @@ const tranformData = (data: any) => {
     is_active: data.data.is_active,
     root_admin: data.data.admins.root_admin,
     max_allocation_all_phases: round(
-      new Decimal(data.data?.campaign.max_allocation_all_phases).div(data.data?.rate).toNumber(),
+      new Decimal(data.data?.campaign.max_allocation_all_phases)
+        .div(data.data?.rate)
+        .toNumber(),
       data.token_to_decimals || 9
     ),
     claim_at: data.data.campaign.claim_at,
     early_phase_max_total_alloc: round(
-      new Decimal(data.data?.campaign.early_join_phase.max_total_alloc).div(data.data?.rate).toNumber(),
+      new Decimal(data.data?.campaign.early_join_phase.max_total_alloc)
+        .div(data.data?.rate)
+        .toNumber(),
       data.token_to_decimals || 9
     ),
     public_phase_max_individual_alloc: round(
-      new Decimal(data.data?.campaign.public_phase.max_individual_alloc).div(data.data?.rate).toNumber(),
+      new Decimal(data.data?.campaign.public_phase.max_individual_alloc)
+        .div(data.data?.rate)
+        .toNumber(),
       data.token_to_decimals || 9
     ),
     ...(data.data?.campaign?.exclusive_phase && {
       ...(data.data?.campaign.exclusive_phase.snapshot_at && {
-        exclusive_snapshot_time: data.data?.campaign.exclusive_phase.snapshot_at,
+        exclusive_snapshot_time:
+          data.data?.campaign.exclusive_phase.snapshot_at,
       }),
       exclusive_level1: {
         ...data.data?.campaign.exclusive_phase.level1,
@@ -249,7 +299,8 @@ const tranformData = (data: any) => {
     ...getJoinPoolStartEnd(data.data),
     version: data.data.version || 1,
     fcfs_stake_phase_is_active: data.data?.campaign.fcfs_stake_phase?.is_active,
-    fcfs_stake_phase_multiplication_rate: data.data?.campaign.fcfs_stake_phase?.multiplication_rate || 0,
+    fcfs_stake_phase_multiplication_rate:
+      data.data?.campaign.fcfs_stake_phase?.multiplication_rate || 0,
     fcfs_stake_duration:
       (new Date(data.data.campaign.fcfs_stake_phase?.end_at).getTime() -
         new Date(data.data.campaign.fcfs_stake_phase?.start_at).getTime()) /
@@ -260,7 +311,9 @@ const tranformData = (data: any) => {
       (60 * 1000),
     exclusive_phase_is_active: data.data.campaign.exclusive_phase.is_active,
     exclusive_phase_max_total_alloc: round(
-      new Decimal(data.data?.campaign.exclusive_phase.max_total_alloc).div(data.data?.rate).toNumber(),
+      new Decimal(data.data?.campaign.exclusive_phase.max_total_alloc)
+        .div(data.data?.rate)
+        .toNumber(),
       data.token_to_decimals || 9
     ),
     fees: data.data?.fees || 0,
@@ -277,7 +330,11 @@ const tranformData = (data: any) => {
     voting_start: data.data?.voting?.start_at,
     voting_end: data.data?.voting?.end_at,
     max_voting_days: data.data?.voting?.max_voting_days,
-    is_enough_vote: new Decimal(data.data?.voting?.required_absolute_vote || 0).toNumber() <= new Decimal(data.data?.voting?.total_vote_up || 0).minus(data.data?.voting?.total_vote_down || 0).toNumber(),
+    is_enough_vote:
+      new Decimal(data.data?.voting?.required_absolute_vote || 0).toNumber() <=
+      new Decimal(data.data?.voting?.total_vote_up || 0)
+        .minus(data.data?.voting?.total_vote_down || 0)
+        .toNumber(),
   } as any;
 };
 
@@ -312,4 +369,7 @@ export const fetchLatestPlatform = () => {
 };
 
 const convertToTokenToUnit = (amount: number, rate: number, decimals: number) =>
-  new Decimal(amount).div(new Decimal(rate)).toDecimalPlaces(decimals).toNumber();
+  new Decimal(amount)
+    .div(new Decimal(rate))
+    .toDecimalPlaces(decimals)
+    .toNumber();

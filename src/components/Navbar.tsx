@@ -120,7 +120,10 @@ const Navbar: React.FC = ({ ...rest }) => {
   );
 };
 
-export function displayTimestampUtc(unixTimestamp: number, shortTimeZoneName = false): string {
+export function displayTimestampUtc(
+  unixTimestamp: number,
+  shortTimeZoneName = false
+): string {
   const expireDate = new Date(unixTimestamp);
   const dateString = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',

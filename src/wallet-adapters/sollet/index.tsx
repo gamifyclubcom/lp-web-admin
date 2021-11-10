@@ -45,7 +45,8 @@ export class SolletWalletAdapter extends BaseSignerWalletAdapter {
     this._connecting = false;
     this._wallet = null;
 
-    if (!this.ready) pollUntilReady(this, config.pollInterval || 1000, config.pollCount || 3);
+    if (!this.ready)
+      pollUntilReady(this, config.pollInterval || 1000, config.pollCount || 3);
   }
 
   get publicKey(): PublicKey | null {
@@ -55,7 +56,8 @@ export class SolletWalletAdapter extends BaseSignerWalletAdapter {
   get ready(): boolean {
     return (
       typeof window !== 'undefined' &&
-      (typeof this._provider === 'string' || typeof window.sollet?.postMessage === 'function')
+      (typeof this._provider === 'string' ||
+        typeof window.sollet?.postMessage === 'function')
     );
   }
 
@@ -84,7 +86,9 @@ export class SolletWalletAdapter extends BaseSignerWalletAdapter {
         wallet = new Wallet(provider, this._network);
 
         // HACK: sol-wallet-adapter doesn't reject or emit an event if the popup or extension is closed or blocked
-        const handleDisconnect: (...args: unknown[]) => unknown = (wallet as any).handleDisconnect;
+        const handleDisconnect: (...args: unknown[]) => unknown = (
+          wallet as any
+        ).handleDisconnect;
         let timeout: NodeJS.Timer | undefined;
         let interval: NodeJS.Timer | undefined;
         try {
@@ -95,7 +99,9 @@ export class SolletWalletAdapter extends BaseSignerWalletAdapter {
               resolve();
             };
 
-            (wallet as any).handleDisconnect = (...args: unknown[]): unknown => {
+            (wallet as any).handleDisconnect = (
+              ...args: unknown[]
+            ): unknown => {
               wallet.off('connect', connect);
               reject(new WalletWindowClosedError());
               return handleDisconnect.apply(wallet, args);
@@ -196,7 +202,9 @@ export class SolletWalletAdapter extends BaseSignerWalletAdapter {
     }
   }
 
-  async signAllTransactions(transactions: Transaction[]): Promise<Transaction[]> {
+  async signAllTransactions(
+    transactions: Transaction[]
+  ): Promise<Transaction[]> {
     try {
       const wallet = this._wallet;
       if (!wallet) throw new WalletNotConnectedError();

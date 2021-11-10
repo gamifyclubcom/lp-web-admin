@@ -5,7 +5,11 @@ import { useParams } from 'react-router-dom';
 import * as api from '../../api/pool';
 import ServerError from '../../components/Error/ServerError';
 import { useAlert, useConnection } from '../../hooks';
-import { parseTransaction, sendSignedTransaction, sleep } from '../../shared/helper';
+import {
+  parseTransaction,
+  sendSignedTransaction,
+  sleep,
+} from '../../shared/helper';
 import * as Types from '../../types';
 import Pool from './Pool';
 import useStyles from './styles';
@@ -30,32 +34,33 @@ interface URLParams {
   id: string;
 }
 
-const ReadPool: React.FC=() => {
-  const classes=useStyles();
-  const { alertSuccess, alertError }=useAlert();
-  const [loading, setLoading]=useState<boolean>(false);
-  const [pool, setPool]=useState<Types.Pool|undefined>(undefined);
-  const [error, setError]=useState<Types.ServerError|null>(null);
-  const [value, setValue]=React.useState(0);
-  const [poolIsActive, setPoolIsActive]=useState(false);
-  const handleChange=(event: React.ChangeEvent<{}>, newValue: number) => {
+const ReadPool: React.FC = () => {
+  const classes = useStyles();
+  const { alertSuccess, alertError } = useAlert();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [pool, setPool] = useState<Types.Pool | undefined>(undefined);
+  const [error, setError] = useState<Types.ServerError | null>(null);
+  const [value, setValue] = React.useState(0);
+  const [poolIsActive, setPoolIsActive] = useState(false);
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
-  const [open, setOpen]=useState(false);
-  const [message, setMessage]=useState('');
-  const [title, setTitle]=useState('');
-  const [hideConfirm, setHideConfirm]=useState(false);
-  const [cancelDialogText, setCancelDialogText]=useState('Cancel');
-  const { wallet, connected, publicKey, connect, signTransaction }=useWallet();
-  const { connection }=useConnection();
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [title, setTitle] = useState('');
+  const [hideConfirm, setHideConfirm] = useState(false);
+  const [cancelDialogText, setCancelDialogText] = useState('Cancel');
+  const { wallet, connected, publicKey, connect, signTransaction } =
+    useWallet();
+  const { connection } = useConnection();
 
-  const { id }: URLParams=useParams();
-  const fetchPool=async () => {
+  const { id }: URLParams = useParams();
+  const fetchPool = async () => {
     try {
       if (!id) return;
 
       setLoading(true);
-      const data=await api.fetchPool(id);
+      const data = await api.fetchPool(id);
       if (!data) {
         setError({ code: 404, message: 'Not found' });
         setLoading(false);
@@ -71,8 +76,8 @@ const ReadPool: React.FC=() => {
     }
   };
 
-  const handleClickActiveButton=async () => {
-    if (!connected&&wallet) {
+  const handleClickActiveButton = async () => {
+    if (!connected && wallet) {
       await connect();
       await sleep(3000);
     }
@@ -80,15 +85,21 @@ const ReadPool: React.FC=() => {
       alertError('Please connect your wallet!');
       return;
     }
-    if (publicKey?.toBase58()!==pool?.root_admin) {
+    if (publicKey?.toBase58() !== pool?.root_admin) {
       alertError('You are not admin of this pool');
       setLoading(false);
       return;
     }
-    const tokenYBalance=(
-      await getTokenBalances(connection, pool?.token_address as string, pool?.token_y as string)
+    const tokenYBalance = (
+      await getTokenBalances(
+        connection,
+        pool?.token_address as string,
+        pool?.token_y as string
+      )
     ).toNumber();
-    const totalRaise=new Decimal(pool?.max_allocation_all_phases).mul(pool.token_ratio);
+    const totalRaise = new Decimal(pool?.max_allocation_all_phases).mul(
+      pool.token_ratio
+    );
 
     if (totalRaise.lte(tokenYBalance)) {
       setTitle(`ARE YOU SURE?`);
@@ -102,7 +113,9 @@ const ReadPool: React.FC=() => {
         `This pool account has not been transferred enough tokens.
         Current tokens in the pool: ${tokenYBalance.toString()}
         Required tokens [total raise * ratio]: ${totalRaise.toString()}
-        Please transfer sufficient tokens to pool account before activate it: ${pool?.token_y}`
+        Please transfer sufficient tokens to pool account before activate it: ${
+          pool?.token_y
+        }`
       );
       setHideConfirm(true);
       setCancelDialogText('Ok');
@@ -115,19 +128,19 @@ const ReadPool: React.FC=() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const syncAndFetchPool=async () => {
-    const newPool=await api.syncPool(pool?.id||'');
+  const syncAndFetchPool = async () => {
+    const newPool = await api.syncPool(pool?.id || '');
     setPool(newPool);
     setPoolIsActive(newPool?.is_active);
 
     return newPool;
   };
 
-  const handleActivate=async (id: string) => {
+  const handleActivate = async (id: string) => {
     try {
       setOpen(false);
       setLoading(true);
-      if (!connected&&wallet) {
+      if (!connected && wallet) {
         await connect();
         await sleep(3000);
       }
@@ -138,16 +151,20 @@ const ReadPool: React.FC=() => {
         return;
       }
 
-      if (publicKey?.toBase58()!==pool?.root_admin) {
+      if (publicKey?.toBase58() !== pool?.root_admin) {
         alertError('You are not admin of this pool');
         setLoading(false);
         return;
       }
-      const res = await new Actions(connection).activatePool(publicKey, new PublicKey(pool.contract_address), new PublicKey(pool.platform));
+      const res = await new Actions(connection).activatePool(
+        publicKey,
+        new PublicKey(pool.contract_address),
+        new PublicKey(pool.platform)
+      );
       if (res.rawTransaction) {
         try {
-          const transaction=await parseTransaction(res.rawTransaction);
-          const signedTx=await signTransaction!(transaction);
+          const transaction = await parseTransaction(res.rawTransaction);
+          const signedTx = await signTransaction!(transaction);
           await sendSignedTransaction(connection, signedTx.serialize());
           await syncAndFetchPool();
         } catch (e: any) {
@@ -165,10 +182,10 @@ const ReadPool: React.FC=() => {
     }
   };
 
-  const handleSnapshot=async () => {
+  const handleSnapshot = async () => {
     try {
       setLoading(true);
-      if (!connected&&wallet) {
+      if (!connected && wallet) {
         await connect();
         await sleep(3000);
       }
@@ -179,16 +196,19 @@ const ReadPool: React.FC=() => {
         return;
       }
 
-      if (publicKey?.toBase58()!==pool?.root_admin) {
+      if (publicKey?.toBase58() !== pool?.root_admin) {
         alertError('You are not admin of this pool');
         setLoading(false);
         return;
       }
-      const action=new Actions(connection);
-      const { unsignedTransaction }=await action.snapshot(publicKey, new PublicKey(pool.contract_address));
+      const action = new Actions(connection);
+      const { unsignedTransaction } = await action.snapshot(
+        publicKey,
+        new PublicKey(pool.contract_address)
+      );
       if (unsignedTransaction) {
         try {
-          const signedTx=await signTransaction!(unsignedTransaction);
+          const signedTx = await signTransaction!(unsignedTransaction);
           await sendSignedTransaction(connection, signedTx.serialize());
           await syncAndFetchPool();
         } catch (e: any) {
@@ -210,7 +230,7 @@ const ReadPool: React.FC=() => {
     return <ServerError {...error} />;
   }
 
-  const handleClose=() => {
+  const handleClose = () => {
     setLoading(false);
   };
 
@@ -225,19 +245,33 @@ const ReadPool: React.FC=() => {
         hideConfirm={hideConfirm}
         cancelButtonText={cancelDialogText}
       />
-      <Backdrop className={classes.backdrop} open={loading} onClick={handleClose}>
+      <Backdrop
+        className={classes.backdrop}
+        open={loading}
+        onClick={handleClose}
+      >
         <CircularProgress color="inherit" />
       </Backdrop>
       <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="simple tabs example"
+        >
           <Tab label="POOL INFORMATION" {...a11yProps(0)} />
-          {pool?.early_phase_is_active&&<Tab label="WHITELIST" {...a11yProps(1)} />}
-          <Tab label="WITHDRAWAL" {...a11yProps(2)} />
-          {pool?.exclusive_phase_is_active&&<Tab label="ALLOCATION" {...a11yProps(2)} />}
-          {poolIsActive&&<Tab label="POOL TIMING" {...a11yProps(3)} />}
-          {pool&&pool.is_active&&new Date()>=new Date(pool.join_pool_start)&&(
-            <Tab label="PARTICIPANTS" {...a11yProps(4)} />
+          {pool?.early_phase_is_active && (
+            <Tab label="WHITELIST" {...a11yProps(1)} />
           )}
+          <Tab label="WITHDRAWAL" {...a11yProps(2)} />
+          {pool?.exclusive_phase_is_active && (
+            <Tab label="ALLOCATION" {...a11yProps(2)} />
+          )}
+          {poolIsActive && <Tab label="POOL TIMING" {...a11yProps(3)} />}
+          {pool &&
+            pool.is_active &&
+            new Date() >= new Date(pool.join_pool_start) && (
+              <Tab label="PARTICIPANTS" {...a11yProps(4)} />
+            )}
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -247,28 +281,28 @@ const ReadPool: React.FC=() => {
           submitBtnLoadingText="Loading..."
           mode="read"
           loading={loading}
-          handleSubmitOnchainProp={() => { }}
-          handleSubmitOffchainProp={() => { }}
+          handleSubmitOnchainProp={() => {}}
+          handleSubmitOffchainProp={() => {}}
           handleActivate={handleClickActiveButton}
-          handleSubmitProp={() => { }}
+          handleSubmitProp={() => {}}
           handleSnapshot={handleSnapshot}
         />
       </TabPanel>
-      {pool?.early_phase_is_active&&(
+      {pool?.early_phase_is_active && (
         <TabPanel value={value} index={1}>
           <Whitelist whitelistedUsers={[]} poolId={id} pool={pool} />
         </TabPanel>
       )}
 
-      <TabPanel value={value} index={pool?.early_phase_is_active? 2:1}>
+      <TabPanel value={value} index={pool?.early_phase_is_active ? 2 : 1}>
         <PoolWithdrawal pool={pool} setLoading={setLoading} />
       </TabPanel>
-      {pool?.exclusive_phase_is_active&&(
+      {pool?.exclusive_phase_is_active && (
         <TabPanel value={value} index={2}>
           <PoolTiers pool={pool} />
         </TabPanel>
       )}
-      {poolIsActive&&(
+      {poolIsActive && (
         <TabPanel value={value} index={3}>
           <PoolTiming
             pool={pool}
@@ -279,9 +313,13 @@ const ReadPool: React.FC=() => {
           />
         </TabPanel>
       )}
-      {pool&&pool.is_active&&new Date()>=new Date(pool.join_pool_start)&&(
+      {pool && pool.is_active && new Date() >= new Date(pool.join_pool_start) && (
         <TabPanel value={value} index={4}>
-          <PoolParticipants pool={pool} loading={loading} setLoading={setLoading} />
+          <PoolParticipants
+            pool={pool}
+            loading={loading}
+            setLoading={setLoading}
+          />
         </TabPanel>
       )}
     </>
@@ -295,17 +333,17 @@ interface TabPanelProps {
 }
 
 function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other }=props;
+  const { children, value, index, ...other } = props;
 
   return (
     <div
       role="tabpanel"
-      hidden={value!==index}
+      hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value===index&&(
+      {value === index && (
         <Box p={3}>
           <Typography component={'div'}>{children}</Typography>
         </Box>

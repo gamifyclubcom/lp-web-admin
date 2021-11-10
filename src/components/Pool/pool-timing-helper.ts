@@ -22,13 +22,14 @@ export function getUpdatePoolV4TimingParams({
   data,
   earlyJoinIsActive,
   exclusiveJoinIsActive,
-  fcfsStakersJoinIsActive,getValues
+  fcfsStakersJoinIsActive,
+  getValues,
 }: {
   data: FormValues;
   earlyJoinIsActive: boolean;
   exclusiveJoinIsActive: boolean;
   fcfsStakersJoinIsActive: boolean;
-  getValues: any
+  getValues: any;
 }) {
   let earlyJoinStartAt: Date | null = null;
   let earlyJoinEndAt: Date | null = null;
@@ -44,46 +45,62 @@ export function getUpdatePoolV4TimingParams({
   publicJoinEndAt = new Date(data.new_join_pool_end);
   claimAt = new Date(data.new_claim_at);
   if (
-    new Date(data.new_join_pool_end).getTime() !== new Date(data.join_pool_end).getTime() ||
+    new Date(data.new_join_pool_end).getTime() !==
+      new Date(data.join_pool_end).getTime() ||
     new Date(data.new_claim_at).getTime() !== new Date(data.claim_at).getTime()
   ) {
     needUpdate = true;
   }
   if (earlyJoinIsActive) {
     earlyJoinStartAt = new Date(data.new_join_pool_start);
-    earlyJoinEndAt = new Date(new Date(data.new_join_pool_start).getTime() + data.new_early_join_duration * 60 * 1000);
+    earlyJoinEndAt = new Date(
+      new Date(data.new_join_pool_start).getTime() +
+        data.new_early_join_duration * 60 * 1000
+    );
     publicJoinStartAt = earlyJoinEndAt;
     if (
-      new Date(data.join_pool_start).getTime() !== new Date(data.new_join_pool_start).getTime() ||
-      new Date(data.new_early_join_duration).getTime() !== new Date(data.early_join_duration).getTime()
+      new Date(data.join_pool_start).getTime() !==
+        new Date(data.new_join_pool_start).getTime() ||
+      new Date(data.new_early_join_duration).getTime() !==
+        new Date(data.early_join_duration).getTime()
     ) {
       needUpdate = true;
     }
   } else if (exclusiveJoinIsActive) {
     exclusiveJoinStartAt = new Date(data.new_join_pool_start);
     exclusiveJoinEndAt = new Date(
-      new Date(data.new_join_pool_start).getTime() + data.new_exclusive_join_duration * 60 * 1000
+      new Date(data.new_join_pool_start).getTime() +
+        data.new_exclusive_join_duration * 60 * 1000
     );
     publicJoinStartAt = exclusiveJoinEndAt;
     if (
-      new Date(data.join_pool_start).getTime() !== new Date(data.new_join_pool_start).getTime() ||
-      new Date(data.new_exclusive_join_duration).getTime() !== new Date(data.exclusive_join_duration).getTime()
+      new Date(data.join_pool_start).getTime() !==
+        new Date(data.new_join_pool_start).getTime() ||
+      new Date(data.new_exclusive_join_duration).getTime() !==
+        new Date(data.exclusive_join_duration).getTime()
     ) {
       needUpdate = true;
     }
     if (fcfsStakersJoinIsActive) {
       fcfsStakeJoinStartAt = exclusiveJoinEndAt;
       fcfsStakeJoinEndAt = new Date(
-        fcfsStakeJoinStartAt.getTime() + getValues('new_fcfs_stake_join_duration') * 60 * 1000
+        fcfsStakeJoinStartAt.getTime() +
+          getValues('new_fcfs_stake_join_duration') * 60 * 1000
       );
       publicJoinStartAt = fcfsStakeJoinEndAt;
-      if (getValues('new_fcfs_stake_join_duration') !== data.fcfs_stake_join_duration) {
+      if (
+        getValues('new_fcfs_stake_join_duration') !==
+        data.fcfs_stake_join_duration
+      ) {
         needUpdate = true;
       }
     }
   } else {
     publicJoinStartAt = new Date(data.new_join_pool_start);
-    if (new Date(data.join_pool_start).getTime() !== new Date(data.new_join_pool_start).getTime()) {
+    if (
+      new Date(data.join_pool_start).getTime() !==
+      new Date(data.new_join_pool_start).getTime()
+    ) {
       needUpdate = true;
     }
   }
@@ -98,19 +115,20 @@ export function getUpdatePoolV4TimingParams({
     fcfsStakeJoinStartAt,
     publicJoinStartAt,
     publicJoinEndAt,
-    claimAt
+    claimAt,
   };
 }
 
 export function getUpdatePoolV3TimingParams({
   data,
   exclusiveJoinIsActive,
-  fcfsStakersJoinIsActive,getValues
+  fcfsStakersJoinIsActive,
+  getValues,
 }: {
   data: FormValues;
   exclusiveJoinIsActive: boolean;
   fcfsStakersJoinIsActive: boolean;
-  getValues: any
+  getValues: any;
 }) {
   let earlyJoinStartAt: Date | null = null;
   let earlyJoinEndAt: Date | null = null;
@@ -124,35 +142,47 @@ export function getUpdatePoolV3TimingParams({
   publicJoinEndAt = new Date(data.new_join_pool_end);
   claimAt = new Date(data.new_claim_at);
   if (
-    new Date(data.new_join_pool_end).getTime() !== new Date(data.join_pool_end).getTime() ||
+    new Date(data.new_join_pool_end).getTime() !==
+      new Date(data.join_pool_end).getTime() ||
     new Date(data.new_claim_at).getTime() !== new Date(data.claim_at).getTime()
   ) {
     needUpdate = true;
-  }if (exclusiveJoinIsActive) {
+  }
+  if (exclusiveJoinIsActive) {
     earlyJoinStartAt = new Date(data.new_join_pool_start);
     earlyJoinEndAt = new Date(
-      new Date(data.new_join_pool_start).getTime() + data.new_exclusive_join_duration * 60 * 1000
+      new Date(data.new_join_pool_start).getTime() +
+        data.new_exclusive_join_duration * 60 * 1000
     );
     publicJoinStartAt = earlyJoinEndAt;
     if (
-      new Date(data.join_pool_start).getTime() !== new Date(data.new_join_pool_start).getTime() ||
-      new Date(data.new_exclusive_join_duration).getTime() !== new Date(data.exclusive_join_duration).getTime()
+      new Date(data.join_pool_start).getTime() !==
+        new Date(data.new_join_pool_start).getTime() ||
+      new Date(data.new_exclusive_join_duration).getTime() !==
+        new Date(data.exclusive_join_duration).getTime()
     ) {
       needUpdate = true;
     }
     if (fcfsStakersJoinIsActive) {
       fcfsStakeJoinStartAt = earlyJoinEndAt;
       fcfsStakeJoinEndAt = new Date(
-        fcfsStakeJoinStartAt.getTime() + getValues('new_fcfs_stake_join_duration') * 60 * 1000
+        fcfsStakeJoinStartAt.getTime() +
+          getValues('new_fcfs_stake_join_duration') * 60 * 1000
       );
       publicJoinStartAt = fcfsStakeJoinEndAt;
-      if (getValues('new_fcfs_stake_join_duration') !== data.fcfs_stake_join_duration) {
+      if (
+        getValues('new_fcfs_stake_join_duration') !==
+        data.fcfs_stake_join_duration
+      ) {
         needUpdate = true;
       }
     }
   } else {
     publicJoinStartAt = new Date(data.new_join_pool_start);
-    if (new Date(data.join_pool_start).getTime() !== new Date(data.new_join_pool_start).getTime()) {
+    if (
+      new Date(data.join_pool_start).getTime() !==
+      new Date(data.new_join_pool_start).getTime()
+    ) {
       needUpdate = true;
     }
   }
@@ -165,6 +195,6 @@ export function getUpdatePoolV3TimingParams({
     fcfsStakeJoinStartAt,
     publicJoinStartAt,
     publicJoinEndAt,
-    claimAt
+    claimAt,
   };
 }

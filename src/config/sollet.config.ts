@@ -7,7 +7,9 @@ import { ISolletChain } from '../utils/interface';
 const SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID: PublicKey = new PublicKey(
   'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'
 );
-const clockSysvarAccount: PublicKey = new PublicKey('SysvarC1ock11111111111111111111111111111111');
+const clockSysvarAccount: PublicKey = new PublicKey(
+  'SysvarC1ock11111111111111111111111111111111'
+);
 
 const SOLLET_CHAINS: ISolletChain[] = [
   {

@@ -42,13 +42,18 @@ export function disconnect(): void {
   wallet.disconnect();
 }
 
-export async function sign(data: Uint8Array, display: string): Promise<{ signature: Buffer; publicKey: PublicKey }> {
+export async function sign(
+  data: Uint8Array,
+  display: string
+): Promise<{ signature: Buffer; publicKey: PublicKey }> {
   const { signature, publicKey } = await wallet.sign(data, display);
 
   return { signature, publicKey };
 }
 
-export async function getSolBalance(solAddress: string | undefined): Promise<number> {
+export async function getSolBalance(
+  solAddress: string | undefined
+): Promise<number> {
   if (!solAddress) {
     return 0;
   }

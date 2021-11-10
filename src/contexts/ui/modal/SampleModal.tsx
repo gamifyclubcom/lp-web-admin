@@ -6,7 +6,7 @@ const SampleModal: React.FC = () => {
     <ModalWrapper
       modalType={EModalType.SAMPLE_MODAL}
       closeable={true}
-      title='Sample Modal'
+      title="Sample Modal"
     >
       sample modal
     </ModalWrapper>

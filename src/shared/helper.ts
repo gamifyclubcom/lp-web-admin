@@ -1,4 +1,9 @@
-import { Connection, LAMPORTS_PER_SOL, PublicKey, Transaction } from '@solana/web3.js';
+import {
+  Connection,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  Transaction,
+} from '@solana/web3.js';
 import moment from 'moment';
 import { envConfig, solletConfig } from '../config';
 import { ESolletEnv } from '../utils/enum';
@@ -34,7 +39,10 @@ export const getListPageFromTotalPage = (totalPage: number): number[] => {
   return listPage;
 };
 
-export const convertUnixTimestampToDate = (timestamp: number, format?: string): string => {
+export const convertUnixTimestampToDate = (
+  timestamp: number,
+  format?: string
+): string => {
   return moment.unix(timestamp).format(format || 'ddd MMM DD, YYYY HH:mm');
 };
 
@@ -99,13 +107,18 @@ export const extractPoolData = (
   };
 };
 
-export const generateOnChainUrl = (variant: 'tx' | 'address', value: string): string => {
+export const generateOnChainUrl = (
+  variant: 'tx' | 'address',
+  value: string
+): string => {
   return `${SOLANA_EXPLORER_URL}/${variant}/${value}?cluster=${SOLLET_ENV}`;
 };
 
 export const getCurrentChain = (): ISolletChain => {
   let matched: ISolletChain | null;
-  const defaultChain = SOLLET_CHAINS.find((slc) => slc.name === ESolletEnv.TESTNET)!;
+  const defaultChain = SOLLET_CHAINS.find(
+    (slc) => slc.name === ESolletEnv.TESTNET
+  )!;
 
   if (SOLLET_ENV && (SOLLET_ENV as ESolletEnv)) {
     matched = SOLLET_CHAINS.find((slc) => slc.name === SOLLET_ENV) || null;
@@ -164,7 +177,10 @@ export async function parseTransaction(rawTransaction: string | Buffer) {
   return transaction;
 }
 
-export async function sendSignedTransaction(conn: Connection, transaction: Buffer) {
+export async function sendSignedTransaction(
+  conn: Connection,
+  transaction: Buffer
+) {
   await conn.sendRawTransaction(transaction, {
     skipPreflight: false,
     preflightCommitment: 'confirmed',

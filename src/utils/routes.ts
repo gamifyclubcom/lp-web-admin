@@ -77,5 +77,5 @@ export const routes: Route[] = [
     path: '*',
     exact: true,
     component: NotFound,
-  }
+  },
 ];

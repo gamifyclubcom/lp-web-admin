@@ -41,7 +41,13 @@ const NavItem: React.FC<Props> = ({ href, icon, title, active, ...rest }) => {
   const classes = useStyles();
 
   return (
-    <ListItem button component={RouterLink} to={href} activeClassName={classes.active} {...rest}>
+    <ListItem
+      button
+      component={RouterLink}
+      to={href}
+      activeClassName={classes.active}
+      {...rest}
+    >
       {icon && (
         <ListItemIcon>
           <Icon

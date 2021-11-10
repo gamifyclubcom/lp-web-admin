@@ -109,7 +109,10 @@ export const AuthProvider: React.FC = ({ children }) => {
     try {
       let token;
       if (signMessage) {
-        token = await createTokenWithSignMessageFunc(signMessage!, walletAddress);
+        token = await createTokenWithSignMessageFunc(
+          signMessage!,
+          walletAddress
+        );
       } else {
         token = await createTokenWithWalletAdapter(adapter._wallet);
       }

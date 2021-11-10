@@ -1,12 +1,18 @@
 import {
   Button,
   ButtonProps,
-  Collapse, createStyles,
-  Fade, IconButton,
+  Collapse,
+  createStyles,
+  Fade,
+  IconButton,
   ListItemIcon,
   Menu,
-  MenuItem, Switch, SwitchClassKey, SwitchProps,
-  Theme, withStyles,
+  MenuItem,
+  Switch,
+  SwitchClassKey,
+  SwitchProps,
+  Theme,
+  withStyles,
 } from '@material-ui/core';
 import CopyIcon from '@material-ui/icons/FileCopy';
 import DisconnectIcon from '@material-ui/icons/LinkOff';
@@ -66,7 +72,7 @@ const IOSSwitch = withStyles((theme: Theme) =>
     },
     checked: {},
     focusVisible: {},
-  }),
+  })
 )(({ classes, ...props }: Props) => {
   return (
     <Switch
@@ -85,13 +91,13 @@ const IOSSwitch = withStyles((theme: Theme) =>
 });
 
 export const WalletMultiButton: FC<ButtonProps> = ({
-                                                     color = 'primary',
-                                                     variant = 'contained',
-                                                     children,
-                                                     disabled,
-                                                     onClick,
-                                                     ...props
-                                                   }) => {
+  color = 'primary',
+  variant = 'contained',
+  children,
+  disabled,
+  onClick,
+  ...props
+}) => {
   const { publicKey, wallet, disconnect, connected } = useWallet();
   const { setOpen } = useWalletDialog();
 
@@ -105,10 +111,9 @@ export const WalletMultiButton: FC<ButtonProps> = ({
     return base58.substr(0, 4) + '..' + base58.substr(-4, 4);
   }, [children, wallet, base58]);
 
-
   const openSelectWallets = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   const handleChange = () => {
     if (connected) {
@@ -117,37 +122,100 @@ export const WalletMultiButton: FC<ButtonProps> = ({
   };
 
   if (!wallet) {
-    return <>
-      <div style={{height: '2em', display: 'flex', justifyItems: 'flex-end', alignItems: 'center' }}>
-        <IconButton onClick={openSelectWallets} aria-label="delete" color={'default'} style={{height: '100%', color: 'white', display: 'flex', justifyContent: 'center'}}>
-          <SwapHorizIcon fontSize="large" />
-        </IconButton>
-        <WalletDialogButton color={color} variant={variant} {...props} />
-        <div>
-          <IOSSwitch checked={connected} onChange={handleChange} name="checkedB" />
+    return (
+      <>
+        <div
+          style={{
+            height: '2em',
+            display: 'flex',
+            justifyItems: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
+          <IconButton
+            onClick={openSelectWallets}
+            aria-label="delete"
+            color={'default'}
+            style={{
+              height: '100%',
+              color: 'white',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <SwapHorizIcon fontSize="large" />
+          </IconButton>
+          <WalletDialogButton color={color} variant={variant} {...props} />
+          <div>
+            <IOSSwitch
+              checked={connected}
+              onChange={handleChange}
+              name="checkedB"
+            />
+          </div>
         </div>
-      </div></>;
+      </>
+    );
   }
 
   if (!base58) {
-    return <>
-      <div style={{height: '2em', display: 'flex', justifyItems: 'flex-end', alignItems: 'center' }}>
-        <IconButton onClick={openSelectWallets} aria-label="delete" color={'default'} style={{height: '100%', color: 'white', display: 'flex', justifyContent: 'center'}}>
-          <SwapHorizIcon fontSize="large" />
-        </IconButton>
-        <WalletConnectButton color={color} variant={variant} {...props} />
-        <div>
-          <IOSSwitch checked={connected} onChange={handleChange} name="checkedB" />
+    return (
+      <>
+        <div
+          style={{
+            height: '2em',
+            display: 'flex',
+            justifyItems: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
+          <IconButton
+            onClick={openSelectWallets}
+            aria-label="delete"
+            color={'default'}
+            style={{
+              height: '100%',
+              color: 'white',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <SwapHorizIcon fontSize="large" />
+          </IconButton>
+          <WalletConnectButton color={color} variant={variant} {...props} />
+          <div>
+            <IOSSwitch
+              checked={connected}
+              onChange={handleChange}
+              name="checkedB"
+            />
+          </div>
         </div>
-      </div>
-      </>;
+      </>
+    );
   }
-
 
   return (
     <>
-      <div style={{height: '2em', display: 'flex', justifyItems: 'flex-end', alignItems: 'center' }}>
-        <IconButton onClick={openSelectWallets} aria-label="delete" color={'default'} style={{height: '100%', color: 'white', display: 'flex', justifyContent: 'center'}}>
+      <div
+        style={{
+          height: '2em',
+          display: 'flex',
+          justifyItems: 'flex-end',
+          alignItems: 'center',
+        }}
+      >
+        <IconButton
+          onClick={openSelectWallets}
+          aria-label="delete"
+          color={'default'}
+          style={{
+            height: '100%',
+            color: 'white',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
           <SwapHorizIcon fontSize="large" />
         </IconButton>
         <Button
@@ -162,7 +230,11 @@ export const WalletMultiButton: FC<ButtonProps> = ({
           {content}
         </Button>
         <div>
-          <IOSSwitch checked={connected} onChange={handleChange} name="checkedB" />
+          <IOSSwitch
+            checked={connected}
+            onChange={handleChange}
+            name="checkedB"
+          />
         </div>
       </div>
 
@@ -227,4 +299,4 @@ export const WalletMultiButton: FC<ButtonProps> = ({
       </Menu>
     </>
   );
-}
+};

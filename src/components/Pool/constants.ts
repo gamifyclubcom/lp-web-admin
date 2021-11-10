@@ -31,7 +31,8 @@ export const PoolInputLabel = {
   liquidity_percentage: 'Liquidity percentage',
   claimable_percentage: 'Claimable percentage',
   fcfs_stake_duration: 'Duration of ISOLA FCFS for stakers round( minutes)',
-  fcfs_stake_phase_multiplication_rate: 'Multiplication rate in FCFS for stakers round',
+  fcfs_stake_phase_multiplication_rate:
+    'Multiplication rate in FCFS for stakers round',
   exclusive_phase_is_active: 'ISOLA exclusive round',
   exclusive_join_duration: 'Duration of ISOLA exclusive round (minutes)',
   exclusive_phase_max_total_alloc: 'Total raise in ISOLA exclusive round',

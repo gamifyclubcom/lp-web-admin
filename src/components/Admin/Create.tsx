@@ -25,7 +25,12 @@ const AdminAddContainer = () => {
   };
 
   return (
-    <Admin submitBtnText="Create" submitBtnLoadingText="Creating" loading={loading} handleSubmitProp={handleSubmit} />
+    <Admin
+      submitBtnText="Create"
+      submitBtnLoadingText="Creating"
+      loading={loading}
+      handleSubmitProp={handleSubmit}
+    />
   );
 };
 

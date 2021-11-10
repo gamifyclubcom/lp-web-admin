@@ -7,9 +7,13 @@ import { Actions } from '@gamify/onchain-program-sdk';
 
 const SOL = 'SOL';
 
-export const getTokenInfo = async (connection: Connection, tokenAddress: string) => {
+export const getTokenInfo = async (
+  connection: Connection,
+  tokenAddress: string
+) => {
   try {
-    const data = (await connection.getAccountInfo(new PublicKey(tokenAddress)))?.data;
+    const data = (await connection.getAccountInfo(new PublicKey(tokenAddress)))
+      ?.data;
 
     if (!data) {
       return null;
@@ -32,8 +36,13 @@ export const getTokenInfo = async (connection: Connection, tokenAddress: string)
 };
 
 // TODO move to sdk
-export const getTokenDecimals = async (connection: Connection, token: string): Promise<number> => {
-  const token_acc = await connection.getAccountInfo(token === SOL ? WRAPPED_SOL_MINT : new PublicKey(token));
+export const getTokenDecimals = async (
+  connection: Connection,
+  token: string
+): Promise<number> => {
+  const token_acc = await connection.getAccountInfo(
+    token === SOL ? WRAPPED_SOL_MINT : new PublicKey(token)
+  );
   if (!token_acc?.data) {
     throw new Error(`Invalid token`);
   }
@@ -41,7 +50,11 @@ export const getTokenDecimals = async (connection: Connection, token: string): P
   return tokenInfo.decimals;
 };
 
-export const getTokenBalances = async (connection: Connection, token: string, address: string) => {
+export const getTokenBalances = async (
+  connection: Connection,
+  token: string,
+  address: string
+) => {
   const tokenDecimals = await getTokenDecimals(connection, token);
   const tokenPerAcc = await connection.getAccountInfo(new PublicKey(address));
   if (!tokenPerAcc?.data) {
@@ -53,18 +66,31 @@ export const getTokenBalances = async (connection: Connection, token: string, ad
   );
 };
 
-export const getBalance = async (connection: Connection, action: Actions, address: PublicKey) => {
+export const getBalance = async (
+  connection: Connection,
+  action: Actions,
+  address: PublicKey
+) => {
   const tokenAddress = await action.getSPLMintTokenAccountInfo(address);
   if (!tokenAddress) {
-    return new Decimal(await connection.getBalance(address)).div(new Decimal(10).pow(9)).toNumber();
+    return new Decimal(await connection.getBalance(address))
+      .div(new Decimal(10).pow(9))
+      .toNumber();
   }
 
   if (tokenAddress.equals(WRAPPED_SOL_MINT)) {
-    const rentBalance = await connection.getMinimumBalanceForRentExemption(AccountLayout.span);
-    return new Decimal(await connection.getBalance(address)).minus(rentBalance).div(new Decimal(10).pow(9)).toNumber();
+    const rentBalance = await connection.getMinimumBalanceForRentExemption(
+      AccountLayout.span
+    );
+    return new Decimal(await connection.getBalance(address))
+      .minus(rentBalance)
+      .div(new Decimal(10).pow(9))
+      .toNumber();
   }
 
-  const tokenDecimals = await action.getTokenDecimalsFromTokenAccount(tokenAddress);
+  const tokenDecimals = await action.getTokenDecimalsFromTokenAccount(
+    tokenAddress
+  );
   const tokenAcc = await connection.getAccountInfo(address);
   if (!tokenAcc?.data) {
     throw new Error(`Cannot get account info of address: ${address}`);

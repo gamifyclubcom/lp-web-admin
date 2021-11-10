@@ -34,7 +34,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import NumberInput from '../common/form/NumberFormatInput';
 import { Actions } from '@gamify/onchain-program-sdk';
 
-type FormValues = Types.Pool & {is_checked_fee_information: boolean};
+type FormValues = Types.Pool & { is_checked_fee_information: boolean };
 
 interface Props {
   pool?: Types.Pool;
@@ -174,13 +174,22 @@ const Pool: React.FC<Props> = ({
       setValue('token_total_supply', '0');
     }
   };
-
-  const [isRequreidEarlyPhaseMaxTotalAlloc, setIsRequreidEarlyPhaseMaxTotalAlloc] = useState(true);
-  const [isRequreidExclusivePhaseMaxTotalAlloc, setIsRequreidExclusivePhaseMaxTotalAlloc] = useState(true);
-  const [isRequreidFcfsStakePhaseMaxTotalAlloc, setIsRequreidFcfsStakePhaseMaxTotalAlloc] = useState(true);
+  const [isEnabledVoting, setIsEnabledVoting] = useState(false);
+  const [
+    isRequreidEarlyPhaseMaxTotalAlloc,
+    setIsRequreidEarlyPhaseMaxTotalAlloc,
+  ] = useState(true);
+  const [
+    isRequreidExclusivePhaseMaxTotalAlloc,
+    setIsRequreidExclusivePhaseMaxTotalAlloc,
+  ] = useState(true);
+  const [
+    isRequreidFcfsStakePhaseMaxTotalAlloc,
+    setIsRequreidFcfsStakePhaseMaxTotalAlloc,
+  ] = useState(true);
   const [feeSetting, setFeeSetting] = useState(0);
   const [maxVotingDays, setMaxVotingDays] = useState(0);
-  if(readMode) {
+  if (readMode) {
     setValue('is_checked_fee_information', true);
   }
 
@@ -214,7 +223,10 @@ const Pool: React.FC<Props> = ({
                     disabled={loading}
                     onClick={() => {
                       if (changePoolAdmin) {
-                        changePoolAdmin(getValues('root_admin'), pool?._id as string);
+                        changePoolAdmin(
+                          getValues('root_admin'),
+                          pool?._id as string
+                        );
                       }
                     }}
                   >
@@ -293,7 +305,7 @@ const Pool: React.FC<Props> = ({
         voting_end,
         max_voting_days,
       } = pool;
-      
+
       setIsRequreidEarlyPhaseMaxTotalAlloc(early_phase_is_active);
       setIsRequreidExclusivePhaseMaxTotalAlloc(exclusive_phase_is_active);
       setIsRequreidFcfsStakePhaseMaxTotalAlloc(fcfs_stake_phase_is_active);
@@ -325,7 +337,10 @@ const Pool: React.FC<Props> = ({
       setValue('token_total_supply', token_total_supply);
       setValue('early_phase_is_active', early_phase_is_active);
       setValue('early_phase_max_total_alloc', early_phase_max_total_alloc);
-      setValue('public_phase_max_individual_alloc', public_phase_max_individual_alloc);
+      setValue(
+        'public_phase_max_individual_alloc',
+        public_phase_max_individual_alloc
+      );
       setValue('token_x', token_x);
       setValue('token_y', token_y);
       setValue('token_to', token_to);
@@ -337,16 +352,23 @@ const Pool: React.FC<Props> = ({
       setValue('audit_link', audit_link);
       setValue('liquidity_percentage', liquidity_percentage);
       setValue('claimable_percentage', claimable_percentage);
-      setValue('fcfs_stake_phase_multiplication_rate', fcfs_stake_phase_multiplication_rate);
+      setValue(
+        'fcfs_stake_phase_multiplication_rate',
+        fcfs_stake_phase_multiplication_rate
+      );
       setValue('fcfs_stake_duration', fcfs_stake_duration);
       setValue('exclusive_phase_is_active', exclusive_phase_is_active);
       setValue('exclusive_join_duration', exclusive_join_duration);
-      setValue('exclusive_phase_max_total_alloc', exclusive_phase_max_total_alloc);
+      setValue(
+        'exclusive_phase_max_total_alloc',
+        exclusive_phase_max_total_alloc
+      );
       setValue('fcfs_stake_phase_is_active', fcfs_stake_phase_is_active);
       setValue('voting_phase_is_active', voting_phase_is_active);
       setValue('voting_start', voting_start);
       setValue('voting_end', voting_end);
       setValue('max_voting_days', max_voting_days);
+      setIsEnabledVoting(voting_phase_is_active);
 
       const loatTokenInfo = async () => {
         const token = await getTokenInfo(getConnection(), token_address);
@@ -369,8 +391,9 @@ const Pool: React.FC<Props> = ({
       setFeeSetting(commonSetting.fees);
       setMaxVotingDays(commonSetting.vote_setting.max_voting_days);
       setValue('max_voting_days', commonSetting.vote_setting.max_voting_days);
+      setIsEnabledVoting(commonSetting.vote_setting.is_enabled);
     };
-    if(createMode){
+    if (createMode) {
       readCommonSetting();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -412,7 +435,10 @@ const Pool: React.FC<Props> = ({
                 {readMode &&
                   pool &&
                   !pool.is_active &&
-                  (pool?.voting_end ? (new Date(pool.voting_end) < new Date()) && pool.is_enough_vote : true) && (
+                  (isEnabledVoting
+                    ? new Date(pool.voting_end) < new Date() &&
+                      pool.is_enough_vote
+                    : true) && (
                     <Button
                       size="large"
                       variant="contained"
@@ -423,18 +449,21 @@ const Pool: React.FC<Props> = ({
                       {loading ? submitBtnLoadingText : 'Activate'}
                     </Button>
                   )}
-                {readMode && pool && pool.exclusive_phase_is_active && new Date() < new Date(pool.join_pool_start) && (
-                  <Button
-                    size="large"
-                    variant="contained"
-                    color="primary"
-                    style={{ marginLeft: theme.spacing(2) }}
-                    disabled={loading}
-                    onClick={() => handleSnapshot!()}
-                  >
-                    {loading ? submitBtnLoadingText : 'Snapshot'}
-                  </Button>
-                )}
+                {readMode &&
+                  pool &&
+                  pool.exclusive_phase_is_active &&
+                  new Date() < new Date(pool.join_pool_start) && (
+                    <Button
+                      size="large"
+                      variant="contained"
+                      color="primary"
+                      style={{ marginLeft: theme.spacing(2) }}
+                      disabled={loading}
+                      onClick={() => handleSnapshot!()}
+                    >
+                      {loading ? submitBtnLoadingText : 'Snapshot'}
+                    </Button>
+                  )}
                 {!createMode && (
                   <Button
                     variant="contained"
@@ -447,7 +476,12 @@ const Pool: React.FC<Props> = ({
                     {toggleEditMode ? 'Cancel' : 'Edit'}
                   </Button>
                 )}
-                <Avatar src={isEmpty(poolLogoUrl) ? DEFAULT_POOL_LOGO_URL : poolLogoUrl} className={classes.avatar}>
+                <Avatar
+                  src={
+                    isEmpty(poolLogoUrl) ? DEFAULT_POOL_LOGO_URL : poolLogoUrl
+                  }
+                  className={classes.avatar}
+                >
                   L
                 </Avatar>
               </>
@@ -469,7 +503,10 @@ const Pool: React.FC<Props> = ({
               {(toggleEditMode || readMode) && (
                 <>
                   <Grid item container className={classes.formItem}>
-                    <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                    <Grid
+                      item
+                      style={{ flex: 1, marginRight: theme.spacing(1) }}
+                    >
                       <Input
                         control={control}
                         disabled
@@ -480,10 +517,17 @@ const Pool: React.FC<Props> = ({
                         inputProps={{ readOnly: true }}
                         InputProps={{
                           endAdornment: (
-                            <CopyToClipboard text={pool?.contract_address || ''} onCopy={() => setCopied(true)}>
+                            <CopyToClipboard
+                              text={pool?.contract_address || ''}
+                              onCopy={() => setCopied(true)}
+                            >
                               <InputAdornment position="start">
                                 <IconButton onClick={() => setCopied(true)}>
-                                  {copied ? <BsFiles color="primary" /> : <BsFiles />}
+                                  {copied ? (
+                                    <BsFiles color="primary" />
+                                  ) : (
+                                    <BsFiles />
+                                  )}
                                 </IconButton>
                               </InputAdornment>
                             </CopyToClipboard>
@@ -491,7 +535,10 @@ const Pool: React.FC<Props> = ({
                         }}
                       />
                     </Grid>
-                    <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
+                    <Grid
+                      item
+                      style={{ flex: 1, marginLeft: theme.spacing(1) }}
+                    >
                       <Input
                         control={control}
                         disabled
@@ -502,10 +549,17 @@ const Pool: React.FC<Props> = ({
                         inputProps={{ readOnly: true }}
                         InputProps={{
                           endAdornment: (
-                            <CopyToClipboard text={pool?.token_y || ''} onCopy={() => setCopied(true)}>
+                            <CopyToClipboard
+                              text={pool?.token_y || ''}
+                              onCopy={() => setCopied(true)}
+                            >
                               <InputAdornment position="start">
                                 <IconButton onClick={() => setCopied(true)}>
-                                  {copied ? <BsFiles color="primary" /> : <BsFiles />}
+                                  {copied ? (
+                                    <BsFiles color="primary" />
+                                  ) : (
+                                    <BsFiles />
+                                  )}
                                 </IconButton>
                               </InputAdornment>
                             </CopyToClipboard>
@@ -576,7 +630,14 @@ const Pool: React.FC<Props> = ({
                     errorMessage={errors?.twitter?.message}
                   />
                 </Grid>
-                <Grid item style={{ flex: 1, marginLeft: theme.spacing(1), marginRight: theme.spacing(1) }}>
+                <Grid
+                  item
+                  style={{
+                    flex: 1,
+                    marginLeft: theme.spacing(1),
+                    marginRight: theme.spacing(1),
+                  }}
+                >
                   <Input
                     control={control}
                     label={PoolInputLabel.medium}
@@ -610,7 +671,14 @@ const Pool: React.FC<Props> = ({
                     errorMessage={errors?.pool_start?.message}
                   />
                 </Grid>
-                <Grid item style={{ flex: 1, marginLeft: theme.spacing(1), marginRight: theme.spacing(1) }}>
+                <Grid
+                  item
+                  style={{
+                    flex: 1,
+                    marginLeft: theme.spacing(1),
+                    marginRight: theme.spacing(1),
+                  }}
+                >
                   <Input
                     control={control}
                     inputProps={{ readOnly: readMode }}
@@ -681,7 +749,10 @@ const Pool: React.FC<Props> = ({
                   onChange={(event) => loadTokenInfor(event.target.value)}
                   InputProps={{
                     endAdornment: (
-                      <CopyToClipboard text={pool?.token_address || ''} onCopy={() => setCopied(true)}>
+                      <CopyToClipboard
+                        text={pool?.token_address || ''}
+                        onCopy={() => setCopied(true)}
+                      >
                         <InputAdornment position="start">
                           <IconButton onClick={() => setCopied(true)}>
                             {copied ? <BsFiles color="primary" /> : <BsFiles />}
@@ -705,7 +776,14 @@ const Pool: React.FC<Props> = ({
                     inputProps={{ readOnly: readMode }}
                   />
                 </Grid>
-                <Grid item style={{ flex: 1, marginLeft: theme.spacing(1), marginRight: theme.spacing(1) }}>
+                <Grid
+                  item
+                  style={{
+                    flex: 1,
+                    marginLeft: theme.spacing(1),
+                    marginRight: theme.spacing(1),
+                  }}
+                >
                   <Input
                     required
                     control={control}
@@ -775,33 +853,39 @@ const Pool: React.FC<Props> = ({
           <CardContent>
             <form>
               <Grid item className={classes.formItem}>
-                <CheckBoxInput control={control} disabled label="Active" name="is_active" defaultChecked={false} />
+                <CheckBoxInput
+                  control={control}
+                  disabled
+                  label="Active"
+                  name="is_active"
+                  defaultChecked={false}
+                />
               </Grid>
-              {getValues('voting_phase_is_active') && (
-              <Grid item container className={classes.formItem}>
-                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <DateInput
-                    required
-                    control={control}
-                    disabled={readMode}
-                    name="voting_start"
-                    label={PoolInputLabel.voting_start}
-                    isError={Boolean(errors.voting_start)}
-                    errorMessage={errors?.voting_start?.message}
-                  />
+              {isEnabledVoting && (
+                <Grid item container className={classes.formItem}>
+                  <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                    <DateInput
+                      required
+                      control={control}
+                      disabled={readMode}
+                      name="voting_start"
+                      label={PoolInputLabel.voting_start}
+                      isError={Boolean(errors.voting_start)}
+                      errorMessage={errors?.voting_start?.message}
+                    />
+                  </Grid>
+                  <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
+                    <DateInput
+                      required
+                      control={control}
+                      name="voting_end"
+                      disabled={readMode}
+                      label={`${PoolInputLabel.voting_end_1}${maxVotingDays}${PoolInputLabel.voting_end_2}`}
+                      isError={Boolean(errors?.voting_end)}
+                      errorMessage={errors?.voting_end?.message}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <DateInput
-                    required
-                    control={control}
-                    name="voting_end"
-                    disabled={readMode}
-                    label={`${PoolInputLabel.voting_end_1}${maxVotingDays}${PoolInputLabel.voting_end_2}`}
-                    isError={Boolean(errors?.voting_end)}
-                    errorMessage={errors?.voting_end?.message}
-                  />
-                </Grid>
-              </Grid>
               )}
 
               <Grid item container className={classes.formItem}>
@@ -842,7 +926,11 @@ const Pool: React.FC<Props> = ({
                 </Grid>
               </Grid>
               <Grid item container className={classes.formItem}>
-                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }} xs={6}>
+                <Grid
+                  item
+                  style={{ flex: 1, marginRight: theme.spacing(1) }}
+                  xs={6}
+                >
                   <NumberInput
                     onChange={() => trigger('max_allocation_all_phases')}
                     onValueChange={(values: any) => {
@@ -850,7 +938,9 @@ const Pool: React.FC<Props> = ({
                     }}
                     required
                     control={control}
-                    label={`${PoolInputLabel.max_allocation_all_phases} (${getValues('token_to')})`}
+                    label={`${
+                      PoolInputLabel.max_allocation_all_phases
+                    } (${getValues('token_to')})`}
                     name="max_allocation_all_phases"
                     isError={Boolean(errors?.max_allocation_all_phases)}
                     errorMessage={errors?.max_allocation_all_phases?.message}
@@ -867,11 +957,18 @@ const Pool: React.FC<Props> = ({
                     name="early_phase_is_active"
                     defaultChecked={true}
                     onChange={(event) => {
-                      setIsRequreidEarlyPhaseMaxTotalAlloc(event.target.checked);
+                      setIsRequreidEarlyPhaseMaxTotalAlloc(
+                        event.target.checked
+                      );
                       setValue('early_phase_is_active', event.target.checked);
                       if (event.target.checked) {
-                        setValue('exclusive_phase_is_active', !event.target.checked);
-                        setIsRequreidExclusivePhaseMaxTotalAlloc(!event.target.checked);
+                        setValue(
+                          'exclusive_phase_is_active',
+                          !event.target.checked
+                        );
+                        setIsRequreidExclusivePhaseMaxTotalAlloc(
+                          !event.target.checked
+                        );
                       }
                     }}
                   />
@@ -898,14 +995,21 @@ const Pool: React.FC<Props> = ({
                     <NumberInput
                       onChange={() => trigger('early_phase_max_total_alloc')}
                       onValueChange={(values: any) => {
-                        setValue('early_phase_max_total_alloc', values.floatValue);
+                        setValue(
+                          'early_phase_max_total_alloc',
+                          values.floatValue
+                        );
                       }}
                       required={isRequreidEarlyPhaseMaxTotalAlloc}
                       control={control}
-                      label={`${PoolInputLabel.early_phase_max_total_alloc} (${getValues('token_to')})`}
+                      label={`${
+                        PoolInputLabel.early_phase_max_total_alloc
+                      } (${getValues('token_to')})`}
                       name="early_phase_max_total_alloc"
                       isError={Boolean(errors?.early_phase_max_total_alloc)}
-                      errorMessage={errors?.early_phase_max_total_alloc?.message}
+                      errorMessage={
+                        errors?.early_phase_max_total_alloc?.message
+                      }
                       inputProps={{ readOnly: readMode }}
                     />
                   )}
@@ -922,14 +1026,24 @@ const Pool: React.FC<Props> = ({
                     defaultChecked={true}
                     onChange={(event) => {
                       if (event.target.checked) {
-                        setIsRequreidEarlyPhaseMaxTotalAlloc(!event.target.checked);
-                        setValue('early_phase_is_active', !event.target.checked);
+                        setIsRequreidEarlyPhaseMaxTotalAlloc(
+                          !event.target.checked
+                        );
+                        setValue(
+                          'early_phase_is_active',
+                          !event.target.checked
+                        );
                       } else {
                         setIsRequreidFcfsStakePhaseMaxTotalAlloc(false);
                         setValue('fcfs_stake_phase_is_active', false);
                       }
-                      setIsRequreidExclusivePhaseMaxTotalAlloc(event.target.checked);
-                      setValue('exclusive_phase_is_active', event.target.checked);
+                      setIsRequreidExclusivePhaseMaxTotalAlloc(
+                        event.target.checked
+                      );
+                      setValue(
+                        'exclusive_phase_is_active',
+                        event.target.checked
+                      );
                     }}
                   />
                 </Grid>
@@ -954,16 +1068,25 @@ const Pool: React.FC<Props> = ({
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
                   {getValues('exclusive_phase_is_active') && (
                     <NumberInput
-                      onChange={() => trigger('exclusive_phase_max_total_alloc')}
+                      onChange={() =>
+                        trigger('exclusive_phase_max_total_alloc')
+                      }
                       onValueChange={(values: any) => {
-                        setValue('exclusive_phase_max_total_alloc', values.floatValue);
+                        setValue(
+                          'exclusive_phase_max_total_alloc',
+                          values.floatValue
+                        );
                       }}
                       required={isRequreidExclusivePhaseMaxTotalAlloc}
                       control={control}
-                      label={`${PoolInputLabel.exclusive_phase_max_total_alloc} (${getValues('token_to')})`}
+                      label={`${
+                        PoolInputLabel.exclusive_phase_max_total_alloc
+                      } (${getValues('token_to')})`}
                       name="exclusive_phase_max_total_alloc"
                       isError={Boolean(errors?.exclusive_phase_max_total_alloc)}
-                      errorMessage={errors?.exclusive_phase_max_total_alloc?.message}
+                      errorMessage={
+                        errors?.exclusive_phase_max_total_alloc?.message
+                      }
                       inputProps={{ readOnly: readMode }}
                     />
                   )}
@@ -980,14 +1103,22 @@ const Pool: React.FC<Props> = ({
                       name="fcfs_stake_phase_is_active"
                       defaultChecked={true}
                       onChange={(event) => {
-                        setIsRequreidFcfsStakePhaseMaxTotalAlloc(event.target.checked);
-                        setValue('fcfs_stake_phase_is_active', event.target.checked);
+                        setIsRequreidFcfsStakePhaseMaxTotalAlloc(
+                          event.target.checked
+                        );
+                        setValue(
+                          'fcfs_stake_phase_is_active',
+                          event.target.checked
+                        );
                       }}
                     />
                   </Grid>
                   {isRequreidFcfsStakePhaseMaxTotalAlloc && (
                     <>
-                      <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
+                      <Grid
+                        item
+                        style={{ flex: 1, marginLeft: theme.spacing(1) }}
+                      >
                         <NumberInput
                           onChange={() => trigger('fcfs_stake_duration')}
                           onValueChange={(values: any) => {
@@ -1002,18 +1133,33 @@ const Pool: React.FC<Props> = ({
                           inputProps={{ readOnly: readMode }}
                         />
                       </Grid>
-                      <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
+                      <Grid
+                        item
+                        style={{ flex: 1, marginLeft: theme.spacing(1) }}
+                      >
                         <NumberInput
-                          onChange={() => trigger('fcfs_stake_phase_multiplication_rate')}
+                          onChange={() =>
+                            trigger('fcfs_stake_phase_multiplication_rate')
+                          }
                           onValueChange={(values: any) => {
-                            setValue('fcfs_stake_phase_multiplication_rate', values.floatValue);
+                            setValue(
+                              'fcfs_stake_phase_multiplication_rate',
+                              values.floatValue
+                            );
                           }}
                           required
                           control={control}
-                          label={`${PoolInputLabel.fcfs_stake_phase_multiplication_rate} (${getValues('token_to')})`}
+                          label={`${
+                            PoolInputLabel.fcfs_stake_phase_multiplication_rate
+                          } (${getValues('token_to')})`}
                           name="fcfs_stake_phase_multiplication_rate"
-                          isError={Boolean(errors?.fcfs_stake_phase_multiplication_rate)}
-                          errorMessage={errors?.fcfs_stake_phase_multiplication_rate?.message}
+                          isError={Boolean(
+                            errors?.fcfs_stake_phase_multiplication_rate
+                          )}
+                          errorMessage={
+                            errors?.fcfs_stake_phase_multiplication_rate
+                              ?.message
+                          }
                           inputProps={{ readOnly: readMode }}
                         />
                       </Grid>
@@ -1061,14 +1207,21 @@ const Pool: React.FC<Props> = ({
                 <NumberInput
                   onChange={() => trigger('public_phase_max_individual_alloc')}
                   onValueChange={(values: any) => {
-                    setValue('public_phase_max_individual_alloc', values.floatValue);
+                    setValue(
+                      'public_phase_max_individual_alloc',
+                      values.floatValue
+                    );
                   }}
                   required
                   control={control}
-                  label={`${PoolInputLabel.public_phase_max_individual_alloc} (${getValues('token_to')})`}
+                  label={`${
+                    PoolInputLabel.public_phase_max_individual_alloc
+                  } (${getValues('token_to')})`}
                   name="public_phase_max_individual_alloc"
                   isError={Boolean(errors?.public_phase_max_individual_alloc)}
-                  errorMessage={errors?.public_phase_max_individual_alloc?.message}
+                  errorMessage={
+                    errors?.public_phase_max_individual_alloc?.message
+                  }
                   inputProps={{ readOnly: readMode }}
                 />
               </Grid>
@@ -1081,7 +1234,9 @@ const Pool: React.FC<Props> = ({
                     name="is_checked_fee_information"
                     defaultChecked={false}
                   />
-                  <FormHelperText error={Boolean(errors?.is_checked_fee_information)}>
+                  <FormHelperText
+                    error={Boolean(errors?.is_checked_fee_information)}
+                  >
                     {errors?.is_checked_fee_information?.message}
                   </FormHelperText>
                 </Grid>

@@ -2,7 +2,8 @@ import Wallet from '@project-serum/sol-wallet-adapter';
 // import { useAlert } from '../../hooks';
 import { SolletWalletAdapter, SolletWalletAdapterConfig } from '../sollet';
 
-export const ICONS_URL = 'https://raw.githubusercontent.com/solana-labs/wallet-adapter/master/packages/wallets/icons';
+export const ICONS_URL =
+  'https://raw.githubusercontent.com/solana-labs/wallet-adapter/master/packages/wallets/icons';
 
 export function SolletExtensionAdapter(_: any, network: any) {
   // const { alertError } = useAlert();
@@ -20,7 +21,9 @@ export function SolletExtensionAdapter(_: any, network: any) {
   };
 }
 
-export const getSolletExtensionWallet = (config?: SolletWalletAdapterConfig): any => {
+export const getSolletExtensionWallet = (
+  config?: SolletWalletAdapterConfig
+): any => {
   const sollet = (window as any).sollet;
   return {
     name: 'Sollet extension',

@@ -38,7 +38,7 @@ export const rustString = (property: string = 'string'): Object => {
       BufferLayout.u32('lengthPadding'),
       BufferLayout.blob(BufferLayout.offset(BufferLayout.u32(), -8), 'chars'),
     ],
-    property,
+    property
   );
   const _decode = rsl.decode.bind(rsl);
   const _encode = rsl.encode.bind(rsl);
