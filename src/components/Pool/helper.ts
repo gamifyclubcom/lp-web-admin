@@ -30,15 +30,23 @@ export const handlePoolData = (data: Types.Pool) => {
     telegram: data.telegram,
     medium: data.medium,
     campaign: {
-      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases).mul(data.token_ratio).toNumber(),
+      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases)
+        .mul(data.token_ratio)
+        .toNumber(),
       claim_at: data.claim_at,
       early_join_phase: {
         is_active: data.early_phase_is_active,
-        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0).mul(data.token_ratio).toNumber(),
+        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0)
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       public_phase: {
         is_active: true,
-        max_individual_alloc: new Decimal(data.public_phase_max_individual_alloc).mul(data.token_ratio).toNumber(),
+        max_individual_alloc: new Decimal(
+          data.public_phase_max_individual_alloc
+        )
+          .mul(data.token_ratio)
+          .toNumber(),
       },
     },
     description: data.description,
@@ -83,15 +91,23 @@ export const handleOnchainPoolData = (data: Types.FormOnchainValues) => {
     join_pool_start: data.join_pool_start,
     join_pool_end: data.join_pool_end,
     campaign: {
-      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases).mul(data.token_ratio).toNumber(),
+      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases)
+        .mul(data.token_ratio)
+        .toNumber(),
       claim_at: data.claim_at,
       early_join_phase: {
         is_active: data.early_phase_is_active,
-        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0).mul(data.token_ratio).toNumber(),
+        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0)
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       public_phase: {
         is_active: true,
-        max_individual_alloc: new Decimal(data.public_phase_max_individual_alloc).mul(data.token_ratio).toNumber(),
+        max_individual_alloc: new Decimal(
+          data.public_phase_max_individual_alloc
+        )
+          .mul(data.token_ratio)
+          .toNumber(),
       },
     },
     token_ratio: data.token_ratio,
@@ -99,17 +115,29 @@ export const handleOnchainPoolData = (data: Types.FormOnchainValues) => {
   };
 };
 
-export const handdlePoolDataToCreatePoolV2 = (data: Types.Pool, payer: PublicKey, platform: PublicKey) => {
+export const handdlePoolDataToCreatePoolV2 = (
+  data: Types.Pool,
+  payer: PublicKey,
+  platform: PublicKey
+) => {
   return {
     campaign: {
-      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases).mul(data.token_ratio).toNumber(),
+      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases)
+        .mul(data.token_ratio)
+        .toNumber(),
       claim_at: new Date(data.claim_at),
       exclusive_join_phase: {
         is_active: data.early_phase_is_active,
-        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0).mul(data.token_ratio).toNumber(),
+        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0)
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       public_phase: {
-        max_individual_alloc: new Decimal(data.public_phase_max_individual_alloc).mul(data.token_ratio).toNumber(),
+        max_individual_alloc: new Decimal(
+          data.public_phase_max_individual_alloc
+        )
+          .mul(data.token_ratio)
+          .toNumber(),
       },
     },
     join_pool_start: new Date(data.join_pool_start),
@@ -119,22 +147,34 @@ export const handdlePoolDataToCreatePoolV2 = (data: Types.Pool, payer: PublicKey
     payer: payer,
     root_admin: new PublicKey(data.root_admin),
     platform: platform,
-    token_to: data.token_to === 'SOL' ? WRAPPED_SOL_MINT : new PublicKey(data.token_to),
+    token_to:
+      data.token_to === 'SOL' ? WRAPPED_SOL_MINT : new PublicKey(data.token_to),
     token: new PublicKey(data.token_address),
   };
 };
 
-export const handdlePoolDataToUpdatePoolV2 = (data: Types.FormOnchainValues, payer: PublicKey) => {
+export const handdlePoolDataToUpdatePoolV2 = (
+  data: Types.FormOnchainValues,
+  payer: PublicKey
+) => {
   return {
     campaign: {
-      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases).mul(data.token_ratio).toNumber(),
+      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases)
+        .mul(data.token_ratio)
+        .toNumber(),
       claim_at: new Date(data.claim_at),
       exclusive_join_phase: {
         is_active: data.early_phase_is_active,
-        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0).mul(data.token_ratio).toNumber(),
+        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0)
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       public_phase: {
-        max_individual_alloc: new Decimal(data.public_phase_max_individual_alloc).mul(data.token_ratio).toNumber(),
+        max_individual_alloc: new Decimal(
+          data.public_phase_max_individual_alloc
+        )
+          .mul(data.token_ratio)
+          .toNumber(),
       },
     },
     join_pool_start: new Date(data.join_pool_start),
@@ -145,17 +185,29 @@ export const handdlePoolDataToUpdatePoolV2 = (data: Types.FormOnchainValues, pay
   };
 };
 
-export const handdlePoolDataToCreatePoolV3 = (data: Types.Pool, payer: PublicKey, platform: PublicKey) => {
+export const handdlePoolDataToCreatePoolV3 = (
+  data: Types.Pool,
+  payer: PublicKey,
+  platform: PublicKey
+) => {
   return {
     campaign: {
-      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases).mul(data.token_ratio).toNumber(),
+      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases)
+        .mul(data.token_ratio)
+        .toNumber(),
       claim_at: new Date(data.claim_at),
       exclusive_join_phase: {
         is_active: data.early_phase_is_active,
-        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0).mul(data.token_ratio).toNumber(),
+        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0)
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       public_phase: {
-        max_individual_alloc: new Decimal(data.public_phase_max_individual_alloc).mul(data.token_ratio).toNumber(),
+        max_individual_alloc: new Decimal(
+          data.public_phase_max_individual_alloc
+        )
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       fcfs_stake_phase: {
         multiplication_rate: data.fcfs_stake_phase_multiplication_rate,
@@ -169,23 +221,35 @@ export const handdlePoolDataToCreatePoolV3 = (data: Types.Pool, payer: PublicKey
     payer: payer,
     root_admin: new PublicKey(data.root_admin),
     platform: platform,
-    token_to: data.token_to === 'SOL' ? WRAPPED_SOL_MINT : new PublicKey(data.token_to),
+    token_to:
+      data.token_to === 'SOL' ? WRAPPED_SOL_MINT : new PublicKey(data.token_to),
     token: new PublicKey(data.token_address),
     fcfs_stake_join_duration: data.fcfs_stake_duration,
   };
 };
 
-export const handdlePoolDataToUpdatePoolV3 = (data: Types.FormOnchainValues, payer: PublicKey) => {
+export const handdlePoolDataToUpdatePoolV3 = (
+  data: Types.FormOnchainValues,
+  payer: PublicKey
+) => {
   return {
     campaign: {
-      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases).mul(data.token_ratio).toNumber(),
+      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases)
+        .mul(data.token_ratio)
+        .toNumber(),
       claim_at: new Date(data.claim_at),
       exclusive_join_phase: {
         is_active: data.early_phase_is_active,
-        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0).mul(data.token_ratio).toNumber(),
+        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0)
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       public_phase: {
-        max_individual_alloc: new Decimal(data.public_phase_max_individual_alloc).mul(data.token_ratio).toNumber(),
+        max_individual_alloc: new Decimal(
+          data.public_phase_max_individual_alloc
+        )
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       fcfs_stake_phase: {
         multiplication_rate: data.fcfs_stake_phase_multiplication_rate || 0,
@@ -201,17 +265,29 @@ export const handdlePoolDataToUpdatePoolV3 = (data: Types.FormOnchainValues, pay
   };
 };
 
-export const handdlePoolDataToCreatePoolV4 = (data: Types.Pool, payer: PublicKey, platform: PublicKey) => {
+export const handdlePoolDataToCreatePoolV4 = (
+  data: Types.Pool,
+  payer: PublicKey,
+  platform: PublicKey
+) => {
   return {
     campaign: {
-      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases).mul(data.token_ratio).toNumber(),
+      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases)
+        .mul(data.token_ratio)
+        .toNumber(),
       claim_at: new Date(data.claim_at),
       exclusive_join_phase: {
         is_active: data.exclusive_phase_is_active,
-        max_total_alloc: new Decimal(data.exclusive_phase_max_total_alloc || 0).mul(data.token_ratio).toNumber(),
+        max_total_alloc: new Decimal(data.exclusive_phase_max_total_alloc || 0)
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       public_phase: {
-        max_individual_alloc: new Decimal(data.public_phase_max_individual_alloc).mul(data.token_ratio).toNumber(),
+        max_individual_alloc: new Decimal(
+          data.public_phase_max_individual_alloc
+        )
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       fcfs_stake_phase: {
         multiplication_rate: data.fcfs_stake_phase_multiplication_rate,
@@ -219,7 +295,9 @@ export const handdlePoolDataToCreatePoolV4 = (data: Types.Pool, payer: PublicKey
       },
       early_join_phase: {
         is_active: data.early_phase_is_active,
-        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0).mul(data.token_ratio).toNumber(),
+        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0)
+          .mul(data.token_ratio)
+          .toNumber(),
       },
     },
     join_pool_start: new Date(data.join_pool_start),
@@ -229,7 +307,8 @@ export const handdlePoolDataToCreatePoolV4 = (data: Types.Pool, payer: PublicKey
     payer: payer,
     root_admin: new PublicKey(data.root_admin),
     platform: platform,
-    token_to: data.token_to === 'SOL' ? WRAPPED_SOL_MINT : new PublicKey(data.token_to),
+    token_to:
+      data.token_to === 'SOL' ? WRAPPED_SOL_MINT : new PublicKey(data.token_to),
     token: new PublicKey(data.token_address),
     fcfs_stake_join_duration: data.fcfs_stake_duration,
     exclusive_join_duration: data.exclusive_join_duration,
@@ -240,17 +319,28 @@ export const handdlePoolDataToCreatePoolV4 = (data: Types.Pool, payer: PublicKey
   };
 };
 
-export const handdlePoolDataToUpdatePoolV4 = (data: Types.FormOnchainValues, payer: PublicKey) => {
+export const handdlePoolDataToUpdatePoolV4 = (
+  data: Types.FormOnchainValues,
+  payer: PublicKey
+) => {
   return {
     campaign: {
-      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases).mul(data.token_ratio).toNumber(),
+      max_allocation_all_phases: new Decimal(data.max_allocation_all_phases)
+        .mul(data.token_ratio)
+        .toNumber(),
       claim_at: new Date(data.claim_at),
       exclusive_join_phase: {
         is_active: data.exclusive_phase_is_active,
-        max_total_alloc: new Decimal(data.exclusive_phase_max_total_alloc || 0).mul(data.token_ratio).toNumber(),
+        max_total_alloc: new Decimal(data.exclusive_phase_max_total_alloc || 0)
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       public_phase: {
-        max_individual_alloc: new Decimal(data.public_phase_max_individual_alloc).mul(data.token_ratio).toNumber(),
+        max_individual_alloc: new Decimal(
+          data.public_phase_max_individual_alloc
+        )
+          .mul(data.token_ratio)
+          .toNumber(),
       },
       fcfs_stake_phase: {
         multiplication_rate: data.fcfs_stake_phase_multiplication_rate || 0,
@@ -258,7 +348,9 @@ export const handdlePoolDataToUpdatePoolV4 = (data: Types.FormOnchainValues, pay
       },
       early_join_phase: {
         is_active: data.early_phase_is_active,
-        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0).mul(data.token_ratio).toNumber(),
+        max_total_alloc: new Decimal(data.early_phase_max_total_alloc || 0)
+          .mul(data.token_ratio)
+          .toNumber(),
       },
     },
     join_pool_start: new Date(data.join_pool_start),

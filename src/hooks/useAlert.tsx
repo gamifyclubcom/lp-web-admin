@@ -27,12 +27,13 @@ export function useAlert() {
         <Typography variant="body1" className={classes.bodyMessage}>
           {message}
         </Typography>
-      </div>
-    , {
-      style: {
-        width: 'fit-content'
+      </div>,
+      {
+        style: {
+          width: 'fit-content',
+        },
       }
-      });
+    );
   };
 
   const alertError = (message: string) => {
@@ -44,10 +45,11 @@ export function useAlert() {
           {message}
         </Typography>
       </div>,
-    {
-      style: {
-        width: 'fit-content'
-      }}
+      {
+        style: {
+          width: 'fit-content',
+        },
+      }
     );
   };
 
@@ -56,13 +58,14 @@ export function useAlert() {
       <div className={classes.messageSection}>
         <CgDanger />
         <Typography variant="body1" className={classes.bodyMessage}>
-          <div dangerouslySetInnerHTML={{__html: message }} />
+          <div dangerouslySetInnerHTML={{ __html: message }} />
         </Typography>
       </div>,
-    {
-      style: {
-        width: 'fit-content'
-      }}
+      {
+        style: {
+          width: 'fit-content',
+        },
+      }
     );
   };
 

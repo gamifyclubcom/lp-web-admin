@@ -21,10 +21,10 @@ const Login: React.FC = () => {
       try {
         await login(publicKey, signMessage, adapter);
         const { redirectUrl } = queryString.parse(location.search);
-        if(redirectUrl) {
-          history.push(`${redirectUrl}`)
+        if (redirectUrl) {
+          history.push(`${redirectUrl}`);
         } else {
-          history.push('/wallet')
+          history.push('/wallet');
         }
       } catch (error) {
         setLoading(false);
@@ -40,7 +40,13 @@ const Login: React.FC = () => {
         <span className="signin__heading">Your Wallet is connected</span>
         <span className="signin__description">Your current address</span>
         <span className="signin__address">{publicKey?.toString()}</span>
-        <Button fullWidth color="primary" style={{ height: '50px' }} variant="contained" onClick={handleLogin}>
+        <Button
+          fullWidth
+          color="primary"
+          style={{ height: '50px' }}
+          variant="contained"
+          onClick={handleLogin}
+        >
           {loading ? 'CONNECTING...' : 'SIGN IN WITH ADDRESS'}
         </Button>
       </div>
@@ -51,7 +57,9 @@ const Login: React.FC = () => {
     <div className="login">
       <WalletDialogProvider>
         <span className="login__heading">Connect Your Wallet</span>
-        <span className="login__description">Connect your wallet to continue signing in</span>
+        <span className="login__description">
+          Connect your wallet to continue signing in
+        </span>
         <WalletMultiButtonSingle
           color={'primary'}
           style={{

@@ -32,10 +32,16 @@ const ConnectionContext = createContext<ConnectionState>({
 });
 
 export function ConnectionProvider({ children = undefined as any }) {
-  const [slippage, setSlippage] = useLocalStorageState('slippage', DEFAULT_SLIPPAGE.toString());
+  const [slippage, setSlippage] = useLocalStorageState(
+    'slippage',
+    DEFAULT_SLIPPAGE.toString()
+  );
 
   const connection = useMemo(() => new Connection(endpoint, 'confirmed'), []);
-  const sendConnection = useMemo(() => new Connection(endpoint, 'confirmed'), []);
+  const sendConnection = useMemo(
+    () => new Connection(endpoint, 'confirmed'),
+    []
+  );
 
   const [tokens] = useState<TokenInfo[]>([]);
   const [tokenMap] = useState<Map<string, TokenInfo>>(new Map());
@@ -58,7 +64,10 @@ export function ConnectionProvider({ children = undefined as any }) {
   }, [connection]);
 
   useEffect(() => {
-    const id = sendConnection.onAccountChange(new Account().publicKey, () => {});
+    const id = sendConnection.onAccountChange(
+      new Account().publicKey,
+      () => {}
+    );
     return () => {
       sendConnection.removeAccountChangeListener(id);
     };

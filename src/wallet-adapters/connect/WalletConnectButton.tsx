@@ -4,13 +4,13 @@ import React, { FC, MouseEventHandler, useCallback, useMemo } from 'react';
 import { WalletIcon } from '@solana/wallet-adapter-material-ui';
 
 export const WalletConnectButton: FC<ButtonProps> = ({
-                                                       color = 'primary',
-                                                       variant = 'contained',
-                                                       children,
-                                                       disabled,
-                                                       onClick,
-                                                       ...props
-                                                     }) => {
+  color = 'primary',
+  variant = 'contained',
+  children,
+  disabled,
+  onClick,
+  ...props
+}) => {
   const { wallet, connect, connecting, connected } = useWallet();
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(

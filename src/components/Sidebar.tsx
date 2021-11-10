@@ -8,7 +8,12 @@ import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import { BsGearFill, BsHouseDoorFill, BsFillCollectionFill, BsExclamationOctagonFill } from 'react-icons/bs';
+import {
+  BsGearFill,
+  BsHouseDoorFill,
+  BsFillCollectionFill,
+  BsExclamationOctagonFill,
+} from 'react-icons/bs';
 import NavItem from './NavItem';
 import { useAuth } from '../hooks';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -74,7 +79,11 @@ const DashboardSidebar: React.FC = () => {
     setLinks((links) =>
       links.map((link) => ({
         ...link,
-        active: !!matchPath(location.pathname, { path: link.href, exact: false, strict: true }),
+        active: !!matchPath(location.pathname, {
+          path: link.href,
+          exact: false,
+          strict: true,
+        }),
       }))
     );
   }, [location.pathname]);
@@ -114,9 +123,20 @@ const DashboardSidebar: React.FC = () => {
       <Box className={classes.box}>
         <List>
           {links.map((item) => (
-            <NavItem href={item.href} key={item.title} title={item.title} active={item.active} icon={item.icon} />
+            <NavItem
+              href={item.href}
+              key={item.title}
+              title={item.title}
+              active={item.active}
+              icon={item.icon}
+            />
           ))}
-          <NavItem href="/logout" title="Logout" icon={<BsExclamationOctagonFill />} onClick={() => a()} />
+          <NavItem
+            href="/logout"
+            title="Logout"
+            icon={<BsExclamationOctagonFill />}
+            onClick={() => a()}
+          />
         </List>
       </Box>
       <Box style={{ flexGrow: 1 }} />
@@ -129,7 +149,9 @@ const DashboardSidebar: React.FC = () => {
         anchor="left"
         open
         variant="persistent"
-        PaperProps={{ style: { width: 256, top: 64, height: 'calc(100% - 64px)' } }}
+        PaperProps={{
+          style: { width: 256, top: 64, height: 'calc(100% - 64px)' },
+        }}
       >
         {content}
       </Drawer>

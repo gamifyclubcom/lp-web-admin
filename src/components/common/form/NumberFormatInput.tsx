@@ -34,7 +34,7 @@ const NumberInput: React.FC<Props & NumberFormatProps> = ({
       render={({ field }) => {
         return (
           <NumberFormat
-          {...{ ...field, ...rest }}
+            {...{ ...field, ...rest }}
             thousandSeparator={true}
             customInput={TextField}
             label={label}

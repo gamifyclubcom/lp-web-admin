@@ -11,7 +11,10 @@ import {
 import CopyIcon from '@material-ui/icons/FileCopy';
 import DisconnectIcon from '@material-ui/icons/LinkOff';
 import SwitchIcon from '@material-ui/icons/SwapHoriz';
-import { useWalletDialog, WalletIcon } from '@solana/wallet-adapter-material-ui';
+import {
+  useWalletDialog,
+  WalletIcon,
+} from '@solana/wallet-adapter-material-ui';
 import { useWallet } from '@solana/wallet-adapter-react';
 import React, { FC, useMemo, useState } from 'react';
 import { WalletConnectButton } from './WalletConnectButton';
@@ -47,13 +50,23 @@ export const WalletMultiButtonSingle: FC<ButtonProps> = ({
     return (
       <>
         <div
-          style={{ height: '2em', marginLeft: '-3em', display: 'flex', justifyItems: 'flex-end', alignItems: 'center' }}
+          style={{
+            height: '2em',
+            marginLeft: '-3em',
+            display: 'flex',
+            justifyItems: 'flex-end',
+            alignItems: 'center',
+          }}
         >
           <IconButton
             onClick={openSelectWallets}
             aria-label="delete"
             color={'primary'}
-            style={{ height: '100%', display: 'flex', justifyContent: 'center' }}
+            style={{
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
           >
             <SwapHorizIcon fontSize="large" />
           </IconButton>
@@ -67,13 +80,23 @@ export const WalletMultiButtonSingle: FC<ButtonProps> = ({
     return (
       <>
         <div
-          style={{ height: '2em', marginLeft: '-3em', display: 'flex', justifyItems: 'flex-end', alignItems: 'center' }}
+          style={{
+            height: '2em',
+            marginLeft: '-3em',
+            display: 'flex',
+            justifyItems: 'flex-end',
+            alignItems: 'center',
+          }}
         >
           <IconButton
             onClick={openSelectWallets}
             aria-label="delete"
             color={'primary'}
-            style={{ height: '100%', display: 'flex', justifyContent: 'center' }}
+            style={{
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
           >
             <SwapHorizIcon fontSize="large" />
           </IconButton>
@@ -86,7 +109,13 @@ export const WalletMultiButtonSingle: FC<ButtonProps> = ({
   return (
     <>
       <div
-        style={{ height: '2em', marginLeft: '-3em', display: 'flex', justifyItems: 'flex-end', alignItems: 'center' }}
+        style={{
+          height: '2em',
+          marginLeft: '-3em',
+          display: 'flex',
+          justifyItems: 'flex-end',
+          alignItems: 'center',
+        }}
       >
         <IconButton
           onClick={openSelectWallets}

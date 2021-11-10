@@ -21,13 +21,23 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useAlert, useConnection, useDebounce } from '../../hooks';
 import * as Types from '../../types';
 import * as api from '../../api/pool';
-import { poolChangeAdminValidator, poolOffchainValidator, poolOnchainValidator } from '../../utils/validators';
+import {
+  poolChangeAdminValidator,
+  poolOffchainValidator,
+  poolOnchainValidator,
+} from '../../utils/validators';
 import CheckBoxInput from '../common/form/CheckBoxInput';
 import DateInput from '../common/form/DateInput';
 import Input from '../common/form/Input';
 import useStyles from './styles';
 import { DEFAULT_POOL_LOGO_URL } from '../../utils/constants';
-import { getConnection, isEmpty, parseTransaction, sendSignedTransaction, sleep } from '../../shared/helper';
+import {
+  getConnection,
+  isEmpty,
+  parseTransaction,
+  sendSignedTransaction,
+  sleep,
+} from '../../shared/helper';
 import {
   handdlePoolDataToUpdatePoolV2,
   handdlePoolDataToUpdatePoolV3,
@@ -51,7 +61,10 @@ type FormOnchainValues = Types.FormOnchainValues & {
   current_voting_end: string;
   is_checked_fee_information: boolean;
 };
-type FormOffchainValues = Types.FormOffchainValues & { join_pool_start: string; is_active: boolean };
+type FormOffchainValues = Types.FormOffchainValues & {
+  join_pool_start: string;
+  is_active: boolean;
+};
 type FormChangeRootAdmin = { root_admin: string };
 
 interface URLParams {
@@ -132,7 +145,8 @@ const UpdatePool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pool, setPool] = useState<Types.Pool | undefined>(undefined);
   const [error, setError] = useState<Types.ServerError | null>(null);
-  const { wallet, connected, connect, publicKey, signTransaction } = useWallet();
+  const { wallet, connected, connect, publicKey, signTransaction } =
+    useWallet();
   const { connection } = useConnection();
   const contractAction = new Actions(connection);
   const { id }: URLParams = useParams();
@@ -172,7 +186,9 @@ const UpdatePool: React.FC = () => {
       }
       setLoading(true);
       const action = new Actions(connection);
-      const poolVersion = await action.getVersionOfPool(new PublicKey(pool.contract_address));
+      const poolVersion = await action.getVersionOfPool(
+        new PublicKey(pool.contract_address)
+      );
       switch (poolVersion) {
         case 2: {
           const params = handdlePoolDataToUpdatePoolV2(data, publicKey);
@@ -264,7 +280,10 @@ const UpdatePool: React.FC = () => {
 
     let prepareData;
     if (wallet && publicKey) {
-      prepareData = await contractAction.changePoolAdmin(new PublicKey(pool?.contract_address as string), newPoolAdmin);
+      prepareData = await contractAction.changePoolAdmin(
+        new PublicKey(pool?.contract_address as string),
+        newPoolAdmin
+      );
     }
 
     try {
@@ -370,9 +389,18 @@ const UpdatePool: React.FC = () => {
 
   const toggleEditMode = true;
 
-  const [isRequreidEarlyPhaseMaxTotalAlloc, setIsRequreidEarlyPhaseMaxTotalAlloc] = useState(true);
-  const [isRequreidExclusivePhaseMaxTotalAlloc, setIsRequreidExclusivePhaseMaxTotalAlloc] = useState(true);
-  const [isRequreidFcfsStakePhaseMaxTotalAlloc, setIsRequreidFcfsStakePhaseMaxTotalAlloc] = useState(true);
+  const [
+    isRequreidEarlyPhaseMaxTotalAlloc,
+    setIsRequreidEarlyPhaseMaxTotalAlloc,
+  ] = useState(true);
+  const [
+    isRequreidExclusivePhaseMaxTotalAlloc,
+    setIsRequreidExclusivePhaseMaxTotalAlloc,
+  ] = useState(true);
+  const [
+    isRequreidFcfsStakePhaseMaxTotalAlloc,
+    setIsRequreidFcfsStakePhaseMaxTotalAlloc,
+  ] = useState(true);
   const [feeSetting, setFeeSetting] = useState(0);
 
   const showTransferAdmin = () => {
@@ -515,14 +543,26 @@ const UpdatePool: React.FC = () => {
       setOnchainValue('token_y', token_y);
       setOnchainValue('claim_at', claim_at);
       setOnchainValue('early_phase_is_active', early_phase_is_active);
-      setOnchainValue('early_phase_max_total_alloc', early_phase_max_total_alloc);
-      setOnchainValue('public_phase_max_individual_alloc', public_phase_max_individual_alloc);
+      setOnchainValue(
+        'early_phase_max_total_alloc',
+        early_phase_max_total_alloc
+      );
+      setOnchainValue(
+        'public_phase_max_individual_alloc',
+        public_phase_max_individual_alloc
+      );
       setOnchainValue('token_total_supply', token_total_supply);
-      setOnchainValue('fcfs_stake_phase_multiplication_rate', fcfs_stake_phase_multiplication_rate);
+      setOnchainValue(
+        'fcfs_stake_phase_multiplication_rate',
+        fcfs_stake_phase_multiplication_rate
+      );
       setOnchainValue('fcfs_stake_duration', fcfs_stake_duration);
       setOnchainValue('exclusive_phase_is_active', exclusive_phase_is_active);
       setOnchainValue('exclusive_join_duration', exclusive_join_duration);
-      setOnchainValue('exclusive_phase_max_total_alloc', exclusive_phase_max_total_alloc);
+      setOnchainValue(
+        'exclusive_phase_max_total_alloc',
+        exclusive_phase_max_total_alloc
+      );
       setOnchainValue('fcfs_stake_phase_is_active', fcfs_stake_phase_is_active);
       setOnchainValue('voting_phase_is_active', voting_phase_is_active);
       setOnchainValue('voting_start', voting_start);
@@ -564,7 +604,11 @@ const UpdatePool: React.FC = () => {
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <>
-        <Backdrop className={classes.backdrop} open={loading} onClick={() => setLoading(false)}>
+        <Backdrop
+          className={classes.backdrop}
+          open={loading}
+          onClick={() => setLoading(false)}
+        >
           <CircularProgress color="inherit" />
         </Backdrop>
         <Card style={{ marginBottom: theme.spacing(2) }}>
@@ -582,7 +626,12 @@ const UpdatePool: React.FC = () => {
                 >
                   Cancel
                 </Button>
-                <Avatar src={isEmpty(poolLogoUrl) ? DEFAULT_POOL_LOGO_URL : poolLogoUrl} className={classes.avatar}>
+                <Avatar
+                  src={
+                    isEmpty(poolLogoUrl) ? DEFAULT_POOL_LOGO_URL : poolLogoUrl
+                  }
+                  className={classes.avatar}
+                >
                   L
                 </Avatar>
               </>
@@ -604,7 +653,10 @@ const UpdatePool: React.FC = () => {
               {toggleEditMode && (
                 <>
                   <Grid item container className={classes.formItem}>
-                    <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                    <Grid
+                      item
+                      style={{ flex: 1, marginRight: theme.spacing(1) }}
+                    >
                       <Input
                         control={offchainController}
                         label={PoolInputLabel.contract_address}
@@ -614,10 +666,17 @@ const UpdatePool: React.FC = () => {
                         InputProps={{
                           readOnly: true,
                           endAdornment: (
-                            <CopyToClipboard text={pool?.contract_address || ''} onCopy={() => setCopied(true)}>
+                            <CopyToClipboard
+                              text={pool?.contract_address || ''}
+                              onCopy={() => setCopied(true)}
+                            >
                               <InputAdornment position="start">
                                 <IconButton onClick={() => setCopied(true)}>
-                                  {copied ? <BsFiles color="primary" /> : <BsFiles />}
+                                  {copied ? (
+                                    <BsFiles color="primary" />
+                                  ) : (
+                                    <BsFiles />
+                                  )}
                                 </IconButton>
                               </InputAdornment>
                             </CopyToClipboard>
@@ -625,7 +684,10 @@ const UpdatePool: React.FC = () => {
                         }}
                       />
                     </Grid>
-                    <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
+                    <Grid
+                      item
+                      style={{ flex: 1, marginLeft: theme.spacing(1) }}
+                    >
                       <Input
                         control={onchainController}
                         label={PoolInputLabel.token_y}
@@ -636,10 +698,17 @@ const UpdatePool: React.FC = () => {
                         InputProps={{
                           readOnly: true,
                           endAdornment: (
-                            <CopyToClipboard text={pool?.token_y || ''} onCopy={() => setCopied(true)}>
+                            <CopyToClipboard
+                              text={pool?.token_y || ''}
+                              onCopy={() => setCopied(true)}
+                            >
                               <InputAdornment position="start">
                                 <IconButton onClick={() => setCopied(true)}>
-                                  {copied ? <BsFiles color="primary" /> : <BsFiles />}
+                                  {copied ? (
+                                    <BsFiles color="primary" />
+                                  ) : (
+                                    <BsFiles />
+                                  )}
                                 </IconButton>
                               </InputAdornment>
                             </CopyToClipboard>
@@ -657,7 +726,9 @@ const UpdatePool: React.FC = () => {
                     required
                     control={offchainController}
                     inputProps={{
-                      readOnly: new Date(getValuesOffchain('pool_start')).getTime() < Date.now(),
+                      readOnly:
+                        new Date(getValuesOffchain('pool_start')).getTime() <
+                        Date.now(),
                     }}
                     label={PoolInputLabel.name}
                     name="name"
@@ -684,7 +755,9 @@ const UpdatePool: React.FC = () => {
                     control={offchainController}
                     label={PoolInputLabel.website}
                     inputProps={{
-                      readOnly: new Date(getValuesOffchain('pool_start')).getTime() < Date.now(),
+                      readOnly:
+                        new Date(getValuesOffchain('pool_start')).getTime() <
+                        Date.now(),
                     }}
                     name="website"
                     isError={Boolean(offchainError?.website)}
@@ -714,7 +787,14 @@ const UpdatePool: React.FC = () => {
                     errorMessage={offchainError?.twitter?.message}
                   />
                 </Grid>
-                <Grid item style={{ flex: 1, marginLeft: theme.spacing(1), marginRight: theme.spacing(1) }}>
+                <Grid
+                  item
+                  style={{
+                    flex: 1,
+                    marginLeft: theme.spacing(1),
+                    marginRight: theme.spacing(1),
+                  }}
+                >
                   <Input
                     control={offchainController}
                     label={PoolInputLabel.medium}
@@ -747,7 +827,14 @@ const UpdatePool: React.FC = () => {
                     errorMessage={offchainError?.pool_start?.message}
                   />
                 </Grid>
-                <Grid item style={{ flex: 1, marginLeft: theme.spacing(1), marginRight: theme.spacing(1) }}>
+                <Grid
+                  item
+                  style={{
+                    flex: 1,
+                    marginLeft: theme.spacing(1),
+                    marginRight: theme.spacing(1),
+                  }}
+                >
                   <Input
                     control={offchainController}
                     inputProps={{}}
@@ -761,7 +848,10 @@ const UpdatePool: React.FC = () => {
                   <NumberInput
                     onChange={() => offchainTrigger('liquidity_percentage')}
                     onValueChange={(values: any) => {
-                      setOffchainValue('liquidity_percentage', values.floatValue);
+                      setOffchainValue(
+                        'liquidity_percentage',
+                        values.floatValue
+                      );
                     }}
                     control={offchainController}
                     inputProps={{}}
@@ -815,7 +905,10 @@ const UpdatePool: React.FC = () => {
                   inputProps={{ readOnly: true }}
                   InputProps={{
                     endAdornment: (
-                      <CopyToClipboard text={pool?.token_address || ''} onCopy={() => setCopied(true)}>
+                      <CopyToClipboard
+                        text={pool?.token_address || ''}
+                        onCopy={() => setCopied(true)}
+                      >
                         <InputAdornment position="start">
                           <IconButton onClick={() => setCopied(true)}>
                             {copied ? <BsFiles color="primary" /> : <BsFiles />}
@@ -837,11 +930,20 @@ const UpdatePool: React.FC = () => {
                     isError={Boolean(offchainError?.token_name)}
                     errorMessage={offchainError?.token_name?.message}
                     inputProps={{
-                      readOnly: new Date(getValuesOffchain('pool_start')).getTime() < Date.now(),
+                      readOnly:
+                        new Date(getValuesOffchain('pool_start')).getTime() <
+                        Date.now(),
                     }}
                   />
                 </Grid>
-                <Grid item style={{ flex: 1, marginLeft: theme.spacing(1), marginRight: theme.spacing(1) }}>
+                <Grid
+                  item
+                  style={{
+                    flex: 1,
+                    marginLeft: theme.spacing(1),
+                    marginRight: theme.spacing(1),
+                  }}
+                >
                   <Input
                     required
                     control={offchainController}
@@ -850,7 +952,9 @@ const UpdatePool: React.FC = () => {
                     isError={Boolean(offchainError?.token_symbol)}
                     errorMessage={offchainError?.token_symbol?.message}
                     inputProps={{
-                      readOnly: new Date(getValuesOffchain('pool_start')).getTime() < Date.now(),
+                      readOnly:
+                        new Date(getValuesOffchain('pool_start')).getTime() <
+                        Date.now(),
                     }}
                   />
                 </Grid>
@@ -927,7 +1031,11 @@ const UpdatePool: React.FC = () => {
                     <DateInput
                       required
                       control={onchainController}
-                      disabled={new Date(getValuesOnchain('current_voting_start')).getTime() < Date.now()}
+                      disabled={
+                        new Date(
+                          getValuesOnchain('current_voting_start')
+                        ).getTime() < Date.now()
+                      }
                       name="voting_start"
                       label={PoolInputLabel.voting_start}
                       isError={Boolean(onchainError.voting_start)}
@@ -939,12 +1047,16 @@ const UpdatePool: React.FC = () => {
                       required
                       control={onchainController}
                       name="voting_end"
-                      label={`${PoolInputLabel.voting_end_1}${getValuesOnchain('max_voting_days')}${
-                        PoolInputLabel.voting_end_2
-                      }`}
+                      label={`${PoolInputLabel.voting_end_1}${getValuesOnchain(
+                        'max_voting_days'
+                      )}${PoolInputLabel.voting_end_2}`}
                       isError={Boolean(onchainError?.voting_end)}
                       errorMessage={onchainError?.voting_end?.message}
-                      disabled={new Date(getValuesOnchain('current_voting_end')).getTime() < Date.now()}
+                      disabled={
+                        new Date(
+                          getValuesOnchain('current_voting_end')
+                        ).getTime() < Date.now()
+                      }
                     />
                   </Grid>
                 </Grid>
@@ -988,18 +1100,29 @@ const UpdatePool: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid item container className={classes.formItem}>
-                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }} xs={6}>
+                <Grid
+                  item
+                  style={{ flex: 1, marginRight: theme.spacing(1) }}
+                  xs={6}
+                >
                   <NumberInput
                     onChange={() => onchainTrigger('max_allocation_all_phases')}
                     onValueChange={(values: any) => {
-                      setOnchainValue('max_allocation_all_phases', values.floatValue);
+                      setOnchainValue(
+                        'max_allocation_all_phases',
+                        values.floatValue
+                      );
                     }}
                     required
                     control={onchainController}
-                    label={`${PoolInputLabel.max_allocation_all_phases} (${getValuesOffchain('token_to')})`}
+                    label={`${
+                      PoolInputLabel.max_allocation_all_phases
+                    } (${getValuesOffchain('token_to')})`}
                     name="max_allocation_all_phases"
                     isError={Boolean(onchainError?.max_allocation_all_phases)}
-                    errorMessage={onchainError?.max_allocation_all_phases?.message}
+                    errorMessage={
+                      onchainError?.max_allocation_all_phases?.message
+                    }
                     inputProps={{ readOnly: getValuesOnchain('is_active') }}
                   />
                 </Grid>
@@ -1013,8 +1136,13 @@ const UpdatePool: React.FC = () => {
                     disabled={getValuesOnchain('is_active')}
                     defaultChecked={true}
                     onChange={(event) => {
-                      setIsRequreidEarlyPhaseMaxTotalAlloc(event.target.checked);
-                      setOnchainValue('early_phase_is_active', event.target.checked);
+                      setIsRequreidEarlyPhaseMaxTotalAlloc(
+                        event.target.checked
+                      );
+                      setOnchainValue(
+                        'early_phase_is_active',
+                        event.target.checked
+                      );
                       if (!event.target.checked) {
                         setIsRequreidFcfsStakePhaseMaxTotalAlloc(false);
                         setOnchainValue('fcfs_stake_phase_is_active', false);
@@ -1028,7 +1156,10 @@ const UpdatePool: React.FC = () => {
                     <NumberInput
                       onChange={() => onchainTrigger('early_join_duration')}
                       onValueChange={(values: any) => {
-                        setOnchainValue('early_join_duration', values.floatValue);
+                        setOnchainValue(
+                          'early_join_duration',
+                          values.floatValue
+                        );
                       }}
                       required
                       control={onchainController}
@@ -1044,16 +1175,27 @@ const UpdatePool: React.FC = () => {
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
                   {getValuesOnchain('early_phase_is_active') && (
                     <NumberInput
-                      onChange={() => onchainTrigger('early_phase_max_total_alloc')}
+                      onChange={() =>
+                        onchainTrigger('early_phase_max_total_alloc')
+                      }
                       onValueChange={(values: any) => {
-                        setOnchainValue('early_phase_max_total_alloc', values.floatValue);
+                        setOnchainValue(
+                          'early_phase_max_total_alloc',
+                          values.floatValue
+                        );
                       }}
                       required={isRequreidEarlyPhaseMaxTotalAlloc}
                       control={onchainController}
-                      label={`${PoolInputLabel.early_phase_max_total_alloc} (${getValuesOffchain('token_to')})`}
+                      label={`${
+                        PoolInputLabel.early_phase_max_total_alloc
+                      } (${getValuesOffchain('token_to')})`}
                       name="early_phase_max_total_alloc"
-                      isError={Boolean(onchainError?.early_phase_max_total_alloc)}
-                      errorMessage={onchainError?.early_phase_max_total_alloc?.message}
+                      isError={Boolean(
+                        onchainError?.early_phase_max_total_alloc
+                      )}
+                      errorMessage={
+                        onchainError?.early_phase_max_total_alloc?.message
+                      }
                       inputProps={{ readOnly: getValuesOnchain('is_active') }}
                     />
                   )}
@@ -1070,11 +1212,21 @@ const UpdatePool: React.FC = () => {
                     disabled={getValuesOnchain('is_active')}
                     onChange={(event) => {
                       if (event.target.checked) {
-                        setIsRequreidEarlyPhaseMaxTotalAlloc(!event.target.checked);
-                        setOnchainValue('early_phase_is_active', !event.target.checked);
+                        setIsRequreidEarlyPhaseMaxTotalAlloc(
+                          !event.target.checked
+                        );
+                        setOnchainValue(
+                          'early_phase_is_active',
+                          !event.target.checked
+                        );
                       }
-                      setIsRequreidExclusivePhaseMaxTotalAlloc(event.target.checked);
-                      setOnchainValue('exclusive_phase_is_active', event.target.checked);
+                      setIsRequreidExclusivePhaseMaxTotalAlloc(
+                        event.target.checked
+                      );
+                      setOnchainValue(
+                        'exclusive_phase_is_active',
+                        event.target.checked
+                      );
                     }}
                   />
                 </Grid>
@@ -1083,30 +1235,46 @@ const UpdatePool: React.FC = () => {
                     <NumberInput
                       onChange={() => onchainTrigger('exclusive_join_duration')}
                       onValueChange={(values: any) => {
-                        setOnchainValue('exclusive_join_duration', values.floatValue);
+                        setOnchainValue(
+                          'exclusive_join_duration',
+                          values.floatValue
+                        );
                       }}
                       required
                       control={onchainController}
                       label={PoolInputLabel.exclusive_join_duration}
                       name="exclusive_join_duration"
                       isError={Boolean(onchainError?.exclusive_join_duration)}
-                      errorMessage={onchainError?.exclusive_join_duration?.message}
+                      errorMessage={
+                        onchainError?.exclusive_join_duration?.message
+                      }
                     />
                   </Grid>
                 )}
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
                   {getValuesOnchain('exclusive_phase_is_active') && (
                     <NumberInput
-                      onChange={() => onchainTrigger('exclusive_phase_max_total_alloc')}
+                      onChange={() =>
+                        onchainTrigger('exclusive_phase_max_total_alloc')
+                      }
                       onValueChange={(values: any) => {
-                        setOnchainValue('exclusive_phase_max_total_alloc', values.floatValue);
+                        setOnchainValue(
+                          'exclusive_phase_max_total_alloc',
+                          values.floatValue
+                        );
                       }}
                       required={isRequreidExclusivePhaseMaxTotalAlloc}
                       control={onchainController}
-                      label={`${PoolInputLabel.exclusive_phase_max_total_alloc} (${getValuesOffchain('token_to')})`}
+                      label={`${
+                        PoolInputLabel.exclusive_phase_max_total_alloc
+                      } (${getValuesOffchain('token_to')})`}
                       name="exclusive_phase_max_total_alloc"
-                      isError={Boolean(onchainError?.exclusive_phase_max_total_alloc)}
-                      errorMessage={onchainError?.exclusive_phase_max_total_alloc?.message}
+                      isError={Boolean(
+                        onchainError?.exclusive_phase_max_total_alloc
+                      )}
+                      errorMessage={
+                        onchainError?.exclusive_phase_max_total_alloc?.message
+                      }
                     />
                   )}
                 </Grid>
@@ -1122,43 +1290,75 @@ const UpdatePool: React.FC = () => {
                       defaultChecked={true}
                       disabled={getValuesOnchain('is_active')}
                       onChange={(event) => {
-                        setIsRequreidFcfsStakePhaseMaxTotalAlloc(event.target.checked);
-                        setOnchainValue('fcfs_stake_phase_is_active', event.target.checked);
+                        setIsRequreidFcfsStakePhaseMaxTotalAlloc(
+                          event.target.checked
+                        );
+                        setOnchainValue(
+                          'fcfs_stake_phase_is_active',
+                          event.target.checked
+                        );
                       }}
                     />
                   </Grid>
                   {isRequreidFcfsStakePhaseMaxTotalAlloc && (
                     <>
-                      <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                      <Grid
+                        item
+                        style={{ flex: 1, marginRight: theme.spacing(1) }}
+                      >
                         <NumberInput
                           onChange={() => onchainTrigger('fcfs_stake_duration')}
                           onValueChange={(values: any) => {
-                            setOnchainValue('fcfs_stake_duration', values.floatValue);
+                            setOnchainValue(
+                              'fcfs_stake_duration',
+                              values.floatValue
+                            );
                           }}
                           required
                           control={onchainController}
                           label={PoolInputLabel.fcfs_stake_duration}
                           name="fcfs_stake_duration"
                           isError={Boolean(onchainError?.fcfs_stake_duration)}
-                          errorMessage={onchainError?.fcfs_stake_duration?.message}
-                          inputProps={{ readOnly: getValuesOnchain('is_active') }}
+                          errorMessage={
+                            onchainError?.fcfs_stake_duration?.message
+                          }
+                          inputProps={{
+                            readOnly: getValuesOnchain('is_active'),
+                          }}
                         />
                       </Grid>
-                      <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
+                      <Grid
+                        item
+                        style={{ flex: 1, marginLeft: theme.spacing(1) }}
+                      >
                         <NumberInput
-                          onChange={() => onchainTrigger('fcfs_stake_phase_multiplication_rate')}
+                          onChange={() =>
+                            onchainTrigger(
+                              'fcfs_stake_phase_multiplication_rate'
+                            )
+                          }
                           onValueChange={(values: any) => {
-                            setOnchainValue('fcfs_stake_phase_multiplication_rate', values.floatValue);
+                            setOnchainValue(
+                              'fcfs_stake_phase_multiplication_rate',
+                              values.floatValue
+                            );
                           }}
                           required
                           control={onchainController}
-                          label={`${PoolInputLabel.fcfs_stake_phase_multiplication_rate} (${getValuesOffchain(
-                            'token_to'
-                          )})`}
+                          label={`${
+                            PoolInputLabel.fcfs_stake_phase_multiplication_rate
+                          } (${getValuesOffchain('token_to')})`}
                           name="fcfs_stake_phase_multiplication_rate"
-                          isError={Boolean(onchainError?.fcfs_stake_phase_multiplication_rate)}
-                          errorMessage={onchainError?.fcfs_stake_phase_multiplication_rate?.message}
-                          inputProps={{ readOnly: getValuesOnchain('is_active') }}
+                          isError={Boolean(
+                            onchainError?.fcfs_stake_phase_multiplication_rate
+                          )}
+                          errorMessage={
+                            onchainError?.fcfs_stake_phase_multiplication_rate
+                              ?.message
+                          }
+                          inputProps={{
+                            readOnly: getValuesOnchain('is_active'),
+                          }}
                         />
                       </Grid>
                     </>
@@ -1203,16 +1403,27 @@ const UpdatePool: React.FC = () => {
               </Grid>
               <Grid item container className={classes.formItem}>
                 <NumberInput
-                  onChange={() => onchainTrigger('public_phase_max_individual_alloc')}
+                  onChange={() =>
+                    onchainTrigger('public_phase_max_individual_alloc')
+                  }
                   onValueChange={(values: any) => {
-                    setOnchainValue('public_phase_max_individual_alloc', values.floatValue);
+                    setOnchainValue(
+                      'public_phase_max_individual_alloc',
+                      values.floatValue
+                    );
                   }}
                   required
                   control={onchainController}
-                  label={`${PoolInputLabel.public_phase_max_individual_alloc} (${getValuesOffchain('token_to')})`}
+                  label={`${
+                    PoolInputLabel.public_phase_max_individual_alloc
+                  } (${getValuesOffchain('token_to')})`}
                   name="public_phase_max_individual_alloc"
-                  isError={Boolean(onchainError?.public_phase_max_individual_alloc)}
-                  errorMessage={onchainError?.public_phase_max_individual_alloc?.message}
+                  isError={Boolean(
+                    onchainError?.public_phase_max_individual_alloc
+                  )}
+                  errorMessage={
+                    onchainError?.public_phase_max_individual_alloc?.message
+                  }
                   inputProps={{ readOnly: getValuesOnchain('is_active') }}
                 />
               </Grid>

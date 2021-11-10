@@ -68,7 +68,11 @@ const PoolTiers: React.FC<Props> = ({ pool }) => {
       }
 
       if (pool.exclusive_snapshot_time) {
-        setSnapshotTime(moment(pool.exclusive_snapshot_time).format('MMMM DD yyyy, hh:mm A (UTCZ)'));
+        setSnapshotTime(
+          moment(pool.exclusive_snapshot_time).format(
+            'MMMM DD yyyy, hh:mm A (UTCZ)'
+          )
+        );
       }
 
       setTotalExclusiveRound(pool.exclusive_phase_max_total_alloc);
@@ -136,7 +140,9 @@ const PoolTiers: React.FC<Props> = ({ pool }) => {
       <CardContent style={{ paddingRight: '5%', paddingLeft: '5%' }}>
         <Grid justifyContent="space-between">
           <Grid>Snapshot time: {snapshotTime}</Grid>
-          <Grid>Total raise in ISOLA exclusive round: {totalExclusiveRound} SOL</Grid>
+          <Grid>
+            Total raise in ISOLA exclusive round: {totalExclusiveRound} SOL
+          </Grid>
         </Grid>
       </CardContent>
       <CardContent style={{ paddingRight: '5%', paddingLeft: '5%' }}>
@@ -172,7 +178,11 @@ const TiersTable: React.FC<{ data: RowData[] }> = ({ data }) => {
       align: 'center',
     },
     { title: 'Total users', field: 'totalUser', align: 'center' },
-    { title: 'Allocation per user (SOL)', field: 'maxIndividual', align: 'center' },
+    {
+      title: 'Allocation per user (SOL)',
+      field: 'maxIndividual',
+      align: 'center',
+    },
     { title: 'Total Allocation (SOL)', field: 'totalAmount', align: 'center' },
   ];
 
@@ -183,7 +193,12 @@ const TiersTable: React.FC<{ data: RowData[] }> = ({ data }) => {
           <MaterialTable
             columns={columns}
             data={data}
-            options={{ ...materialTableConfig.options, search: false, paging: false, toolbar: false }}
+            options={{
+              ...materialTableConfig.options,
+              search: false,
+              paging: false,
+              toolbar: false,
+            }}
             localization={materialTable}
             icons={materialTableConfig.icons}
           />

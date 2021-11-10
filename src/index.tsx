@@ -24,7 +24,11 @@ import { getSolletWallet } from './wallet-adapters/custom-providers';
 const queryClient = new QueryClient();
 
 if (window.sollet) {
-  const wallets = [getPhantomWallet(), getSolletWallet(), getSolletExtensionWallet()];
+  const wallets = [
+    getPhantomWallet(),
+    getSolletWallet(),
+    getSolletExtensionWallet(),
+  ];
 
   handleSollet(wallets);
 } else {
@@ -36,7 +40,11 @@ if (window.sollet) {
 
 function handleSollet(wallets: any) {
   if (!wallets) {
-    wallets = [getPhantomWallet(), getSolletWallet(), getSolletExtensionWallet()];
+    wallets = [
+      getPhantomWallet(),
+      getSolletWallet(),
+      getSolletExtensionWallet(),
+    ];
   }
   Sentry.init({
     dsn: 'https://51fe6861b8f5406da4be19b1e79018b9@o936371.ingest.sentry.io/5886503',

@@ -1,7 +1,9 @@
 import axios from './axios-adapter';
 import * as Request from '../types/request';
 
-export const login = (params: Record<string, unknown>): Promise<Request.LoginResponse> => {
+export const login = (
+  params: Record<string, unknown>
+): Promise<Request.LoginResponse> => {
   return axios.post('auth/sign-in', params);
 };
 

@@ -15,7 +15,11 @@ import { poolSettimeValidator } from '../../utils/validators';
 import DateInput from '../common/form/DateInput';
 import Input from '../common/form/Input';
 import useStyles from './styles';
-import { parseTransaction, sendSignedTransaction, sleep } from '../../shared/helper';
+import {
+  parseTransaction,
+  sendSignedTransaction,
+  sleep,
+} from '../../shared/helper';
 import { PoolInputLabel } from './constants';
 import * as poolSdk from '@gamify/onchain-program-sdk';
 import { PublicKey } from '@solana/web3.js';
@@ -50,10 +54,17 @@ const defaultValues: FormValues = {
   new_exclusive_join_duration: 20,
 };
 
-const PoolTiming: React.FC<Props> = ({ pool, loading = false, fetchPool, setLoading, syncAndFetchPool }) => {
+const PoolTiming: React.FC<Props> = ({
+  pool,
+  loading = false,
+  fetchPool,
+  setLoading,
+  syncAndFetchPool,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const { wallet, connected, connect, publicKey, signTransaction } = useWallet();
+  const { wallet, connected, connect, publicKey, signTransaction } =
+    useWallet();
   const { connection } = useConnection();
   const [earlyJoinIsActive, setEarlyJoinIsActive] = useState(false);
   const [exclusiveJoinIsActive, setExclusiveJoinIsActive] = useState(false);
@@ -222,7 +233,11 @@ const PoolTiming: React.FC<Props> = ({ pool, loading = false, fetchPool, setLoad
                 <DateInput
                   required
                   control={control}
-                  disabled={!toggleEditMode || new Date(getValues('join_pool_start')).getTime() < Date.now()}
+                  disabled={
+                    !toggleEditMode ||
+                    new Date(getValues('join_pool_start')).getTime() <
+                      Date.now()
+                  }
                   name="new_join_pool_start"
                   label={PoolInputLabel.join_pool_start}
                   isError={Boolean(errors.new_join_pool_start)}
@@ -234,7 +249,10 @@ const PoolTiming: React.FC<Props> = ({ pool, loading = false, fetchPool, setLoad
                   required
                   control={control}
                   name="new_join_pool_end"
-                  disabled={!toggleEditMode || new Date(getValues('join_pool_end')).getTime() < Date.now()}
+                  disabled={
+                    !toggleEditMode ||
+                    new Date(getValues('join_pool_end')).getTime() < Date.now()
+                  }
                   label={PoolInputLabel.join_pool_end}
                   isError={Boolean(errors?.new_join_pool_end)}
                   errorMessage={errors?.new_join_pool_end?.message}
@@ -247,7 +265,10 @@ const PoolTiming: React.FC<Props> = ({ pool, loading = false, fetchPool, setLoad
                   required
                   control={control}
                   name="new_claim_at"
-                  disabled={!toggleEditMode || new Date(getValues('claim_at')).getTime() < Date.now()}
+                  disabled={
+                    !toggleEditMode ||
+                    new Date(getValues('claim_at')).getTime() < Date.now()
+                  }
                   label={PoolInputLabel.claim_at}
                   isError={Boolean(errors?.new_claim_at)}
                   errorMessage={errors?.new_claim_at?.message}

@@ -6,7 +6,13 @@ import { useEffect, useState } from 'react';
 import { useAlert, useConnection } from '../../hooks';
 import { Actions, ICommonSetting } from '@gamify/onchain-program-sdk';
 import { PublicKey } from '@solana/web3.js';
-import { Backdrop, Button, CardActions, CircularProgress, TextField } from '@material-ui/core';
+import {
+  Backdrop,
+  Button,
+  CardActions,
+  CircularProgress,
+  TextField,
+} from '@material-ui/core';
 import useStyles from './styles';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { sendSignedTransaction } from '../../shared/helper';
@@ -36,16 +42,25 @@ const Setting: React.FC = () => {
 
   // Vote
   const [maxVotingDays, setMaxVotingDays] = useState(0);
-  const [isMaxVotingDaysInputError, setIsMaxVotingDaysInputError] = useState(false);
+  const [isMaxVotingDaysInputError, setIsMaxVotingDaysInputError] =
+    useState(false);
   const [maxVotingDaysInputError, setMaxVotingDaysInputError] = useState('');
 
   const [requiredAbsoluteVote, setRequiredAbsoluteVote] = useState(0);
-  const [isRequiredAbsoluteVoteInputError, setIsRequiredAbsoluteVoteInputError] = useState(false);
-  const [requiredAbsoluteVoteInputError, setRequiredAbsoluteVoteInputError] = useState('');
+  const [
+    isRequiredAbsoluteVoteInputError,
+    setIsRequiredAbsoluteVoteInputError,
+  ] = useState(false);
+  const [requiredAbsoluteVoteInputError, setRequiredAbsoluteVoteInputError] =
+    useState('');
 
   const [tokenVotingPowerRate, setTokenVotingPowerRate] = useState(0);
-  const [isTokenVotingPowerRateInputError, setIsTokenVotingPowerRateInputError] = useState(false);
-  const [tokenVotingPowerRateInputError, setTokenVotingPowerRateInputError] = useState('');
+  const [
+    isTokenVotingPowerRateInputError,
+    setIsTokenVotingPowerRateInputError,
+  ] = useState(false);
+  const [tokenVotingPowerRateInputError, setTokenVotingPowerRateInputError] =
+    useState('');
 
   const [isVoteSettingEditMode, setIsVoteSettingEditMode] = useState(false);
 
@@ -86,8 +101,12 @@ const Setting: React.FC = () => {
 
       setFees(commonSetting.fees);
       setMaxVotingDays(commonSetting.vote_setting.max_voting_days);
-      setRequiredAbsoluteVote(commonSetting.vote_setting.required_absolute_vote);
-      setTokenVotingPowerRate(commonSetting.vote_setting.token_voting_power_rate);
+      setRequiredAbsoluteVote(
+        commonSetting.vote_setting.required_absolute_vote
+      );
+      setTokenVotingPowerRate(
+        commonSetting.vote_setting.token_voting_power_rate
+      );
 
       if (commonSetting.admin) {
         setAdmin(commonSetting.admin);
@@ -112,7 +131,10 @@ const Setting: React.FC = () => {
         setLoading(false);
         return;
       }
-      const { transaction } = await action.transferSuperAdmin(publicKey, new PublicKey(admin));
+      const { transaction } = await action.transferSuperAdmin(
+        publicKey,
+        new PublicKey(admin)
+      );
       const signedTx = await signTransaction!(transaction);
       await sendSignedTransaction(connection, signedTx.serialize());
       alertSuccess('Update successfully');
@@ -204,10 +226,14 @@ const Setting: React.FC = () => {
       setMaxVotingDaysInputError('This field is required');
       setIsMaxVotingDaysInputError(true);
     } else if (value < 0) {
-      setMaxVotingDaysInputError('Maximum days for voting period cannot be less than 0');
+      setMaxVotingDaysInputError(
+        'Maximum days for voting period cannot be less than 0'
+      );
       setIsMaxVotingDaysInputError(true);
     } else if (!Number.isInteger(+value)) {
-      setMaxVotingDaysInputError('Maximum days for voting period must be integer');
+      setMaxVotingDaysInputError(
+        'Maximum days for voting period must be integer'
+      );
       setIsMaxVotingDaysInputError(true);
     } else {
       setMaxVotingDaysInputError('');
@@ -222,10 +248,14 @@ const Setting: React.FC = () => {
       setRequiredAbsoluteVoteInputError('This field is required');
       setIsRequiredAbsoluteVoteInputError(true);
     } else if (value < 0) {
-      setRequiredAbsoluteVoteInputError('Number of Absolute votes required to activate pool cannot less than 0');
+      setRequiredAbsoluteVoteInputError(
+        'Number of Absolute votes required to activate pool cannot less than 0'
+      );
       setIsRequiredAbsoluteVoteInputError(true);
     } else if (!Number.isInteger(+value)) {
-      setRequiredAbsoluteVoteInputError('Number of Absolute votes required to activate pool must be integer');
+      setRequiredAbsoluteVoteInputError(
+        'Number of Absolute votes required to activate pool must be integer'
+      );
       setIsRequiredAbsoluteVoteInputError(true);
     } else {
       setRequiredAbsoluteVoteInputError('');
@@ -240,7 +270,9 @@ const Setting: React.FC = () => {
       setTokenVotingPowerRateInputError('This field is required');
       setIsTokenVotingPowerRateInputError(true);
     } else if (value < 0) {
-      setTokenVotingPowerRateInputError('Voting Power equal to (ISOLA) cannot be less than 0');
+      setTokenVotingPowerRateInputError(
+        'Voting Power equal to (ISOLA) cannot be less than 0'
+      );
       setIsTokenVotingPowerRateInputError(true);
     } else if (!Number.isInteger(+value)) {
       setTokenVotingPowerRateInputError('Penalty percentage must be integer');
@@ -252,7 +284,11 @@ const Setting: React.FC = () => {
   };
 
   const changeVoteSetting = async () => {
-    if (isRequiredAbsoluteVoteInputError || isMaxVotingDaysInputError || isTokenVotingPowerRateInputError) {
+    if (
+      isRequiredAbsoluteVoteInputError ||
+      isMaxVotingDaysInputError ||
+      isTokenVotingPowerRateInputError
+    ) {
       return;
     }
 
@@ -267,6 +303,7 @@ const Setting: React.FC = () => {
         return;
       }
       const { transaction } = await action.updateVoteSetting(publicKey, {
+        is_enabled: false,
         max_voting_days: maxVotingDays,
         required_absolute_vote: requiredAbsoluteVote,
         token_voting_power_rate: tokenVotingPowerRate,
@@ -298,7 +335,11 @@ const Setting: React.FC = () => {
 
   return (
     <>
-      <Backdrop className={classes.backdrop} open={loading} onClick={handleClose}>
+      <Backdrop
+        className={classes.backdrop}
+        open={loading}
+        onClick={handleClose}
+      >
         <CircularProgress color="inherit" />
       </Backdrop>
       <Card style={{ marginBottom: theme.spacing(2) }}>
@@ -363,107 +404,109 @@ const Setting: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Card style={{ marginBottom: theme.spacing(2) }}>
-        <CardHeader title="Voting Settings" />
+      {false && (
+        <Card style={{ marginBottom: theme.spacing(2) }}>
+          <CardHeader title="Voting Settings" />
 
-        <CardContent>
-          <TextField
-            required
-            label={'Maximum days for voting period'}
-            error={Boolean(isMaxVotingDaysInputError)}
-            fullWidth
-            inputProps={{ readOnly: !isVoteSettingEditMode }}
-            type="number"
-            helperText={maxVotingDaysInputError}
-            onChange={onchangeMaxVotingDays}
-            value={maxVotingDays}
-            variant={'outlined'}
-          />
-          <CardActions
-            classes={{
-              root: classes.cardActions,
-            }}
-          ></CardActions>
-        </CardContent>
+          <CardContent>
+            <TextField
+              required
+              label={'Maximum days for voting period'}
+              error={Boolean(isMaxVotingDaysInputError)}
+              fullWidth
+              inputProps={{ readOnly: !isVoteSettingEditMode }}
+              type="number"
+              helperText={maxVotingDaysInputError}
+              onChange={onchangeMaxVotingDays}
+              value={maxVotingDays}
+              variant={'outlined'}
+            />
+            <CardActions
+              classes={{
+                root: classes.cardActions,
+              }}
+            ></CardActions>
+          </CardContent>
 
-        <CardContent>
-          <TextField
-            required
-            label={'Number of Absolute votes required to activate pool'}
-            type="number"
-            error={Boolean(isRequiredAbsoluteVoteInputError)}
-            fullWidth
-            inputProps={{ readOnly: !isVoteSettingEditMode }}
-            helperText={requiredAbsoluteVoteInputError}
-            onChange={onchangeRequiredAbsoluteVote}
-            value={requiredAbsoluteVote}
-            variant={'outlined'}
-          />
-          <CardActions
-            classes={{
-              root: classes.cardActions,
-            }}
-          ></CardActions>
-        </CardContent>
+          <CardContent>
+            <TextField
+              required
+              label={'Number of Absolute votes required to activate pool'}
+              type="number"
+              error={Boolean(isRequiredAbsoluteVoteInputError)}
+              fullWidth
+              inputProps={{ readOnly: !isVoteSettingEditMode }}
+              helperText={requiredAbsoluteVoteInputError}
+              onChange={onchangeRequiredAbsoluteVote}
+              value={requiredAbsoluteVote}
+              variant={'outlined'}
+            />
+            <CardActions
+              classes={{
+                root: classes.cardActions,
+              }}
+            ></CardActions>
+          </CardContent>
 
-        <CardContent>
-          <TextField
-            required
-            label={'Voting Power equal to (ISOLA)'}
-            type="number"
-            error={Boolean(isTokenVotingPowerRateInputError)}
-            fullWidth
-            inputProps={{ readOnly: !isVoteSettingEditMode }}
-            helperText={tokenVotingPowerRateInputError}
-            onChange={onchangeTokenVotingPowerRate}
-            value={tokenVotingPowerRate}
-            variant={'outlined'}
-          />
-          <CardActions
-            classes={{
-              root: classes.cardActions,
-            }}
-          >
-            {isVoteSettingEditMode && (
-              <Button
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={() => {
-                  changeVoteSetting();
-                }}
-              >
-                {loading ? 'LOADING' : 'CHANGE'}
-              </Button>
-            )}
-            {!isVoteSettingEditMode && (
-              <Button
-                style={{ margin: theme.spacing(2) }}
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={handlesPenaltyRulesEditMode}
-              >
-                {loading ? 'LOADING' : 'EDIT'}
-              </Button>
-            )}
-            {isVoteSettingEditMode && (
-              <Button
-                size="large"
-                style={{ margin: theme.spacing(2) }}
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={handlesPenaltyRulesEditMode}
-              >
-                {loading ? 'LOADING' : 'CANCEL'}
-              </Button>
-            )}
-          </CardActions>
-        </CardContent>
-      </Card>
+          <CardContent>
+            <TextField
+              required
+              label={'Voting Power equal to (ISOLA)'}
+              type="number"
+              error={Boolean(isTokenVotingPowerRateInputError)}
+              fullWidth
+              inputProps={{ readOnly: !isVoteSettingEditMode }}
+              helperText={tokenVotingPowerRateInputError}
+              onChange={onchangeTokenVotingPowerRate}
+              value={tokenVotingPowerRate}
+              variant={'outlined'}
+            />
+            <CardActions
+              classes={{
+                root: classes.cardActions,
+              }}
+            >
+              {isVoteSettingEditMode && (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={() => {
+                    changeVoteSetting();
+                  }}
+                >
+                  {loading ? 'LOADING' : 'CHANGE'}
+                </Button>
+              )}
+              {!isVoteSettingEditMode && (
+                <Button
+                  style={{ margin: theme.spacing(2) }}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={handlesPenaltyRulesEditMode}
+                >
+                  {loading ? 'LOADING' : 'EDIT'}
+                </Button>
+              )}
+              {isVoteSettingEditMode && (
+                <Button
+                  size="large"
+                  style={{ margin: theme.spacing(2) }}
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={handlesPenaltyRulesEditMode}
+                >
+                  {loading ? 'LOADING' : 'CANCEL'}
+                </Button>
+              )}
+            </CardActions>
+          </CardContent>
+        </Card>
+      )}
 
       <Card style={{ marginBottom: theme.spacing(2) }}>
         <CardHeader title="Super admin" />
@@ -537,6 +580,7 @@ const defaultSetting: ICommonSetting = {
     max_voting_days: 7,
     required_absolute_vote: 200,
     token_voting_power_rate: 100,
+    is_enabled: false,
   },
 };
 

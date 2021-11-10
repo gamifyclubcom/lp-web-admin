@@ -40,7 +40,15 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const ModalWrapper: React.FC<Props> = ({ children, title, closeable, actions, modalType, modalWidth, ...rest }) => {
+const ModalWrapper: React.FC<Props> = ({
+  children,
+  title,
+  closeable,
+  actions,
+  modalType,
+  modalWidth,
+  ...rest
+}) => {
   const theme = useTheme();
   const classes = useStyles();
   const { checkOpen, closeModal } = useContext(ModalContext);
@@ -65,7 +73,10 @@ const ModalWrapper: React.FC<Props> = ({ children, title, closeable, actions, mo
       <DialogTitle disableTypography>
         {title && <Typography variant="h6">{title}</Typography>}
         {closeable && (
-          <IconButton className={classes.closeButton} onClick={() => closeModal()}>
+          <IconButton
+            className={classes.closeButton}
+            onClick={() => closeModal()}
+          >
             <CloseIcon />
           </IconButton>
         )}

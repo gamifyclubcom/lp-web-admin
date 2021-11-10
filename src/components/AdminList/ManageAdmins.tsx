@@ -4,7 +4,12 @@ import { useHistory } from 'react-router-dom';
 import { useConfirm } from 'material-ui-confirm';
 import LoadingBar from 'react-top-loading-bar';
 
-import { useTheme, makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {
+  useTheme,
+  makeStyles,
+  createStyles,
+  Theme,
+} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
@@ -94,7 +99,9 @@ const ManageAdmins: React.FC<Props> = () => {
     {
       title: 'Wallet address',
       field: 'address',
-      render: (data) => <Chip label={data.address} className={classes.address} />,
+      render: (data) => (
+        <Chip label={data.address} className={classes.address} />
+      ),
     },
   ];
 
@@ -134,7 +141,11 @@ const ManageAdmins: React.FC<Props> = () => {
             <Grid container alignItems="center" justifyContent="space-between">
               <MTableToolbar {...props} />
               <Grid item style={{ paddingRight: theme.spacing(2) }}>
-                <Button variant="contained" color="primary" onClick={() => history.push('/admins/create')}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => history.push('/admins/create')}
+                >
                   Add new Admin
                 </Button>
               </Grid>

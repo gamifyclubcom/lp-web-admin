@@ -13,10 +13,18 @@ interface Props {
   title: string;
   hideConfirm: boolean;
   handleConfirm: () => void;
-  cancelButtonText?: string
+  cancelButtonText?: string;
 }
 
-const AlertDialog: React.FC<Props> = ({ open, setOpen, handleConfirm, message, title, hideConfirm, cancelButtonText = 'Cancel' }) => {
+const AlertDialog: React.FC<Props> = ({
+  open,
+  setOpen,
+  handleConfirm,
+  message,
+  title,
+  hideConfirm,
+  cancelButtonText = 'Cancel',
+}) => {
   const handleClickOpen = () => {
     handleConfirm();
   };
@@ -33,9 +41,16 @@ const AlertDialog: React.FC<Props> = ({ open, setOpen, handleConfirm, message, t
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        {title !== '' && <DialogTitle id="alert-dialog-title">{title}</DialogTitle>}
+        {title !== '' && (
+          <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+        )}
         <DialogContent>
-          <DialogContentText style={{whiteSpace: "pre-line"}} id="alert-dialog-description">{message}</DialogContentText>
+          <DialogContentText
+            style={{ whiteSpace: 'pre-line' }}
+            id="alert-dialog-description"
+          >
+            {message}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

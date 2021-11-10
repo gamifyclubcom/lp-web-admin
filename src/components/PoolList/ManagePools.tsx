@@ -2,10 +2,18 @@ import DateFnsUtils from '@date-io/date-fns';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
-import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  useTheme,
+} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import MaterialTable, { Action, Column, MTableToolbar } from 'material-table';
 import { createRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -49,7 +57,8 @@ const ManagePools: React.FC<Props> = () => {
         style: { color: primaryColor },
       },
       position: 'row',
-      onClick: (e: any, rowData: any) => history.push(`/pools/${rowData._id}/update`),
+      onClick: (e: any, rowData: any) =>
+        history.push(`/pools/${rowData._id}/update`),
     },
   ];
 
@@ -66,7 +75,8 @@ const ManagePools: React.FC<Props> = () => {
       dateSetting: {
         format: `MMMM DD yyyy, hh:mm A (UTCZ)`,
       },
-      render: (rowData) => moment(rowData.join_pool_start).format('MMMM DD yyyy, hh:mm A (UTCZ)'),
+      render: (rowData) =>
+        moment(rowData.join_pool_start).format('MMMM DD yyyy, hh:mm A (UTCZ)'),
     },
     {
       title: 'Join Pool End',
@@ -76,7 +86,8 @@ const ManagePools: React.FC<Props> = () => {
       dateSetting: {
         format: `MMMM DD yyyy, hh:mm A (UTCZ)`,
       },
-      render: (rowData) => moment(rowData.join_pool_end).format('MMMM DD yyyy, hh:mm A (UTCZ)'),
+      render: (rowData) =>
+        moment(rowData.join_pool_end).format('MMMM DD yyyy, hh:mm A (UTCZ)'),
     },
     {
       title: 'Token Symbol',
@@ -86,7 +97,9 @@ const ManagePools: React.FC<Props> = () => {
         if (!data.token_symbol) {
           return 'N/A';
         }
-        return <Chip label={data?.token_symbol} className={classes.tokenBadge} />;
+        return (
+          <Chip label={data?.token_symbol} className={classes.tokenBadge} />
+        );
       },
     },
   ];
@@ -182,7 +195,11 @@ const ManagePools: React.FC<Props> = () => {
               </Grid>
 
               <Grid item style={{ padding: theme.spacing(2) }}>
-                <Button variant="contained" color="primary" onClick={() => history.push('/pools/create')}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => history.push('/pools/create')}
+                >
                   Create Pool
                 </Button>
               </Grid>

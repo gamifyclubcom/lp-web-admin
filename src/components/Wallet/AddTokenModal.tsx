@@ -79,7 +79,11 @@ const AddTokenModal = ({ onSubmit, open, handleClose }: Props) => {
           />
         </div>
         <div className={classes.paper_input + ' ' + classes.text_right}>
-          <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit(onSubmit)}
+          >
             Confirm
           </Button>
         </div>

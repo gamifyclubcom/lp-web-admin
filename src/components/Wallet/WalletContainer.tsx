@@ -27,7 +27,10 @@ const WalletContainer: React.FC = () => {
     tokenInfo = { ...tokenInfo, ...{ amount } };
     setTokens((tokens) => [...tokens, tokenInfo]);
 
-    localStorage.setItem(WALLET_LIST_TOKEN_INFO_KEY, JSON.stringify([...tokens, tokenInfo]));
+    localStorage.setItem(
+      WALLET_LIST_TOKEN_INFO_KEY,
+      JSON.stringify([...tokens, tokenInfo])
+    );
   };
   useEffect(() => {
     let tokenExisted;
@@ -41,7 +44,13 @@ const WalletContainer: React.FC = () => {
     setTokens(tokenExisted);
   }, []);
 
-  return <Wallet address={publicKey?.toString()} addTokenInfo={addTokenInfo} tokens={tokens} />;
+  return (
+    <Wallet
+      address={publicKey?.toString()}
+      addTokenInfo={addTokenInfo}
+      tokens={tokens}
+    />
+  );
 };
 
 export default WalletContainer;

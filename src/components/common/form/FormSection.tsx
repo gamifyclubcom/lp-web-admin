@@ -51,7 +51,13 @@ const FormSection: React.FC<Props> = ({ title, children, headerImageUrl }) => {
 
   return (
     <Grid container direction="column" className={classes.section}>
-      <Grid item container alignItems="center" justifyContent="space-between" className={classes.sectionHeader}>
+      <Grid
+        item
+        container
+        alignItems="center"
+        justifyContent="space-between"
+        className={classes.sectionHeader}
+      >
         <Typography variant="body1">{title}</Typography>
         {headerImageUrl && (
           <Avatar src={headerImageUrl} className={classes.logo}>

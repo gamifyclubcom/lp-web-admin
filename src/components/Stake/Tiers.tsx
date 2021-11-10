@@ -11,7 +11,13 @@ import Decimal from 'decimal.js';
 import { Actions, ITiersData } from '@gamify/onchain-program-sdk';
 import { PublicKey } from '@solana/web3.js';
 import { getBalance } from '../../utils/solana-api';
-import { Backdrop, Button, CardActions, CircularProgress, TextField } from '@material-ui/core';
+import {
+  Backdrop,
+  Button,
+  CardActions,
+  CircularProgress,
+  TextField,
+} from '@material-ui/core';
 import useStyles from './styles';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { sendSignedTransaction } from '../../shared/helper';
@@ -33,11 +39,14 @@ const Tiers: React.FC = () => {
   const { publicKey, signTransaction } = useWallet();
   const { alertSuccess, alertError } = useAlert();
   const [minDaysStake, setMinDaysStake] = useState(0);
-  const [isMinDaysStakeInputError, setIsMinDaysStakeInputError] = useState(false);
+  const [isMinDaysStakeInputError, setIsMinDaysStakeInputError] =
+    useState(false);
   const [minDaysStakeInputError, setMinDaysStakeInputError] = useState('');
   const [penaltyPercentage, setPenaltyPercentage] = useState(0);
-  const [isPenaltyPercentageInputError, setIsPenaltyPercentageInputError] = useState(false);
-  const [penaltyPercentageInputError, setPenaltyPercentageInputError] = useState('');
+  const [isPenaltyPercentageInputError, setIsPenaltyPercentageInputError] =
+    useState(false);
+  const [penaltyPercentageInputError, setPenaltyPercentageInputError] =
+    useState('');
   const [isPenaltyRulesEditMode, setIsPenaltyRulesEditMode] = useState(false);
   const [isChangeAdminEditMode, setIsChangeAdminEditMode] = useState(false);
 
@@ -90,7 +99,10 @@ const Tiers: React.FC = () => {
 
       if (pool.stake_token_owner_address) {
         setAdmin(pool.stake_token_owner_address);
-        await calculateBalance(new PublicKey(pool.stake_token_account), pool.user_staking_amount);
+        await calculateBalance(
+          new PublicKey(pool.stake_token_account),
+          pool.user_staking_amount
+        );
       }
 
       setUserStakingAmount(pool.user_staking_amount);
@@ -169,7 +181,11 @@ const Tiers: React.FC = () => {
         setLoading(false);
         return;
       }
-      const { transaction } = await action.updatePenaltyRules(publicKey, minDaysStake, penaltyPercentage);
+      const { transaction } = await action.updatePenaltyRules(
+        publicKey,
+        minDaysStake,
+        penaltyPercentage
+      );
       const signedTx = await signTransaction!(transaction);
       await sendSignedTransaction(connection, signedTx.serialize());
       alertSuccess('Update successfully');
@@ -235,7 +251,9 @@ const Tiers: React.FC = () => {
       setPenaltyPercentageInputError('Penalty percentage cannot less than 0');
       setIsPenaltyPercentageInputError(true);
     } else if (value > 100) {
-      setPenaltyPercentageInputError('Penalty percentage cannot greater than 100');
+      setPenaltyPercentageInputError(
+        'Penalty percentage cannot greater than 100'
+      );
       setIsPenaltyPercentageInputError(true);
     } else if (!Number.isInteger(+value)) {
       setPenaltyPercentageInputError('Penalty percentage must be integer');
@@ -272,7 +290,11 @@ const Tiers: React.FC = () => {
 
   return (
     <>
-      <Backdrop className={classes.backdrop} open={loading} onClick={handleClose}>
+      <Backdrop
+        className={classes.backdrop}
+        open={loading}
+        onClick={handleClose}
+      >
         <CircularProgress color="inherit" />
       </Backdrop>
       <Card style={{ marginBottom: theme.spacing(2) }}>
@@ -490,7 +512,12 @@ const TiersTable: React.FC<{ data: RowData[] }> = ({ data }) => {
           <MaterialTable
             columns={columns}
             data={data}
-            options={{ ...materialTableConfig.options, search: false, paging: false, toolbar: false }}
+            options={{
+              ...materialTableConfig.options,
+              search: false,
+              paging: false,
+              toolbar: false,
+            }}
             localization={materialTable}
             icons={materialTableConfig.icons}
           />

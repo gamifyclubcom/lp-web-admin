@@ -57,7 +57,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Admin = ({ admin, submitBtnText, submitBtnLoadingText, loading = false, handleSubmitProp }: Props) => {
+const Admin = ({
+  admin,
+  submitBtnText,
+  submitBtnLoadingText,
+  loading = false,
+  handleSubmitProp,
+}: Props) => {
   const classes = useStyles();
 
   const {
@@ -65,7 +71,11 @@ const Admin = ({ admin, submitBtnText, submitBtnLoadingText, loading = false, ha
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<FormValues>({ shouldFocusError: true, defaultValues, resolver: yupResolver(adminValidator) });
+  } = useForm<FormValues>({
+    shouldFocusError: true,
+    defaultValues,
+    resolver: yupResolver(adminValidator),
+  });
   const onSubmit: SubmitHandler<FormValues> = (data) => handleSubmitProp(data);
 
   useEffect(() => {

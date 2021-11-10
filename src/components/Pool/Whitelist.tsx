@@ -47,7 +47,8 @@ const useStyles = makeStyles((theme) => ({
 const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
   const theme = useTheme();
   const { materialTable } = useLocalization();
-  const { wallet, connected, connect, publicKey, signTransaction } = useWallet();
+  const { wallet, connected, connect, publicKey, signTransaction } =
+    useWallet();
   const { connection } = useConnection();
   const contractAction = new Actions(connection);
 
@@ -57,7 +58,9 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
       title: 'Is Whitelist',
       field: 'isWhitelisted',
       render: (data) => {
-        return data.isWhitelisted ? <Chip label="Whitelisted" color="primary" /> : null;
+        return data.isWhitelisted ? (
+          <Chip label="Whitelisted" color="primary" />
+        ) : null;
       },
     },
   ];
@@ -75,14 +78,18 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
     }
 
     if (connected && publicKey?.toBase58() !== pool.root_admin) {
-      alertError('You are not admin of this pool. Please try to use another wallet');
+      alertError(
+        'You are not admin of this pool. Please try to use another wallet'
+      );
       setOpenDialog(false);
       return;
     }
 
     if (pool.is_active) {
       setOpenDialog(false);
-      return alertError('The whitelist cannot be changed after the pool is activated.');
+      return alertError(
+        'The whitelist cannot be changed after the pool is activated.'
+      );
     }
 
     setUserWalletAddress('');
@@ -100,7 +107,9 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
       return;
     }
     if (connected && publicKey?.toBase58() !== pool.root_admin) {
-      alertError('You are not admin of this pool. Please try to use another wallet');
+      alertError(
+        'You are not admin of this pool. Please try to use another wallet'
+      );
       setOpenDialog(false);
       return;
     }
@@ -109,8 +118,12 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
     let listUserAddress;
     let listUserPubKey;
     if (wallet && publicKey) {
-      listUserPubKey = selectedRows.map((user: { userAccount: any }) => new PublicKey(user.userAccount));
-      listUserAddress = selectedRows.map((user: { userAccount: any }) => user.userAccount);
+      listUserPubKey = selectedRows.map(
+        (user: { userAccount: any }) => new PublicKey(user.userAccount)
+      );
+      listUserAddress = selectedRows.map(
+        (user: { userAccount: any }) => user.userAccount
+      );
       prepareData = await contractAction.removeMultiUsersFromWhiteList(
         new PublicKey(publicKey),
         new PublicKey(pool.contract_address),
@@ -155,11 +168,15 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
       return;
     }
     if (connected && publicKey?.toBase58() !== pool.root_admin) {
-      alertError('You are not admin of this pool. Please try to use another wallet');
+      alertError(
+        'You are not admin of this pool. Please try to use another wallet'
+      );
       setOpenDialog(false);
       return;
     }
-    let listAddress = userWalletAddress.replaceAll(/([ ]+)/g, '\n').replaceAll(/([^a-zA-Z0-9\n])/g, '');
+    let listAddress = userWalletAddress
+      .replaceAll(/([ ]+)/g, '\n')
+      .replaceAll(/([^a-zA-Z0-9\n])/g, '');
     const userWalletAddressParsed: string[] = listAddress
       .replaceAll(/([^a-zA-Z0-9\n])/g, '')
       .split('\n')
@@ -201,14 +218,18 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
         setIsLoading(false);
         preventInteractions(false);
         if (e?.message.includes('Invalid public key input')) {
-          return alertError('Exist at least address is wrong format. Please check and try again.');
+          return alertError(
+            'Exist at least address is wrong format. Please check and try again.'
+          );
         }
         return alertError('Something went wrong. Please try again later.');
       }
     }
 
     try {
-      const accounts = checkUserAddress.map((item) => new PublicKey(item.address));
+      const accounts = checkUserAddress.map(
+        (item) => new PublicKey(item.address)
+      );
       if (accounts.length === 0) {
         return alertError('Already updated');
       }
@@ -270,7 +291,9 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
         options={{
           ...materialTableConfig.options,
           selection: true,
-          rowStyle: (rowData) => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
+          rowStyle: (rowData) => ({
+            backgroundColor: rowData.tableData.checked ? '#37b15933' : '',
+          }),
         }}
         onSelectionChange={(rows) => {
           pool.selectedRows = rows;
@@ -280,10 +303,20 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
         components={{
           Toolbar: (props) => (
             <div>
-              <Grid container alignItems="center" justifyContent="space-between" style={{ padding: theme.spacing(2) }}>
+              <Grid
+                container
+                alignItems="center"
+                justifyContent="space-between"
+                style={{ padding: theme.spacing(2) }}
+              >
                 <Typography variant="h5">WHITELIST MANAGEMENT</Typography>
                 <Grid item>
-                  <Button size="large" variant="contained" color="primary" onClick={handleClickOpen}>
+                  <Button
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleClickOpen}
+                  >
                     Add participants
                   </Button>
                 </Grid>
@@ -296,7 +329,12 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
           Pagination: (props) => (
             <div className="paginationComponent d-flex">
               <div style={{ minWidth: 200, marginLeft: 14 }}>
-                <Button color="secondary" variant="contained" onClick={handleDeleteParticipant} size="small">
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={handleDeleteParticipant}
+                  size="small"
+                >
                   DELETE
                 </Button>
               </div>
@@ -310,10 +348,16 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      <Dialog open={open && connected} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog
+        open={open && connected}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Add user to whitelist</DialogTitle>
         <DialogContent>
-          <DialogContentText>Add user to whitelist, the address should be an user wallet address</DialogContentText>
+          <DialogContentText>
+            Add user to whitelist, the address should be an user wallet address
+          </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
