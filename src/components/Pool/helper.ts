@@ -63,6 +63,7 @@ export const handleOffchainPoolData = (data: Types.FormOffchainValues) => {
     id: data._id,
     pool_start: data.pool_start,
     logo: data.logo,
+    thumbnail: data.thumbnail,
     tag_line: data.tag_line,
     name: data.name,
     website: data.website,

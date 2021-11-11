@@ -75,6 +75,7 @@ const supportedTokens = [{ key: 'SOL', label: 'SOL', value: 'SOL' }];
 
 const defaultOffchainValues: FormOffchainValues = {
   logo: '',
+  thumbnail: '',
   name: '',
   website: '',
   twitter: '',
@@ -448,6 +449,7 @@ const UpdatePool: React.FC = () => {
       const {
         _id,
         logo,
+        thumbnail,
         contract_address,
         name,
         website,
@@ -504,6 +506,7 @@ const UpdatePool: React.FC = () => {
 
       setOffchainValue('_id', _id);
       setOffchainValue('logo', logo);
+      setOffchainValue('thumbnail', thumbnail);
       setOffchainValue('contract_address', contract_address);
       setOffchainValue('name', name);
       setOffchainValue('website', website);
@@ -648,6 +651,16 @@ const UpdatePool: React.FC = () => {
                   inputProps={{}}
                   isError={Boolean(offchainError?.logo)}
                   errorMessage={offchainError?.logo?.message}
+                />
+              </Grid>
+              <Grid item className={classes.formItem}>
+                <Input
+                  control={offchainController}
+                  label={PoolInputLabel.thumbnail}
+                  name="thumbnail"
+                  inputProps={{}}
+                  isError={Boolean(offchainError?.thumbnail)}
+                  errorMessage={offchainError?.thumbnail?.message}
                 />
               </Grid>
               {toggleEditMode && (

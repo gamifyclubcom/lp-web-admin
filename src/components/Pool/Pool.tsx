@@ -56,6 +56,7 @@ const supportedTokens = [{ key: 'SOL', label: 'SOL', value: 'SOL' }];
 const defaultValues: FormValues = {
   version: 1,
   logo: '',
+  thumbnail: '',
   name: '',
   website: '',
   twitter: '',
@@ -258,6 +259,7 @@ const Pool: React.FC<Props> = ({
       const {
         _id,
         logo,
+        thumbnail,
         contract_address,
         name,
         website,
@@ -314,6 +316,7 @@ const Pool: React.FC<Props> = ({
 
       setValue('_id', _id);
       setValue('logo', logo);
+      setValue('thumbnail', thumbnail);
       setValue('contract_address', contract_address);
       setValue('name', name);
       setValue('website', website);
@@ -498,6 +501,16 @@ const Pool: React.FC<Props> = ({
                   inputProps={{ readOnly: readMode }}
                   isError={Boolean(errors?.logo)}
                   errorMessage={errors?.logo?.message}
+                />
+              </Grid>
+              <Grid item className={classes.formItem}>
+                <Input
+                  control={control}
+                  label={PoolInputLabel.thumbnail}
+                  name="thumbnail"
+                  inputProps={{ readOnly: readMode }}
+                  isError={Boolean(errors?.thumbnail)}
+                  errorMessage={errors?.thumbnail?.message}
                 />
               </Grid>
               {(toggleEditMode || readMode) && (
