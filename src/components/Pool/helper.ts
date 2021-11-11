@@ -13,6 +13,7 @@ export const handlePoolData = (data: Types.Pool) => {
     pool_start: data.pool_start,
     root_admin: data.root_admin,
     logo: data.logo,
+    thumbnail: data.thumbnail,
     tag_line: data.tag_line,
     name: data.name,
     website: data.website,
