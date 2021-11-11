@@ -83,6 +83,7 @@ export type PoolToken = {
 export type PoolOffchain = {
   program_id: string;
   logo?: string;
+  thumbnail?: string;
   name: string;
   slug?: string;
   website?: string;

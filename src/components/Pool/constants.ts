@@ -1,6 +1,7 @@
 export const PoolInputLabel = {
   root_admin: 'Admin address',
   logo: 'Logo',
+  thumbnail: 'Thumbnail',
   contract_address: 'Pool contract',
   token_y: 'Pool account',
   name: 'Pool name',
