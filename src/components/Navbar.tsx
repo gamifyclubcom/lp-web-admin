@@ -7,7 +7,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
 import { useConnection, useAuth } from '../hooks';
 import { WalletMultiButton } from '../wallet-adapters/connect/WalletMultiButton';
 import { useTheme, withStyles, Theme } from '@material-ui/core/styles';
@@ -39,6 +39,25 @@ const LinkTab = withStyles((theme: Theme) => ({
   );
 });
 
+const links = [
+  {
+    href: '/wallet',
+    value: 0,
+  },
+  {
+    href: '/pools',
+    value: 1,
+  },
+  {
+    href: '/stake',
+    value: 2,
+  },
+  {
+    href: '/setting',
+    value: 3,
+  },
+];
+
 const Navbar: React.FC = ({ ...rest }) => {
   const { connection } = useConnection();
   const theme = useTheme();
@@ -46,6 +65,7 @@ const Navbar: React.FC = ({ ...rest }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { cluster, changeCluster } = useAuth();
   const [value, setValue] = React.useState(0);
+  const location = useLocation();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -80,6 +100,15 @@ const Navbar: React.FC = ({ ...rest }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const link = links.filter((link) => {
+      return link.href === location.pathname;
+    });
+    if (link.length > 0) {
+      setValue(link[0].value);
+    }
+  }, [location.pathname]);
 
   const handleChange = (event: any, newValue: number) => {
     setValue(newValue);
