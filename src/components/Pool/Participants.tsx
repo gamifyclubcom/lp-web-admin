@@ -83,7 +83,7 @@ const PoolParticipants: React.FC<Props> = ({
         </Typography>
         {poolData?.campaign?.exclusive_phase?.is_active && (
           <>
-            <CardHeader title="ISOLA exclusive round" />
+            <CardHeader title="GMFC exclusive round" />
             <CardContent>
               <form>
                 <Grid item container className={classes.formItem}>
@@ -141,7 +141,7 @@ const PoolParticipants: React.FC<Props> = ({
         )}
         {poolData?.campaign?.fcfs_stake_phase?.is_active && (
           <>
-            <CardHeader title="ISOLA FCFS for stakers round" />
+            <CardHeader title="GMFC FCFS for stakers round" />
             <CardContent>
               <form>
                 <Grid item container className={classes.formItem}>
@@ -197,7 +197,7 @@ const PoolParticipants: React.FC<Props> = ({
             </CardContent>
           </>
         )}
-        <CardHeader title="ISOLA FCFS round" />
+        <CardHeader title="GMFC FCFS round" />
         <CardContent>
           <form>
             <Grid item container className={classes.formItem}>

@@ -502,7 +502,7 @@ const TiersTable: React.FC<{ data: RowData[] }> = ({ data }) => {
   const columns: Column<RowData>[] = [
     { title: 'Level', field: 'level', align: 'center' },
     { title: 'Total users', field: 'totalUser', align: 'center' },
-    { title: 'Min amount (ISOLA)', field: 'minAmount', align: 'center' },
+    { title: 'Min amount (GMFC)', field: 'minAmount', align: 'center' },
   ];
 
   return (

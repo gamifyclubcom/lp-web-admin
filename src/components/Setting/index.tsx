@@ -271,7 +271,7 @@ const Setting: React.FC = () => {
       setIsTokenVotingPowerRateInputError(true);
     } else if (value < 0) {
       setTokenVotingPowerRateInputError(
-        'Voting Power equal to (ISOLA) cannot be less than 0'
+        'Voting Power equal to (GMFC) cannot be less than 0'
       );
       setIsTokenVotingPowerRateInputError(true);
     } else if (!Number.isInteger(+value)) {
@@ -451,7 +451,7 @@ const Setting: React.FC = () => {
           <CardContent>
             <TextField
               required
-              label={'Voting Power equal to (ISOLA)'}
+              label={'Voting Power equal to (GMFC)'}
               type="number"
               error={Boolean(isTokenVotingPowerRateInputError)}
               fullWidth
