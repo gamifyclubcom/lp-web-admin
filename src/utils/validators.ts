@@ -38,7 +38,7 @@ const ERROR_MESSAGE_POOL_START_MIN_VALUE =
 const ERROR_MESSAGE_EARLY_DURATION =
   'This field must be shorter than the duration between join pool start time and join pool end time.';
 const ERROR_MESSAGE_FCFS_STAKE_DURATION =
-  'This field must be shorter than the duration between join pool start time and join pool end time minus duration of ISOL Exclusive round.';
+  'This field must be shorter than the duration between join pool start time and join pool end time minus duration of GMFC Exclusive round.';
 const ERROR_MESSAGE_INVALIDE_ADDRESS = 'Please enter the correct SOL address';
 const ERROR_MESSAGE_DECIMALS =
   'The number of decimal digits does not exceed two';
