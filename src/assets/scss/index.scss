@@ -1,0 +1,267 @@
+@import 'fonts';
+@import 'variables';
+@import 'login';
+@import 'wallet';
+@import 'pool';
+@import '404';
+
+.layout {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+
+  &__wrapper {
+    display: flex;
+    flex: 1 1 auto;
+    overflow: hidden;
+    padding-top: 64px;
+    // padding-left: 256px;
+  }
+
+  &__container {
+    display: flex;
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+
+  &__content {
+    flex: 1 1 auto;
+    height: 100%;
+    overflow: auto;
+    padding: 20px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+
+  .logo {
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .switch-cluster-btn {
+    color: #fff;
+    font-weight: 500;
+    letter-spacing: 0.02857em;
+  }
+
+  &__left {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__right {
+    color: #fff;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 0.875rem;
+  }
+}
+
+.box {
+  --border-radius: 5px;
+  --border-color: rgba(244, 245, 247, 1);
+  --background-color: rgba(249, 250, 251, 1);
+
+  padding: 0 20px 20px;
+  background-color: #fff;
+  border-radius: var(--border-radius);
+  width: 100%;
+  margin-bottom: 10px;
+  border: 2px solid var(--border-color);
+
+  .divider {
+    width: 100%;
+    margin: 20px auto;
+    background-color: lightgrey;
+    height: 1px;
+  }
+
+  &__title {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 10px;
+    margin: 0 -20px 10px;
+    background-color: var(--background-color);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    &--2 {
+      width: 50%;
+    }
+
+    &__left {
+      flex: 0 0 150px;
+    }
+
+    &__right {
+      width: 100%;
+    }
+  }
+}
+
+.d-flex {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  &.align-items-center {
+    align-items: center;
+  }
+}
+
+.dropzone {
+  min-height: 75px !important;
+
+  & > div {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    width: 320px;
+    margin: 0 auto;
+  }
+}
+
+.admin,
+.participant {
+  &__submit {
+    width: 400px;
+    margin: 0 auto;
+  }
+}
+
+.required {
+  color: red;
+  font-weight: 700;
+}
+
+.pool,
+.token,
+.admin,
+.participant {
+  .d-flex {
+    padding-bottom: 10px;
+
+    > .d-flex {
+      padding-bottom: 0;
+    }
+  }
+  .left {
+    flex: 0 0 190px;
+    padding-left: 10px;
+  }
+
+  .right {
+    width: 100%;
+  }
+
+  .col {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__not-found {
+    display: flex;
+    font-size: 24px;
+    height: 200px;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.textarea {
+  width: calc(100vw - 520px);
+  max-width: calc(100vw - 520px);
+  border-color: rgba(0, 0, 0, 0.23);
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+}
+
+.error {
+  display: block;
+  color: red;
+  font-size: 14px;
+  padding-top: 2px;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.pool-form {
+  .submit {
+    width: 400px;
+    margin: 0 auto 10px;
+  }
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.participant {
+  &__search {
+    width: 50%;
+    margin-bottom: 10px;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.text-truncate {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.table {
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    opacity: 0.5;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.toast__bodyClassName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.MuiDialogContent-root .MuiList-root {
+  background: #ffffff !important;
+}

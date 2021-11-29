@@ -1,0 +1,58 @@
+.wallet {
+  .header {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .address {
+    margin-bottom: 20px;
+
+    &__title {
+      font-weight: 700;
+      line-height: 24px;
+    }
+
+    &__hash {
+      color: darkgray;
+    }
+  }
+
+  .balances {
+    &__title {
+      font-weight: 700;
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      padding: 10px 0;
+
+      .item {
+        display: grid;
+        grid-template-columns: 30px 1fr 1fr 1fr;
+        height: 40px;
+        align-items: center;
+
+        &__icon {
+          padding-right: 10px;
+        }
+
+        &__amount {
+          justify-self: start;
+        }
+
+        &__action {
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  .mg-top-10 {
+    margin-top: 10px;
+  }
+}

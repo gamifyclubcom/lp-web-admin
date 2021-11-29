@@ -1,0 +1,38 @@
+.pools,
+.admins {
+  padding: 10px 20px;
+  background-color: #fff;
+  border-radius: 5px;
+
+  .daterange {
+    width: 100%;
+    display: flex;
+
+    &__from,
+    &__to {
+      display: flex;
+      align-items: baseline;
+    }
+
+    &__from {
+      padding-right: 20px;
+    }
+
+    &__title {
+      font-weight: 500;
+      padding-right: 15px;
+    }
+  }
+
+  &__search {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0 30px;
+
+    &__left {
+      flex: 0 0 520px;
+    }
+  }
+}
