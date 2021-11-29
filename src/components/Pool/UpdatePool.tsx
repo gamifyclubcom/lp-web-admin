@@ -627,7 +627,7 @@ const UpdatePool: React.FC = () => {
                   style={{ marginLeft: theme.spacing(2) }}
                   onClick={() => toggleEdit()}
                 >
-                  Cancel
+                  Back
                 </Button>
                 <Avatar
                   src={

@@ -141,7 +141,7 @@ const PoolTiers: React.FC<Props> = ({ pool }) => {
         <Grid justifyContent="space-between">
           <Grid>Snapshot time: {snapshotTime}</Grid>
           <Grid>
-            Total raise in ISOLA exclusive round: {totalExclusiveRound} SOL
+            Total raise in GMFC exclusive round: {totalExclusiveRound} SOL
           </Grid>
         </Grid>
       </CardContent>

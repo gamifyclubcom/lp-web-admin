@@ -2,10 +2,13 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { useConnection } from '../hooks';
+import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
+import { useConnection, useAuth } from '../hooks';
 import { WalletMultiButton } from '../wallet-adapters/connect/WalletMultiButton';
 import { useTheme, withStyles, Theme } from '@material-ui/core/styles';
 
@@ -36,12 +39,41 @@ const LinkTab = withStyles((theme: Theme) => ({
   );
 });
 
+const links = [
+  {
+    href: '/wallet',
+    value: 0,
+  },
+  {
+    href: '/pools',
+    value: 1,
+  },
+  {
+    href: '/stake',
+    value: 2,
+  },
+  {
+    href: '/setting',
+    value: 3,
+  },
+];
+
 const Navbar: React.FC = ({ ...rest }) => {
   const { connection } = useConnection();
   const theme = useTheme();
   const [blockTime, setBlockTime] = useState(0);
-
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { cluster, changeCluster } = useAuth();
   const [value, setValue] = React.useState(0);
+  const location = useLocation();
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     const getBlockTime = async () => {
@@ -69,6 +101,15 @@ const Navbar: React.FC = ({ ...rest }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const link = links.filter((link) => {
+      return link.href === location.pathname;
+    });
+    if (link.length > 0) {
+      setValue(link[0].value);
+    }
+  }, [location.pathname]);
+
   const handleChange = (event: any, newValue: number) => {
     setValue(newValue);
   };
@@ -90,10 +131,10 @@ const Navbar: React.FC = ({ ...rest }) => {
             />
           </RouterLink>
           <Tabs value={value} onChange={handleChange}>
-            <LinkTab label="Gamify Administrator" href="/wallets" />
-            <LinkTab label="Pools Management" href="/pools" />
-            <LinkTab label="Stake" href="/stake" />
-            <LinkTab label="Setting" href="/setting" />
+            <LinkTab label="Home Admin" href="/wallet" />
+            <LinkTab label="Pools" href="/pools" />
+            <LinkTab label="Staking" href="/stake" />
+            <LinkTab label="Settings" href="/setting" />
           </Tabs>
         </div>
 
@@ -114,6 +155,32 @@ const Navbar: React.FC = ({ ...rest }) => {
           </div>
 
           {/* <CurrentWalletBadge /> */}
+          <Button
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+            className="switch-cluster-btn"
+          >
+            {cluster?.toUpperCase() || 'DEVNET'}
+          </Button>
+
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={() => changeCluster('mainnet-beta')}>
+              https://solana-api.projectserum.com
+            </MenuItem>
+            <MenuItem onClick={() => changeCluster('testnet')}>
+              https://api.testnet.solana.com
+            </MenuItem>
+            <MenuItem onClick={() => changeCluster('devnet')}>
+              https://api.devnet.solana.com
+            </MenuItem>
+          </Menu>
         </div>
       </Toolbar>
     </AppBar>
