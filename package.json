@@ -77,6 +77,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
+        "start:prod": "node express/index.js",
         "lint": "eslint '*/**/*.{js,jsx,ts,tsx}'",
         "prepare": "husky install",
         "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json}\"",

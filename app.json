@@ -1,0 +1,9 @@
+{
+    "apps": [
+        {
+            "name": "gamify-webadmin-production-3010",
+            "script": "npm",
+            "args": "run start:prod"
+        }
+    ]
+}
