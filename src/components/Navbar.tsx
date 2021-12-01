@@ -11,6 +11,8 @@ import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
 import { useConnection, useAuth } from '../hooks';
 import { WalletMultiButton } from '../wallet-adapters/connect/WalletMultiButton';
 import { useTheme, withStyles, Theme } from '@material-ui/core/styles';
+import { Actions, ICommonSetting } from '@gamify/onchain-program-sdk';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 interface LinkTabProps {
   label?: string;
@@ -58,6 +60,19 @@ const links = [
   },
 ];
 
+const defaultSetting: ICommonSetting = {
+  is_initialized: true,
+  version: 0,
+  fees: 0,
+  admin: '',
+  vote_setting: {
+    max_voting_days: 7,
+    required_absolute_vote: 200,
+    token_voting_power_rate: 100,
+    is_enabled: false,
+  },
+};
+
 const Navbar: React.FC = ({ ...rest }) => {
   const { connection } = useConnection();
   const theme = useTheme();
@@ -66,6 +81,10 @@ const Navbar: React.FC = ({ ...rest }) => {
   const { cluster, changeCluster } = useAuth();
   const [value, setValue] = React.useState(0);
   const location = useLocation();
+
+  const { publicKey } = useWallet();
+  const [commonSetting, setCommonSetting] =
+    useState<ICommonSetting>(defaultSetting);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -101,6 +120,14 @@ const Navbar: React.FC = ({ ...rest }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const readCommonSetting = async () => {
+    const action = new Actions(connection);
+    setCommonSetting(await action.readCommonSettingByProgramId());
+  };
+  useEffect(() => {
+    readCommonSetting();
+  }, []);
+
   useEffect(() => {
     const link = links.filter((link) => {
       return link.href === location.pathname;
@@ -134,7 +161,9 @@ const Navbar: React.FC = ({ ...rest }) => {
             <LinkTab label="Home Admin" href="/wallet" />
             <LinkTab label="Pools" href="/pools" />
             <LinkTab label="Staking" href="/stake" />
-            <LinkTab label="Settings" href="/setting" />
+            {publicKey && commonSetting.admin === publicKey.toString() ? (
+              <LinkTab label="Settings" href="/setting" />
+            ) : null}
           </Tabs>
         </div>
 

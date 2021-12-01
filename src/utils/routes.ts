@@ -21,12 +21,12 @@ export const routes: Route[] = [
   {
     path: '/',
     exact: true,
-    component: Wallet,
+    component: /* Wallet */ ManagePool, // hide wallet home page
   },
   {
     path: '/wallet',
     exact: true,
-    component: Wallet,
+    component: /* Wallet */ ManagePool, // hide wallet home page
   },
   {
     path: '/pools',
