@@ -2,7 +2,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import { useTheme } from '@material-ui/core/styles';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAlert, useConnection } from '../../hooks';
 import { Actions, ICommonSetting } from '@gamify/onchain-program-sdk';
 import { PublicKey } from '@solana/web3.js';
@@ -63,6 +63,9 @@ const Setting: React.FC = () => {
     useState('');
 
   const [isVoteSettingEditMode, setIsVoteSettingEditMode] = useState(false);
+  const isSupperAdmin = useMemo(() => {
+    return publicKey?.toString() === commonSetting?.admin?.toString();
+  }, [commonSetting, publicKey]);
 
   const readCommonSetting = async () => {
     setLoading(true);
@@ -98,7 +101,6 @@ const Setting: React.FC = () => {
       if (!commonSetting?.is_initialized) {
         return;
       }
-
       setFees(commonSetting.fees);
       setMaxVotingDays(commonSetting.vote_setting.max_voting_days);
       setRequiredAbsoluteVote(
@@ -107,7 +109,6 @@ const Setting: React.FC = () => {
       setTokenVotingPowerRate(
         commonSetting.vote_setting.token_voting_power_rate
       );
-
       if (commonSetting.admin) {
         setAdmin(commonSetting.admin);
       }
@@ -342,7 +343,7 @@ const Setting: React.FC = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      {admin === publicKey?.toString() && (
+      {isSupperAdmin && (
         <Card style={{ marginBottom: theme.spacing(2) }}>
           <CardHeader title="Fee setting" />
 
@@ -510,7 +511,7 @@ const Setting: React.FC = () => {
         </Card>
       )}
 
-      {admin === publicKey?.toString() && (
+      {isSupperAdmin && (
         <Card style={{ marginBottom: theme.spacing(2) }}>
           <CardHeader title="Super admin" />
           <CardContent>
