@@ -1,15 +1,15 @@
-import Wallet from '../components/Wallet';
-import ManagePool from '../components/PoolList/ManagePools';
-import PoolCreate from '../components/Pool/Create';
-// import AdminList from '../components/AdminList';
-import ManageAdmins from '../components/AdminList/ManageAdmins';
+import { Redirect } from 'react-router';
+import NotFound from '../components/404';
 import AdminCreate from '../components/Admin/Create';
 import AdminUpdate from '../components/Admin/Update';
+// import AdminList from '../components/AdminList';
+import ManageAdmins from '../components/AdminList/ManageAdmins';
+import PoolCreate from '../components/Pool/Create';
 import ReadPool from '../components/Pool/Read';
 import UpdatePool from '../components/Pool/UpdatePool';
-import Tiers from '../components/Stake/Tiers';
+import ManagePool from '../components/PoolList/ManagePools';
 import Setting from '../components/Setting';
-import NotFound from '../components/404';
+import Tiers from '../components/Stake/Tiers';
 
 export type Route = {
   path: string;
@@ -21,12 +21,7 @@ export const routes: Route[] = [
   {
     path: '/',
     exact: true,
-    component: /* Wallet */ ManagePool, // hide wallet home page
-  },
-  {
-    path: '/wallet',
-    exact: true,
-    component: /* Wallet */ ManagePool, // hide wallet home page
+    component: () => <Redirect to="/pools" />,
   },
   {
     path: '/pools',
