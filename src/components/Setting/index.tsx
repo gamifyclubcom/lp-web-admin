@@ -342,67 +342,69 @@ const Setting: React.FC = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Card style={{ marginBottom: theme.spacing(2) }}>
-        <CardHeader title="Fee setting" />
+      {admin === publicKey?.toString() && (
+        <Card style={{ marginBottom: theme.spacing(2) }}>
+          <CardHeader title="Fee setting" />
 
-        <CardContent>
-          <TextField
-            required
-            label={'Fee'}
-            error={Boolean(isFeeInputError)}
-            fullWidth
-            inputProps={{ readOnly: !isFeeEditMode }}
-            type="number"
-            helperText={feeInputError}
-            onChange={onchangeFee}
-            value={fee}
-            variant={'outlined'}
-          />
-          <CardActions
-            classes={{
-              root: classes.cardActions,
-            }}
-          >
-            {isFeeEditMode && (
-              <Button
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={() => {
-                  changeFee();
-                }}
-              >
-                {loading ? 'LOADING' : 'CHANGE'}
-              </Button>
-            )}
-            {!isFeeEditMode && (
-              <Button
-                style={{ margin: theme.spacing(2) }}
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={handlesFeeEditMode}
-              >
-                {loading ? 'LOADING' : 'EDIT'}
-              </Button>
-            )}
-            {isFeeEditMode && (
-              <Button
-                size="large"
-                style={{ margin: theme.spacing(2) }}
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={handlesFeeEditMode}
-              >
-                {loading ? 'LOADING' : 'CANCEL'}
-              </Button>
-            )}
-          </CardActions>
-        </CardContent>
-      </Card>
+          <CardContent>
+            <TextField
+              required
+              label={'Fee'}
+              error={Boolean(isFeeInputError)}
+              fullWidth
+              inputProps={{ readOnly: !isFeeEditMode }}
+              type="number"
+              helperText={feeInputError}
+              onChange={onchangeFee}
+              value={fee}
+              variant={'outlined'}
+            />
+            <CardActions
+              classes={{
+                root: classes.cardActions,
+              }}
+            >
+              {isFeeEditMode && (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={() => {
+                    changeFee();
+                  }}
+                >
+                  {loading ? 'LOADING' : 'CHANGE'}
+                </Button>
+              )}
+              {!isFeeEditMode && (
+                <Button
+                  style={{ margin: theme.spacing(2) }}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={handlesFeeEditMode}
+                >
+                  {loading ? 'LOADING' : 'EDIT'}
+                </Button>
+              )}
+              {isFeeEditMode && (
+                <Button
+                  size="large"
+                  style={{ margin: theme.spacing(2) }}
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={handlesFeeEditMode}
+                >
+                  {loading ? 'LOADING' : 'CANCEL'}
+                </Button>
+              )}
+            </CardActions>
+          </CardContent>
+        </Card>
+      )}
 
       {false && (
         <Card style={{ marginBottom: theme.spacing(2) }}>
@@ -508,65 +510,67 @@ const Setting: React.FC = () => {
         </Card>
       )}
 
-      <Card style={{ marginBottom: theme.spacing(2) }}>
-        <CardHeader title="Super admin" />
-        <CardContent>
-          <TextField
-            required
-            label={'Admin'}
-            error={Boolean(isAdminInputError)}
-            fullWidth
-            inputProps={{ readOnly: !isChangeAdminEditMode }}
-            helperText={adminInputError}
-            onChange={onchangeAdmin}
-            value={admin}
-            variant={'outlined'}
-          />
-          <CardActions
-            classes={{
-              root: classes.cardActions,
-            }}
-          >
-            {isChangeAdminEditMode && (
-              <Button
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={() => {
-                  changeSuperAdmin();
-                }}
-              >
-                {loading ? 'LOADING' : 'CHANGE'}
-              </Button>
-            )}
-            {!isChangeAdminEditMode && (
-              <Button
-                style={{ margin: theme.spacing(2) }}
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={handleChangeAdminEditMode}
-              >
-                {loading ? 'LOADING' : 'EDIT'}
-              </Button>
-            )}
-            {isChangeAdminEditMode && (
-              <Button
-                style={{ margin: theme.spacing(2) }}
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={handleChangeAdminEditMode}
-              >
-                {loading ? 'LOADING' : 'CANCEL'}
-              </Button>
-            )}
-          </CardActions>
-        </CardContent>
-      </Card>
+      {admin === publicKey?.toString() && (
+        <Card style={{ marginBottom: theme.spacing(2) }}>
+          <CardHeader title="Super admin" />
+          <CardContent>
+            <TextField
+              required
+              label={'Admin'}
+              error={Boolean(isAdminInputError)}
+              fullWidth
+              inputProps={{ readOnly: !isChangeAdminEditMode }}
+              helperText={adminInputError}
+              onChange={onchangeAdmin}
+              value={admin}
+              variant={'outlined'}
+            />
+            <CardActions
+              classes={{
+                root: classes.cardActions,
+              }}
+            >
+              {isChangeAdminEditMode && (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={() => {
+                    changeSuperAdmin();
+                  }}
+                >
+                  {loading ? 'LOADING' : 'CHANGE'}
+                </Button>
+              )}
+              {!isChangeAdminEditMode && (
+                <Button
+                  style={{ margin: theme.spacing(2) }}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={handleChangeAdminEditMode}
+                >
+                  {loading ? 'LOADING' : 'EDIT'}
+                </Button>
+              )}
+              {isChangeAdminEditMode && (
+                <Button
+                  style={{ margin: theme.spacing(2) }}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={handleChangeAdminEditMode}
+                >
+                  {loading ? 'LOADING' : 'CANCEL'}
+                </Button>
+              )}
+            </CardActions>
+          </CardContent>
+        </Card>
+      )}
     </>
   );
 };
