@@ -1,11 +1,4 @@
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import { useTheme } from '@material-ui/core/styles';
-import { useEffect, useMemo, useState } from 'react';
-import { useAlert, useConnection } from '../../hooks';
 import { Actions, ICommonSetting } from '@gamify/onchain-program-sdk';
-import { PublicKey } from '@solana/web3.js';
 import {
   Backdrop,
   Button,
@@ -13,11 +6,18 @@ import {
   CircularProgress,
   TextField,
 } from '@material-ui/core';
-import useStyles from './styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import { useTheme } from '@material-ui/core/styles';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { sendSignedTransaction } from '../../shared/helper';
+import { PublicKey } from '@solana/web3.js';
+import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router';
+import { useAlert, useConnection } from '../../hooks';
 import { useGlobal } from '../../hooks/useGlobal';
+import { sendSignedTransaction } from '../../shared/helper';
+import useStyles from './styles';
 
 const Setting: React.FC = () => {
   const history = useHistory();
