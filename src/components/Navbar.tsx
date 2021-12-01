@@ -13,6 +13,7 @@ import { WalletMultiButton } from '../wallet-adapters/connect/WalletMultiButton'
 import { useTheme, withStyles, Theme } from '@material-ui/core/styles';
 import { Actions, ICommonSetting } from '@gamify/onchain-program-sdk';
 import { useWallet } from '@solana/wallet-adapter-react';
+import { useGlobal } from '../hooks/useGlobal';
 
 interface LinkTabProps {
   label?: string;
@@ -78,13 +79,14 @@ const Navbar: React.FC = ({ ...rest }) => {
   const { cluster, changeCluster } = useAuth();
   const [value, setValue] = React.useState(0);
   const location = useLocation();
+  const { commonSettings } = useGlobal();
 
   const { publicKey, connected } = useWallet();
-  const [commonSetting, setCommonSetting] =
-    useState<ICommonSetting>(defaultSetting);
+  // const [commonSetting, setCommonSetting] =
+  //   useState<ICommonSetting>(defaultSetting);
   const isSupperAdmin = useMemo(() => {
-    return publicKey?.toString() === commonSetting?.admin?.toString();
-  }, [commonSetting, publicKey]);
+    return publicKey?.toString() === commonSettings?.admin?.toString();
+  }, [commonSettings, publicKey]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -127,18 +129,18 @@ const Navbar: React.FC = ({ ...rest }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    const readCommonSetting = async () => {
-      if (connected) {
-        const action = new Actions(connection);
-        const result = await action.readCommonSettingByProgramId();
+  // useEffect(() => {
+  //   const readCommonSetting = async () => {
+  //     if (connected) {
+  //       const action = new Actions(connection);
+  //       const result = await action.readCommonSettingByProgramId();
 
-        setCommonSetting(result);
-      }
-    };
+  //       setCommonSetting(result);
+  //     }
+  //   };
 
-    readCommonSetting();
-  }, [connected, connection]);
+  //   readCommonSetting();
+  // }, [connected, connection]);
 
   useEffect(() => {
     const link = links.filter((link) => {

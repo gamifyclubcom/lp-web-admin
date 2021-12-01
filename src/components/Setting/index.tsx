@@ -16,9 +16,12 @@ import {
 import useStyles from './styles';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { sendSignedTransaction } from '../../shared/helper';
+import { useHistory } from 'react-router';
+import { useGlobal } from '../../hooks/useGlobal';
 
 const Setting: React.FC = () => {
-  const [commonSetting, setPool] = useState<ICommonSetting>(defaultSetting);
+  const history = useHistory();
+  const { commonSettings, setCommonSettings } = useGlobal();
   const { connection } = useConnection();
   const classes = useStyles();
   const theme = useTheme();
@@ -64,33 +67,33 @@ const Setting: React.FC = () => {
 
   const [isVoteSettingEditMode, setIsVoteSettingEditMode] = useState(false);
   const isSupperAdmin = useMemo(() => {
-    return publicKey?.toString() === commonSetting?.admin?.toString();
-  }, [commonSetting, publicKey]);
+    return publicKey?.toString() === commonSettings?.admin?.toString();
+  }, [commonSettings, publicKey]);
 
   const readCommonSetting = async () => {
     setLoading(true);
     const action = new Actions(connection);
-    setPool(await action.readCommonSettingByProgramId());
+    setCommonSettings(await action.readCommonSettingByProgramId());
     setLoading(false);
   };
-  useEffect(() => {
-    readCommonSetting();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleClose = () => {
     setLoading(false);
   };
 
   const handleChangeAdminEditMode = () => {
-    setAdmin(commonSetting.admin);
+    if (commonSettings) {
+      setAdmin(commonSettings.admin);
+    }
     setAdminInputError('');
     setIsAdminInputError(false);
     setIsChangeAdminEditMode(!isChangeAdminEditMode);
   };
 
   const handlesFeeEditMode = () => {
-    setFees(commonSetting.fees);
+    if (commonSettings) {
+      setFees(commonSettings.fees);
+    }
     setIsFeeEditMode(!isFeeEditMode);
     setFeeInputError('');
     setIsFeeError(false);
@@ -98,25 +101,25 @@ const Setting: React.FC = () => {
 
   useEffect(() => {
     const tranformValue = async () => {
-      if (!commonSetting?.is_initialized) {
+      if (!commonSettings?.is_initialized) {
         return;
       }
-      setFees(commonSetting.fees);
-      setMaxVotingDays(commonSetting.vote_setting.max_voting_days);
+      setFees(commonSettings.fees);
+      setMaxVotingDays(commonSettings.vote_setting.max_voting_days);
       setRequiredAbsoluteVote(
-        commonSetting.vote_setting.required_absolute_vote
+        commonSettings.vote_setting.required_absolute_vote
       );
       setTokenVotingPowerRate(
-        commonSetting.vote_setting.token_voting_power_rate
+        commonSettings.vote_setting.token_voting_power_rate
       );
-      if (commonSetting.admin) {
-        setAdmin(commonSetting.admin);
+      if (commonSettings.admin) {
+        setAdmin(commonSettings.admin);
       }
     };
 
     tranformValue();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commonSetting]);
+  }, [commonSettings]);
 
   const changeSuperAdmin = async () => {
     if (isAdminInputError) {
@@ -138,12 +141,13 @@ const Setting: React.FC = () => {
       );
       const signedTx = await signTransaction!(transaction);
       await sendSignedTransaction(connection, signedTx.serialize());
+      await readCommonSetting();
+      history.push('/');
       alertSuccess('Update successfully');
     } catch (error: any) {
       console.log(error);
       alertError(error.message);
     } finally {
-      await readCommonSetting();
       setLoading(false);
     }
   };
@@ -322,9 +326,15 @@ const Setting: React.FC = () => {
   };
 
   const handlesPenaltyRulesEditMode = () => {
-    setMaxVotingDays(commonSetting.vote_setting.max_voting_days);
-    setRequiredAbsoluteVote(commonSetting.vote_setting.required_absolute_vote);
-    setTokenVotingPowerRate(commonSetting.vote_setting.token_voting_power_rate);
+    if (commonSettings) {
+      setMaxVotingDays(commonSettings.vote_setting.max_voting_days);
+      setRequiredAbsoluteVote(
+        commonSettings.vote_setting.required_absolute_vote
+      );
+      setTokenVotingPowerRate(
+        commonSettings.vote_setting.token_voting_power_rate
+      );
+    }
     setMaxVotingDaysInputError('');
     setIsMaxVotingDaysInputError(false);
     setIsVoteSettingEditMode(!isVoteSettingEditMode);
