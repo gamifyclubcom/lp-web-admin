@@ -1,11 +1,4 @@
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import { useTheme } from '@material-ui/core/styles';
-import { useEffect, useState } from 'react';
-import { useAlert, useConnection } from '../../hooks';
 import { Actions, ICommonSetting } from '@gamify/onchain-program-sdk';
-import { PublicKey } from '@solana/web3.js';
 import {
   Backdrop,
   Button,
@@ -13,12 +6,22 @@ import {
   CircularProgress,
   TextField,
 } from '@material-ui/core';
-import useStyles from './styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import { useTheme } from '@material-ui/core/styles';
 import { useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey } from '@solana/web3.js';
+import { useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router';
+import { useAlert, useConnection } from '../../hooks';
+import { useGlobal } from '../../hooks/useGlobal';
 import { sendSignedTransaction } from '../../shared/helper';
+import useStyles from './styles';
 
 const Setting: React.FC = () => {
-  const [commonSetting, setPool] = useState<ICommonSetting>(defaultSetting);
+  const history = useHistory();
+  const { commonSettings, setCommonSettings } = useGlobal();
   const { connection } = useConnection();
   const classes = useStyles();
   const theme = useTheme();
@@ -63,31 +66,34 @@ const Setting: React.FC = () => {
     useState('');
 
   const [isVoteSettingEditMode, setIsVoteSettingEditMode] = useState(false);
+  const isSupperAdmin = useMemo(() => {
+    return publicKey?.toString() === commonSettings?.admin?.toString();
+  }, [commonSettings, publicKey]);
 
   const readCommonSetting = async () => {
     setLoading(true);
     const action = new Actions(connection);
-    setPool(await action.readCommonSettingByProgramId());
+    setCommonSettings(await action.readCommonSettingByProgramId());
     setLoading(false);
   };
-  useEffect(() => {
-    readCommonSetting();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleClose = () => {
     setLoading(false);
   };
 
   const handleChangeAdminEditMode = () => {
-    setAdmin(commonSetting.admin);
+    if (commonSettings) {
+      setAdmin(commonSettings.admin);
+    }
     setAdminInputError('');
     setIsAdminInputError(false);
     setIsChangeAdminEditMode(!isChangeAdminEditMode);
   };
 
   const handlesFeeEditMode = () => {
-    setFees(commonSetting.fees);
+    if (commonSettings) {
+      setFees(commonSettings.fees);
+    }
     setIsFeeEditMode(!isFeeEditMode);
     setFeeInputError('');
     setIsFeeError(false);
@@ -95,27 +101,25 @@ const Setting: React.FC = () => {
 
   useEffect(() => {
     const tranformValue = async () => {
-      if (!commonSetting?.is_initialized) {
+      if (!commonSettings?.is_initialized) {
         return;
       }
-
-      setFees(commonSetting.fees);
-      setMaxVotingDays(commonSetting.vote_setting.max_voting_days);
+      setFees(commonSettings.fees);
+      setMaxVotingDays(commonSettings.vote_setting.max_voting_days);
       setRequiredAbsoluteVote(
-        commonSetting.vote_setting.required_absolute_vote
+        commonSettings.vote_setting.required_absolute_vote
       );
       setTokenVotingPowerRate(
-        commonSetting.vote_setting.token_voting_power_rate
+        commonSettings.vote_setting.token_voting_power_rate
       );
-
-      if (commonSetting.admin) {
-        setAdmin(commonSetting.admin);
+      if (commonSettings.admin) {
+        setAdmin(commonSettings.admin);
       }
     };
 
     tranformValue();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commonSetting]);
+  }, [commonSettings]);
 
   const changeSuperAdmin = async () => {
     if (isAdminInputError) {
@@ -137,12 +141,13 @@ const Setting: React.FC = () => {
       );
       const signedTx = await signTransaction!(transaction);
       await sendSignedTransaction(connection, signedTx.serialize());
+      await readCommonSetting();
+      history.push('/');
       alertSuccess('Update successfully');
     } catch (error: any) {
       console.log(error);
       alertError(error.message);
     } finally {
-      await readCommonSetting();
       setLoading(false);
     }
   };
@@ -321,9 +326,15 @@ const Setting: React.FC = () => {
   };
 
   const handlesPenaltyRulesEditMode = () => {
-    setMaxVotingDays(commonSetting.vote_setting.max_voting_days);
-    setRequiredAbsoluteVote(commonSetting.vote_setting.required_absolute_vote);
-    setTokenVotingPowerRate(commonSetting.vote_setting.token_voting_power_rate);
+    if (commonSettings) {
+      setMaxVotingDays(commonSettings.vote_setting.max_voting_days);
+      setRequiredAbsoluteVote(
+        commonSettings.vote_setting.required_absolute_vote
+      );
+      setTokenVotingPowerRate(
+        commonSettings.vote_setting.token_voting_power_rate
+      );
+    }
     setMaxVotingDaysInputError('');
     setIsMaxVotingDaysInputError(false);
     setIsVoteSettingEditMode(!isVoteSettingEditMode);
@@ -342,67 +353,69 @@ const Setting: React.FC = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Card style={{ marginBottom: theme.spacing(2) }}>
-        <CardHeader title="Fee setting" />
+      {isSupperAdmin && (
+        <Card style={{ marginBottom: theme.spacing(2) }}>
+          <CardHeader title="Fee setting" />
 
-        <CardContent>
-          <TextField
-            required
-            label={'Fee'}
-            error={Boolean(isFeeInputError)}
-            fullWidth
-            inputProps={{ readOnly: !isFeeEditMode }}
-            type="number"
-            helperText={feeInputError}
-            onChange={onchangeFee}
-            value={fee}
-            variant={'outlined'}
-          />
-          <CardActions
-            classes={{
-              root: classes.cardActions,
-            }}
-          >
-            {isFeeEditMode && (
-              <Button
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={() => {
-                  changeFee();
-                }}
-              >
-                {loading ? 'LOADING' : 'CHANGE'}
-              </Button>
-            )}
-            {!isFeeEditMode && (
-              <Button
-                style={{ margin: theme.spacing(2) }}
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={handlesFeeEditMode}
-              >
-                {loading ? 'LOADING' : 'EDIT'}
-              </Button>
-            )}
-            {isFeeEditMode && (
-              <Button
-                size="large"
-                style={{ margin: theme.spacing(2) }}
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={handlesFeeEditMode}
-              >
-                {loading ? 'LOADING' : 'CANCEL'}
-              </Button>
-            )}
-          </CardActions>
-        </CardContent>
-      </Card>
+          <CardContent>
+            <TextField
+              required
+              label={'Fee'}
+              error={Boolean(isFeeInputError)}
+              fullWidth
+              inputProps={{ readOnly: !isFeeEditMode }}
+              type="number"
+              helperText={feeInputError}
+              onChange={onchangeFee}
+              value={fee}
+              variant={'outlined'}
+            />
+            <CardActions
+              classes={{
+                root: classes.cardActions,
+              }}
+            >
+              {isFeeEditMode && (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={() => {
+                    changeFee();
+                  }}
+                >
+                  {loading ? 'LOADING' : 'CHANGE'}
+                </Button>
+              )}
+              {!isFeeEditMode && (
+                <Button
+                  style={{ margin: theme.spacing(2) }}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={handlesFeeEditMode}
+                >
+                  {loading ? 'LOADING' : 'EDIT'}
+                </Button>
+              )}
+              {isFeeEditMode && (
+                <Button
+                  size="large"
+                  style={{ margin: theme.spacing(2) }}
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={handlesFeeEditMode}
+                >
+                  {loading ? 'LOADING' : 'CANCEL'}
+                </Button>
+              )}
+            </CardActions>
+          </CardContent>
+        </Card>
+      )}
 
       {false && (
         <Card style={{ marginBottom: theme.spacing(2) }}>
@@ -508,65 +521,67 @@ const Setting: React.FC = () => {
         </Card>
       )}
 
-      <Card style={{ marginBottom: theme.spacing(2) }}>
-        <CardHeader title="Super admin" />
-        <CardContent>
-          <TextField
-            required
-            label={'Admin'}
-            error={Boolean(isAdminInputError)}
-            fullWidth
-            inputProps={{ readOnly: !isChangeAdminEditMode }}
-            helperText={adminInputError}
-            onChange={onchangeAdmin}
-            value={admin}
-            variant={'outlined'}
-          />
-          <CardActions
-            classes={{
-              root: classes.cardActions,
-            }}
-          >
-            {isChangeAdminEditMode && (
-              <Button
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={() => {
-                  changeSuperAdmin();
-                }}
-              >
-                {loading ? 'LOADING' : 'CHANGE'}
-              </Button>
-            )}
-            {!isChangeAdminEditMode && (
-              <Button
-                style={{ margin: theme.spacing(2) }}
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={handleChangeAdminEditMode}
-              >
-                {loading ? 'LOADING' : 'EDIT'}
-              </Button>
-            )}
-            {isChangeAdminEditMode && (
-              <Button
-                style={{ margin: theme.spacing(2) }}
-                size="large"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                onClick={handleChangeAdminEditMode}
-              >
-                {loading ? 'LOADING' : 'CANCEL'}
-              </Button>
-            )}
-          </CardActions>
-        </CardContent>
-      </Card>
+      {isSupperAdmin && (
+        <Card style={{ marginBottom: theme.spacing(2) }}>
+          <CardHeader title="Super admin" />
+          <CardContent>
+            <TextField
+              required
+              label={'Admin'}
+              error={Boolean(isAdminInputError)}
+              fullWidth
+              inputProps={{ readOnly: !isChangeAdminEditMode }}
+              helperText={adminInputError}
+              onChange={onchangeAdmin}
+              value={admin}
+              variant={'outlined'}
+            />
+            <CardActions
+              classes={{
+                root: classes.cardActions,
+              }}
+            >
+              {isChangeAdminEditMode && (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={() => {
+                    changeSuperAdmin();
+                  }}
+                >
+                  {loading ? 'LOADING' : 'CHANGE'}
+                </Button>
+              )}
+              {!isChangeAdminEditMode && (
+                <Button
+                  style={{ margin: theme.spacing(2) }}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={handleChangeAdminEditMode}
+                >
+                  {loading ? 'LOADING' : 'EDIT'}
+                </Button>
+              )}
+              {isChangeAdminEditMode && (
+                <Button
+                  style={{ margin: theme.spacing(2) }}
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  onClick={handleChangeAdminEditMode}
+                >
+                  {loading ? 'LOADING' : 'CANCEL'}
+                </Button>
+              )}
+            </CardActions>
+          </CardContent>
+        </Card>
+      )}
     </>
   );
 };

@@ -6,11 +6,14 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
 import { useConnection, useAuth } from '../hooks';
 import { WalletMultiButton } from '../wallet-adapters/connect/WalletMultiButton';
 import { useTheme, withStyles, Theme } from '@material-ui/core/styles';
+import { Actions, ICommonSetting } from '@gamify/onchain-program-sdk';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useGlobal } from '../hooks/useGlobal';
 
 interface LinkTabProps {
   label?: string;
@@ -41,24 +44,34 @@ const LinkTab = withStyles((theme: Theme) => ({
 
 const links = [
   {
-    href: '/wallet',
+    href: '/pools',
     value: 0,
   },
   {
-    href: '/pools',
+    href: '/stake',
     value: 1,
   },
   {
-    href: '/stake',
-    value: 2,
-  },
-  {
     href: '/setting',
-    value: 3,
+    value: 2,
   },
 ];
 
+const defaultSetting: ICommonSetting = {
+  is_initialized: true,
+  version: 0,
+  fees: 0,
+  admin: '',
+  vote_setting: {
+    max_voting_days: 7,
+    required_absolute_vote: 200,
+    token_voting_power_rate: 100,
+    is_enabled: false,
+  },
+};
+
 const Navbar: React.FC = ({ ...rest }) => {
+  const history = useHistory();
   const { connection } = useConnection();
   const theme = useTheme();
   const [blockTime, setBlockTime] = useState(0);
@@ -66,6 +79,14 @@ const Navbar: React.FC = ({ ...rest }) => {
   const { cluster, changeCluster } = useAuth();
   const [value, setValue] = React.useState(0);
   const location = useLocation();
+  const { commonSettings } = useGlobal();
+
+  const { publicKey, connected } = useWallet();
+  // const [commonSetting, setCommonSetting] =
+  //   useState<ICommonSetting>(defaultSetting);
+  const isSupperAdmin = useMemo(() => {
+    return publicKey?.toString() === commonSettings?.admin?.toString();
+  }, [commonSettings, publicKey]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -74,6 +95,13 @@ const Navbar: React.FC = ({ ...rest }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    if (history.location.pathname === '/setting' && !isSupperAdmin) {
+      history.push('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history.location.pathname, isSupperAdmin]);
 
   useEffect(() => {
     const getBlockTime = async () => {
@@ -100,6 +128,19 @@ const Navbar: React.FC = ({ ...rest }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // useEffect(() => {
+  //   const readCommonSetting = async () => {
+  //     if (connected) {
+  //       const action = new Actions(connection);
+  //       const result = await action.readCommonSettingByProgramId();
+
+  //       setCommonSetting(result);
+  //     }
+  //   };
+
+  //   readCommonSetting();
+  // }, [connected, connection]);
 
   useEffect(() => {
     const link = links.filter((link) => {
@@ -131,10 +172,11 @@ const Navbar: React.FC = ({ ...rest }) => {
             />
           </RouterLink>
           <Tabs value={value} onChange={handleChange}>
-            <LinkTab label="Home Admin" href="/wallet" />
             <LinkTab label="Pools" href="/pools" />
             <LinkTab label="Staking" href="/stake" />
-            <LinkTab label="Settings" href="/setting" />
+            {isSupperAdmin ? (
+              <LinkTab label="Settings" href="/setting" />
+            ) : null}
           </Tabs>
         </div>
 

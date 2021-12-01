@@ -21,6 +21,7 @@ import { WalletProvider } from '@solana/wallet-adapter-react';
 import { getPhantomWallet } from '@solana/wallet-adapter-wallets';
 import { getSolletExtensionWallet } from './wallet-adapters/sollet-extension';
 import { getSolletWallet } from './wallet-adapters/custom-providers';
+import { GlobalProvider } from './contexts/global';
 const queryClient = new QueryClient();
 
 if (window.sollet) {
@@ -64,21 +65,23 @@ function handleSollet(wallets: any) {
           <UIProvider>
             <ConfirmProvider defaultOptions={materialConfirmOptions}>
               <ConnectionProvider>
-                <AuthProvider>
-                  <QueryClientProvider client={queryClient}>
-                    <App />
-                  </QueryClientProvider>
-                  <ToastContainer
-                    hideProgressBar
-                    position="bottom-left"
-                    limit={2}
-                    bodyClassName="toast__bodyClassName"
-                    toastClassName="toast__className"
-                    newestOnTop
-                    closeButton={false}
-                    autoClose={2000}
-                  />
-                </AuthProvider>
+                <GlobalProvider>
+                  <AuthProvider>
+                    <QueryClientProvider client={queryClient}>
+                      <App />
+                    </QueryClientProvider>
+                    <ToastContainer
+                      hideProgressBar
+                      position="bottom-left"
+                      limit={2}
+                      bodyClassName="toast__bodyClassName"
+                      toastClassName="toast__className"
+                      newestOnTop
+                      closeButton={false}
+                      autoClose={2000}
+                    />
+                  </AuthProvider>
+                </GlobalProvider>
               </ConnectionProvider>
             </ConfirmProvider>
           </UIProvider>
@@ -93,21 +96,23 @@ function handleSollet(wallets: any) {
           <UIProvider>
             <ConfirmProvider defaultOptions={materialConfirmOptions}>
               <ConnectionProvider>
-                <AuthProvider>
-                  <QueryClientProvider client={queryClient}>
-                    <App />
-                  </QueryClientProvider>
-                  <ToastContainer
-                    hideProgressBar
-                    position="bottom-left"
-                    limit={2}
-                    bodyClassName="toast__bodyClassName"
-                    toastClassName="toast__className"
-                    newestOnTop
-                    closeButton={false}
-                    autoClose={2000}
-                  />
-                </AuthProvider>
+                <GlobalProvider>
+                  <AuthProvider>
+                    <QueryClientProvider client={queryClient}>
+                      <App />
+                    </QueryClientProvider>
+                    <ToastContainer
+                      hideProgressBar
+                      position="bottom-left"
+                      limit={2}
+                      bodyClassName="toast__bodyClassName"
+                      toastClassName="toast__className"
+                      newestOnTop
+                      closeButton={false}
+                      autoClose={2000}
+                    />
+                  </AuthProvider>
+                </GlobalProvider>
               </ConnectionProvider>
             </ConfirmProvider>
           </UIProvider>
