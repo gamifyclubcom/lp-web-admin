@@ -146,13 +146,6 @@ export const WalletMultiButton: FC<ButtonProps> = ({
             <SwapHorizIcon fontSize="large" />
           </IconButton>
           <WalletDialogButton color={color} variant={variant} {...props} />
-          <div>
-            <IOSSwitch
-              checked={connected}
-              onChange={handleChange}
-              name="checkedB"
-            />
-          </div>
         </div>
       </>
     );
@@ -183,13 +176,6 @@ export const WalletMultiButton: FC<ButtonProps> = ({
             <SwapHorizIcon fontSize="large" />
           </IconButton>
           <WalletConnectButton color={color} variant={variant} {...props} />
-          <div>
-            <IOSSwitch
-              checked={connected}
-              onChange={handleChange}
-              name="checkedB"
-            />
-          </div>
         </div>
       </>
     );
@@ -229,13 +215,6 @@ export const WalletMultiButton: FC<ButtonProps> = ({
         >
           {content}
         </Button>
-        <div>
-          <IOSSwitch
-            checked={connected}
-            onChange={handleChange}
-            name="checkedB"
-          />
-        </div>
       </div>
 
       <Menu
