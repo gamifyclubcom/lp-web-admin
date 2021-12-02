@@ -5,7 +5,7 @@ import AdminUpdate from '../components/Admin/Update';
 // import AdminList from '../components/AdminList';
 import ManageAdmins from '../components/AdminList/ManageAdmins';
 import PoolCreate from '../components/Pool/Create';
-import ReadPool from '../components/Pool/Read';
+import { ReadPool } from '../components/Pool/Read';
 import UpdatePool from '../components/Pool/UpdatePool';
 import ManagePool from '../components/PoolList/ManagePools';
 import Setting from '../components/Setting';

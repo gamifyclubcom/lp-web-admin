@@ -13,7 +13,7 @@ import {
 import * as Types from '../../types';
 import Pool from './Pool';
 import useStyles from './styles';
-import Whitelist from './Whitelist';
+import { Whitelist } from './Whitelist';
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -359,4 +359,4 @@ function a11yProps(index: any) {
   };
 }
 
-export default ReadPool;
+export { ReadPool };
