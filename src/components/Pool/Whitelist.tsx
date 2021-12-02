@@ -188,8 +188,8 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
     if (removeDuplicate.size < userWalletAddressParsed.length) {
       return alertError('Do not enter duplicate addresses');
     }
-    if (userWalletAddressParsed.length > 12) {
-      return alertError('Do not enter more than 12 addresses at once.');
+    if (userWalletAddressParsed.length > 10) {
+      return alertError('Do not enter more than 10 addresses at once.');
     }
 
     setIsLoading(true);
@@ -376,8 +376,8 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">
-            Add
+          <Button onClick={handleSubmit} color="primary" disabled={isLoading}>
+            {isLoading ? 'Loading...' : 'Add'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -385,4 +385,4 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
   );
 };
 
-export default Whitelist;
+export { Whitelist };
