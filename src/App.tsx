@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import Login from './components/Auth/Login';
 import GlobalStyles from './components/GlobalStyles';
-import Layout from './components/Layout';
+import { Layout } from './components/Layout';
 import { useAuth } from './hooks';
 import { routes } from './utils/routes';
 import queryString from 'query-string';

@@ -1,19 +1,15 @@
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import { Theme, useTheme, withStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Toolbar from '@material-ui/core/Toolbar';
 import { WalletDialogProvider } from '@solana/wallet-adapter-material-ui';
-import React, { useEffect, useState, useMemo } from 'react';
-import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
-import { useConnection, useAuth } from '../hooks';
-import { WalletMultiButton } from '../wallet-adapters/connect/WalletMultiButton';
-import { useTheme, withStyles, Theme } from '@material-ui/core/styles';
-import { Actions, ICommonSetting } from '@gamify/onchain-program-sdk';
 import { useWallet } from '@solana/wallet-adapter-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
+import { useConnection } from '../hooks';
 import { useGlobal } from '../hooks/useGlobal';
+import { WalletMultiButton } from '../wallet-adapters/connect/WalletMultiButton';
 
 interface LinkTabProps {
   label?: string;
@@ -57,44 +53,21 @@ const links = [
   },
 ];
 
-const defaultSetting: ICommonSetting = {
-  is_initialized: true,
-  version: 0,
-  fees: 0,
-  admin: '',
-  vote_setting: {
-    max_voting_days: 7,
-    required_absolute_vote: 200,
-    token_voting_power_rate: 100,
-    is_enabled: false,
-  },
-};
-
 const Navbar: React.FC = ({ ...rest }) => {
   const history = useHistory();
   const { connection } = useConnection();
   const theme = useTheme();
   const [blockTime, setBlockTime] = useState(0);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { cluster, changeCluster } = useAuth();
   const [value, setValue] = React.useState(0);
   const location = useLocation();
   const { commonSettings } = useGlobal();
 
-  const { publicKey, connected } = useWallet();
+  const { publicKey } = useWallet();
   // const [commonSetting, setCommonSetting] =
   //   useState<ICommonSetting>(defaultSetting);
   const isSupperAdmin = useMemo(() => {
     return publicKey?.toString() === commonSettings?.admin?.toString();
   }, [commonSettings, publicKey]);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   useEffect(() => {
     if (history.location.pathname === '/setting' && !isSupperAdmin) {
@@ -128,19 +101,6 @@ const Navbar: React.FC = ({ ...rest }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-  //   const readCommonSetting = async () => {
-  //     if (connected) {
-  //       const action = new Actions(connection);
-  //       const result = await action.readCommonSettingByProgramId();
-
-  //       setCommonSetting(result);
-  //     }
-  //   };
-
-  //   readCommonSetting();
-  // }, [connected, connection]);
 
   useEffect(() => {
     const link = links.filter((link) => {
@@ -195,34 +155,6 @@ const Navbar: React.FC = ({ ...rest }) => {
               />
             </WalletDialogProvider>
           </div>
-
-          {/* <CurrentWalletBadge /> */}
-          <Button
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-            className="switch-cluster-btn"
-          >
-            {cluster?.toUpperCase() || 'DEVNET'}
-          </Button>
-
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={() => changeCluster('mainnet-beta')}>
-              https://solana-api.projectserum.com
-            </MenuItem>
-            <MenuItem onClick={() => changeCluster('testnet')}>
-              https://api.testnet.solana.com
-            </MenuItem>
-            <MenuItem onClick={() => changeCluster('devnet')}>
-              https://api.devnet.solana.com
-            </MenuItem>
-          </Menu>
         </div>
       </Toolbar>
     </AppBar>
@@ -251,4 +183,4 @@ export function displayTimestampUtc(
   return `${dateString} at ${timeString}`;
 }
 
-export default Navbar;
+export { Navbar };
