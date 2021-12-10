@@ -31,7 +31,7 @@ const AdminUpdateContainer = () => {
           return;
         }
         setAdmin(response);
-      } catch (error) {
+      } catch (error: any) {
         alertError(error.toString());
       }
     })();
@@ -44,8 +44,8 @@ const AdminUpdateContainer = () => {
       await api.updateAdmin({ ...data, id });
 
       alertSuccess('Update success');
-    } catch (error) {
-      alertError(error.toString());
+    } catch (error: any) {
+      alertError(error?.toString());
     } finally {
       setLoading(false);
     }

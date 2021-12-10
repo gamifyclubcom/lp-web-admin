@@ -17,7 +17,7 @@ const AdminAddContainer = () => {
 
       alertSuccess('Create success');
       history.goBack();
-    } catch (error) {
+    } catch (error: any) {
       alertError(error.toString());
     } finally {
       setLoading(false);
