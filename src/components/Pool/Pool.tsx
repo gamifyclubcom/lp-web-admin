@@ -1029,7 +1029,7 @@ const Pool: React.FC<Props> = ({
                   />
                 </Grid>
                 {getValues('early_phase_is_active') && (
-                  <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
+                  <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
                     <NumberInputV2
                       onChange={() => trigger('early_join_duration')}
                       onValueChange={(values: any) => {
