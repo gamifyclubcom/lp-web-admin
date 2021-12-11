@@ -976,7 +976,7 @@ const UpdatePool: React.FC = () => {
                   style={{
                     flex: 1,
                     marginLeft: theme.spacing(1),
-                    marginRight: theme.spacing(1),
+                    // marginRight: theme.spacing(1),
                   }}
                 >
                   <InputV2
@@ -992,6 +992,25 @@ const UpdatePool: React.FC = () => {
                         Date.now(),
                     }}
                     tooltipHelp={PoolInputLabel.token_symbol_tooltip}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid item container className={classes.formItem}>
+                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                  <NumberInputV2
+                    onChange={() => offchainTrigger('token_total_supply')}
+                    onValueChange={(values: any) => {
+                      setOffchainValue('token_total_supply', values.floatValue);
+                    }}
+                    required
+                    control={offchainController}
+                    label={PoolInputLabel.token_total_supply}
+                    name="token_total_supply"
+                    isError={Boolean(offchainError?.token_total_supply)}
+                    errorMessage={offchainError?.token_total_supply?.message}
+                    inputProps={{ readOnly: true }}
+                    tooltipHelp={PoolInputLabel.token_total_supply_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
@@ -1010,23 +1029,6 @@ const UpdatePool: React.FC = () => {
                     tooltipHelp={PoolInputLabel.token_decimals_tooltip}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid item container className={classes.formItem}>
-                <NumberInputV2
-                  onChange={() => offchainTrigger('token_total_supply')}
-                  onValueChange={(values: any) => {
-                    setOffchainValue('token_total_supply', values.floatValue);
-                  }}
-                  required
-                  control={offchainController}
-                  label={PoolInputLabel.token_total_supply}
-                  name="token_total_supply"
-                  isError={Boolean(offchainError?.token_total_supply)}
-                  errorMessage={offchainError?.token_total_supply?.message}
-                  inputProps={{ readOnly: true }}
-                  tooltipHelp={PoolInputLabel.token_total_supply_tooltip}
-                />
               </Grid>
 
               {toggleEditMode && (
