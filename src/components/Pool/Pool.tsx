@@ -527,7 +527,7 @@ const Pool: React.FC<Props> = ({
                       item
                       style={{ flex: 1, marginRight: theme.spacing(1) }}
                     >
-                      <Input
+                      <InputV2
                         control={control}
                         disabled
                         label={PoolInputLabel.contract_address}
@@ -559,7 +559,7 @@ const Pool: React.FC<Props> = ({
                       item
                       style={{ flex: 1, marginLeft: theme.spacing(1) }}
                     >
-                      <Input
+                      <InputV2
                         control={control}
                         disabled
                         label={PoolInputLabel.token_y}
@@ -955,7 +955,10 @@ const Pool: React.FC<Props> = ({
                 </Grid>
               </Grid>
               <Grid item container className={classes.formItem}>
-                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                <Grid
+                  item
+                  style={{ flex: 1 /* , marginRight: theme.spacing(1) */ }}
+                >
                   <DateInputV2
                     required
                     control={control}
@@ -1104,7 +1107,7 @@ const Pool: React.FC<Props> = ({
                 </Grid>
 
                 {getValues('exclusive_phase_is_active') && (
-                  <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
+                  <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
                     <NumberInputV2
                       onChange={() => trigger('exclusive_join_duration')}
                       onValueChange={(values: any) => {
@@ -1175,7 +1178,7 @@ const Pool: React.FC<Props> = ({
                     <>
                       <Grid
                         item
-                        style={{ flex: 1, marginLeft: theme.spacing(1) }}
+                        style={{ flex: 1, marginRight: theme.spacing(1) }}
                       >
                         <NumberInputV2
                           onChange={() => trigger('fcfs_stake_duration')}
