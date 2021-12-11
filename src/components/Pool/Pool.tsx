@@ -816,7 +816,7 @@ const Pool: React.FC<Props> = ({
                   style={{
                     flex: 1,
                     marginLeft: theme.spacing(1),
-                    marginRight: theme.spacing(1),
+                    // marginRight: theme.spacing(1),
                   }}
                 >
                   <InputV2
@@ -828,6 +828,25 @@ const Pool: React.FC<Props> = ({
                     errorMessage={errors?.token_symbol?.message}
                     inputProps={{ readOnly: readMode }}
                     tooltipHelp={PoolInputLabel.token_symbol_tooltip}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid item container className={classes.formItem}>
+                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                  <NumberInputV2
+                    onChange={() => trigger('token_total_supply')}
+                    required
+                    control={control}
+                    label={PoolInputLabel.token_total_supply}
+                    name="token_total_supply"
+                    isError={Boolean(errors?.token_total_supply)}
+                    errorMessage={errors?.token_total_supply?.message}
+                    inputProps={{ readOnly: true }}
+                    onValueChange={(values: any) => {
+                      setValue('token_total_supply', values.floatValue);
+                    }}
+                    tooltipHelp={PoolInputLabel.token_total_supply_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
@@ -846,23 +865,6 @@ const Pool: React.FC<Props> = ({
                     tooltipHelp={PoolInputLabel.token_decimals_tooltip}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid item container className={classes.formItem}>
-                <NumberInputV2
-                  onChange={() => trigger('token_total_supply')}
-                  required
-                  control={control}
-                  label={PoolInputLabel.token_total_supply}
-                  name="token_total_supply"
-                  isError={Boolean(errors?.token_total_supply)}
-                  errorMessage={errors?.token_total_supply?.message}
-                  inputProps={{ readOnly: true }}
-                  onValueChange={(values: any) => {
-                    setValue('token_total_supply', values.floatValue);
-                  }}
-                  tooltipHelp={PoolInputLabel.token_total_supply_tooltip}
-                />
               </Grid>
 
               {toggleEditMode && (
