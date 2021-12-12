@@ -1,25 +1,24 @@
 import MomentUtils from '@date-io/moment';
+import { Actions, IPoolV4ContractData } from '@gamify/onchain-program-sdk';
+import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
+import Grid from '@material-ui/core/Grid';
 import { useTheme } from '@material-ui/core/styles';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { useEffect, useMemo, useState } from 'react';
-import { useConnection, useCountDown } from '../../hooks';
-import * as Types from '../../types';
-import useStyles from './styles';
 import { PublicKey } from '@solana/web3.js';
-import * as poolAPI from '../../api/pool';
+import Decimal from 'decimal.js';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
-import NumberFormat from 'react-number-format';
-import { TextField, Typography } from '@material-ui/core';
-import { Actions, IPoolV4ContractData } from '@gamify/onchain-program-sdk';
-import { envConfig } from '../../config';
-import Decimal from 'decimal.js';
+import { useEffect, useMemo, useState } from 'react';
 import Countdown from 'react-countdown';
+import * as poolAPI from '../../../api/pool';
+import { envConfig } from '../../../config';
+import { useConnection, useCountDown } from '../../../hooks';
+import * as Types from '../../../types';
+import { RoundCardItem } from './RoundCardItem';
 
 const { REACT_APP_API_BASE_URL } = envConfig;
 interface Props {
@@ -28,12 +27,22 @@ interface Props {
   setLoading: (state: boolean) => void;
 }
 
-const PoolParticipants: React.FC<Props> = ({
+const convertTokenToSOL = (
+  amountInToken: number,
+  rate: number,
+  tokenDecimal: number
+) => {
+  return new Decimal(amountInToken)
+    .div(rate)
+    .toDecimalPlaces(tokenDecimal)
+    .toNumber();
+};
+
+export const PoolParticipants: React.FC<Props> = ({
   pool,
   loading = false,
   setLoading,
 }) => {
-  const classes = useStyles();
   const theme = useTheme();
   const { renderCountDownValue } = useCountDown();
   const { connection } = useConnection();
@@ -114,183 +123,120 @@ const PoolParticipants: React.FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const poolRounds = useMemo(() => {
+    let result: {
+      key: string;
+      title: string;
+      numberJoinedUser: number;
+      totalRaise: number;
+      totalSold: number;
+    }[] = [];
+    if (Boolean(poolData?.campaign?.early_join_phase?.is_active)) {
+      result.push({
+        key: 'whitelist',
+        title: 'GMFC whitelist round',
+        numberJoinedUser:
+          poolData?.campaign?.early_join_phase.number_joined_user || 0,
+        totalRaise: convertTokenToSOL(
+          poolData?.campaign?.early_join_phase?.max_total_alloc || 0,
+          poolData?.rate || 1,
+          tokenToDecimal
+        ),
+        totalSold: convertTokenToSOL(
+          poolData?.campaign?.early_join_phase?.sold_allocation || 0,
+          poolData?.rate || 1,
+          tokenToDecimal
+        ),
+      });
+    }
+    if (Boolean(poolData?.campaign?.exclusive_phase?.is_active)) {
+      result.push({
+        key: 'exclusive',
+        title: 'GMFC exclusive round',
+        numberJoinedUser:
+          poolData?.campaign?.exclusive_phase.number_joined_user || 0,
+        totalRaise: convertTokenToSOL(
+          poolData?.campaign?.exclusive_phase?.max_total_alloc || 0,
+          poolData?.rate || 1,
+          tokenToDecimal
+        ),
+        totalSold: convertTokenToSOL(
+          poolData?.campaign?.exclusive_phase?.sold_allocation || 0,
+          poolData?.rate || 1,
+          tokenToDecimal
+        ),
+      });
+    }
+    if (Boolean(poolData?.campaign?.fcfs_stake_phase?.is_active)) {
+      result.push({
+        key: 'fcfs-staker',
+        title: 'GMFC FCFS for stakers round',
+        numberJoinedUser:
+          poolData?.campaign?.fcfs_stake_phase.number_joined_user || 0,
+        totalRaise: convertTokenToSOL(
+          poolData?.campaign?.fcfs_stake_phase?.max_total_alloc || 0,
+          poolData?.rate || 1,
+          tokenToDecimal
+        ),
+        totalSold: convertTokenToSOL(
+          poolData?.campaign?.fcfs_stake_phase?.sold_allocation || 0,
+          poolData?.rate || 1,
+          tokenToDecimal
+        ),
+      });
+    }
+    if (Boolean(poolData?.campaign?.public_phase?.is_active)) {
+      result.push({
+        key: 'fcfs',
+        title: 'GMFC FCFS round',
+        numberJoinedUser:
+          poolData?.campaign?.public_phase.number_joined_user || 0,
+        totalRaise: convertTokenToSOL(
+          poolData?.campaign?.public_phase?.max_total_alloc || 0,
+          poolData?.rate || 1,
+          tokenToDecimal
+        ),
+        totalSold: convertTokenToSOL(
+          poolData?.campaign?.public_phase?.sold_allocation || 0,
+          poolData?.rate || 1,
+          tokenToDecimal
+        ),
+      });
+    }
+
+    return result;
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolData]);
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <Card style={{ marginBottom: theme.spacing(2) }}>
-        <Typography variant="h4" gutterBottom>
-          Reliable on-chain data
-        </Typography>
-        {poolData?.campaign?.exclusive_phase?.is_active && (
-          <>
-            <CardHeader title="GMFC exclusive round" />
-            <CardContent>
-              <form>
-                <Grid item container className={classes.formItem}>
-                  <NumberFormat
-                    thousandSeparator={true}
-                    customInput={TextField}
-                    variant={'outlined'}
-                    disabled
-                    required
-                    label={'Total joined users'}
-                    value={
-                      poolData?.campaign?.exclusive_phase.number_joined_user
-                    }
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item container className={classes.formItem}>
-                  <NumberFormat
-                    thousandSeparator={true}
-                    customInput={TextField}
-                    variant={'outlined'}
-                    disabled
-                    required
-                    label={'Total raised SOL'}
-                    value={new Decimal(
-                      poolData?.campaign?.exclusive_phase.max_total_alloc || 0
-                    )
-                      .div(poolData?.rate || 1)
-                      .toDecimalPlaces(tokenToDecimal)
-                      .toNumber()}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item container className={classes.formItem}>
-                  <NumberFormat
-                    thousandSeparator={true}
-                    customInput={TextField}
-                    variant={'outlined'}
-                    disabled
-                    required
-                    label={'Total sold amount'}
-                    value={new Decimal(
-                      poolData?.campaign?.exclusive_phase.sold_allocation || 0
-                    )
-                      .div(poolData?.rate || 1)
-                      .toDecimalPlaces(tokenToDecimal)
-                      .toNumber()}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item container className={classes.formItem}></Grid>
-              </form>
-            </CardContent>
-          </>
+        <div style={{ padding: theme.spacing(2) }}>
+          <Typography variant="h4" gutterBottom>
+            Reliable on-chain data
+          </Typography>
+        </div>
+        {loading ? (
+          <div style={{ padding: theme.spacing(2) }}>
+            <Skeleton variant="rect" width="100%" height={250} />
+          </div>
+        ) : (
+          poolRounds.map((round) => (
+            <RoundCardItem
+              key={round.key}
+              title={round.title}
+              numberJoinedUser={round.numberJoinedUser}
+              totalRaise={round.totalRaise}
+              totalSold={round.totalSold}
+            />
+          ))
         )}
-        {poolData?.campaign?.fcfs_stake_phase?.is_active && (
-          <>
-            <CardHeader title="GMFC FCFS for stakers round" />
-            <CardContent>
-              <form>
-                <Grid item container className={classes.formItem}>
-                  <NumberFormat
-                    thousandSeparator={true}
-                    customInput={TextField}
-                    variant={'outlined'}
-                    disabled
-                    required
-                    label={'Total joined users'}
-                    value={
-                      poolData?.campaign?.fcfs_stake_phase?.number_joined_user
-                    }
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item container className={classes.formItem}>
-                  <NumberFormat
-                    thousandSeparator={true}
-                    customInput={TextField}
-                    variant={'outlined'}
-                    disabled
-                    required
-                    label={'Total raised SOL'}
-                    value={new Decimal(
-                      poolData?.campaign?.fcfs_stake_phase?.max_total_alloc || 0
-                    )
-                      .div(poolData?.rate || 1)
-                      .toDecimalPlaces(tokenToDecimal)
-                      .toNumber()}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item container className={classes.formItem}>
-                  <NumberFormat
-                    thousandSeparator={true}
-                    customInput={TextField}
-                    variant={'outlined'}
-                    disabled
-                    required
-                    label={'Total sold amount'}
-                    value={new Decimal(
-                      poolData?.campaign?.fcfs_stake_phase?.sold_allocation || 0
-                    )
-                      .div(poolData?.rate || 1)
-                      .toDecimalPlaces(tokenToDecimal)
-                      .toNumber()}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item container className={classes.formItem}></Grid>
-              </form>
-            </CardContent>
-          </>
-        )}
-        <CardHeader title="GMFC FCFS round" />
-        <CardContent>
-          <form>
-            <Grid item container className={classes.formItem}>
-              <NumberFormat
-                thousandSeparator={true}
-                customInput={TextField}
-                variant={'outlined'}
-                disabled
-                required
-                label={'Total joined users'}
-                value={poolData?.campaign?.public_phase.number_joined_user}
-                fullWidth
-              />
-            </Grid>
-            <Grid item container className={classes.formItem}>
-              <NumberFormat
-                thousandSeparator={true}
-                customInput={TextField}
-                variant={'outlined'}
-                disabled
-                required
-                label={'Total raised SOL'}
-                value={new Decimal(
-                  poolData?.campaign?.public_phase.max_total_alloc || 0
-                )
-                  .div(poolData?.rate || 1)
-                  .toDecimalPlaces(tokenToDecimal)
-                  .toNumber()}
-                fullWidth
-              />
-            </Grid>
-            <Grid item container className={classes.formItem}>
-              <NumberFormat
-                thousandSeparator={true}
-                customInput={TextField}
-                variant={'outlined'}
-                disabled
-                required
-                label={'Total sold amount'}
-                value={new Decimal(
-                  poolData?.campaign?.public_phase.sold_allocation || 0
-                )
-                  .div(poolData?.rate || 1)
-                  .toDecimalPlaces(tokenToDecimal)
-                  .toNumber()}
-                fullWidth
-              />
-            </Grid>
-            <Grid item container className={classes.formItem}></Grid>
-          </form>
-        </CardContent>
-        <Typography variant="h4" gutterBottom>
-          Unreliable off-chain data
-        </Typography>
+        <div style={{ padding: theme.spacing(2) }}>
+          <Typography variant="h4" gutterBottom>
+            Unreliable off-chain data
+          </Typography>
+        </div>
         <CardContent style={{ whiteSpace: 'pre-line' }}>
           <div style={{ whiteSpace: 'pre-line' }}>
             {`WARNING!!!
@@ -407,5 +353,3 @@ After downloading this file you must:
     </MuiPickersUtilsProvider>
   );
 };
-
-export default PoolParticipants;
