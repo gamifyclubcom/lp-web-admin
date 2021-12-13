@@ -29,7 +29,7 @@ import { Decimal } from 'decimal.js';
 import { Actions } from '@gamify/onchain-program-sdk';
 import { PublicKey } from '@solana/web3.js';
 import PoolTiers from './UserTiers';
-import PoolParticipants from './Participants';
+import { PoolParticipants } from './paticipants/Participants';
 interface URLParams {
   id: string;
 }
