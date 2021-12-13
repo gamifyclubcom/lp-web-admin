@@ -24,14 +24,18 @@ import * as Types from '../../types';
 import { getTokenInfo } from '../../utils/solana-api';
 import { poolValidator } from '../../utils/validators';
 import CheckBoxInput from '../common/form/CheckBoxInput';
+import CheckBoxInputV2 from '../common/form/CheckBoxInputV2';
 import DateInput from '../common/form/DateInput';
+import DateInputV2 from '../common/form/DateInputV2';
 import Input from '../common/form/Input';
+import InputV2 from '../common/form/InputV2';
 import useStyles from './styles';
 import { DEFAULT_POOL_LOGO_URL } from '../../utils/constants';
 import { getConnection, isEmpty } from '../../shared/helper';
 import { PoolInputLabel } from './constants';
 import { useWallet } from '@solana/wallet-adapter-react';
 import NumberInput from '../common/form/NumberFormatInput';
+import NumberInputV2 from '../common/form/NumberFormatInputV2';
 import { Actions } from '@gamify/onchain-program-sdk';
 
 type FormValues = Types.Pool & { is_checked_fee_information: boolean };
@@ -201,7 +205,7 @@ const Pool: React.FC<Props> = ({
           <Card style={{ marginBottom: theme.spacing(2) }}>
             <CardHeader title="POOL ADMIN" />
             <CardContent>
-              <Input
+              <InputV2
                 required
                 control={control}
                 label={PoolInputLabel.root_admin}
@@ -209,6 +213,7 @@ const Pool: React.FC<Props> = ({
                 isError={Boolean(errors.root_admin)}
                 inputProps={{ readOnly: readMode }}
                 errorMessage={errors?.root_admin?.message}
+                tooltipHelp={PoolInputLabel.root_admin_tooltip}
               />
 
               {!createMode && !readMode && (
@@ -494,23 +499,25 @@ const Pool: React.FC<Props> = ({
           <CardContent>
             <form className="pool-form">
               <Grid item className={classes.formItem}>
-                <Input
+                <InputV2
                   control={control}
                   label={PoolInputLabel.logo}
                   name="logo"
                   inputProps={{ readOnly: readMode }}
                   isError={Boolean(errors?.logo)}
                   errorMessage={errors?.logo?.message}
+                  tooltipHelp={PoolInputLabel.logo_tooltip}
                 />
               </Grid>
               <Grid item className={classes.formItem}>
-                <Input
+                <InputV2
                   control={control}
                   label={PoolInputLabel.thumbnail}
                   name="thumbnail"
                   inputProps={{ readOnly: readMode }}
                   isError={Boolean(errors?.thumbnail)}
                   errorMessage={errors?.thumbnail?.message}
+                  tooltipHelp={PoolInputLabel.thumbnail_tooltip}
                 />
               </Grid>
               {(toggleEditMode || readMode) && (
@@ -520,7 +527,7 @@ const Pool: React.FC<Props> = ({
                       item
                       style={{ flex: 1, marginRight: theme.spacing(1) }}
                     >
-                      <Input
+                      <InputV2
                         control={control}
                         disabled
                         label={PoolInputLabel.contract_address}
@@ -552,7 +559,7 @@ const Pool: React.FC<Props> = ({
                       item
                       style={{ flex: 1, marginLeft: theme.spacing(1) }}
                     >
-                      <Input
+                      <InputV2
                         control={control}
                         disabled
                         label={PoolInputLabel.token_y}
@@ -586,7 +593,7 @@ const Pool: React.FC<Props> = ({
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     required
                     control={control}
                     inputProps={{ readOnly: readMode }}
@@ -594,23 +601,25 @@ const Pool: React.FC<Props> = ({
                     name="name"
                     isError={Boolean(errors?.name)}
                     errorMessage={errors?.name?.message}
+                    tooltipHelp={PoolInputLabel.name_tooltip}
                   />{' '}
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     control={control}
                     label={PoolInputLabel.tag_line}
                     inputProps={{ readOnly: readMode }}
                     name="tag_line"
                     isError={Boolean(errors?.tag_line)}
                     errorMessage={errors?.tag_line?.message}
+                    tooltipHelp={PoolInputLabel.tag_line_tooltip}
                   />
                 </Grid>
               </Grid>
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     required
                     control={control}
                     label={PoolInputLabel.website}
@@ -618,29 +627,32 @@ const Pool: React.FC<Props> = ({
                     name="website"
                     isError={Boolean(errors?.website)}
                     errorMessage={errors?.website?.message}
+                    tooltipHelp={PoolInputLabel.website_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     control={control}
                     label={PoolInputLabel.token_economic}
                     inputProps={{ readOnly: readMode }}
                     name="token_economic"
                     isError={Boolean(errors?.token_economic)}
                     errorMessage={errors?.token_economic?.message}
+                    tooltipHelp={PoolInputLabel.token_economic_tooltip}
                   />
                 </Grid>
               </Grid>
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     control={control}
                     label={PoolInputLabel.twitter}
                     inputProps={{ readOnly: readMode }}
                     name="twitter"
                     isError={Boolean(errors?.twitter)}
                     errorMessage={errors?.twitter?.message}
+                    tooltipHelp={PoolInputLabel.twitter_tooltip}
                   />
                 </Grid>
                 <Grid
@@ -651,30 +663,35 @@ const Pool: React.FC<Props> = ({
                     marginRight: theme.spacing(1),
                   }}
                 >
-                  <Input
+                  <InputV2
                     control={control}
                     label={PoolInputLabel.medium}
                     inputProps={{ readOnly: readMode }}
                     name="medium"
                     isError={Boolean(errors?.medium)}
                     errorMessage={errors?.medium?.message}
+                    tooltipHelp={PoolInputLabel.medium_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     control={control}
                     inputProps={{ readOnly: readMode }}
                     label={PoolInputLabel.telegram}
                     name="telegram"
                     isError={Boolean(errors?.telegram)}
                     errorMessage={errors?.telegram?.message}
+                    tooltipHelp={PoolInputLabel.telegram_tooltip}
                   />
                 </Grid>
               </Grid>
 
               <Grid item container className={classes.formItem}>
-                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <DateInput
+                <Grid
+                  item
+                  style={{ flex: 1 /* , marginRight: theme.spacing(1) */ }}
+                >
+                  <DateInputV2
                     required
                     disabled={readMode}
                     control={control}
@@ -682,9 +699,10 @@ const Pool: React.FC<Props> = ({
                     label={PoolInputLabel.pool_start}
                     isError={Boolean(errors?.pool_start)}
                     errorMessage={errors?.pool_start?.message}
+                    tooltipHelp={PoolInputLabel.pool_start_tooltip}
                   />
                 </Grid>
-                <Grid
+                {/* <Grid
                   item
                   style={{
                     flex: 1,
@@ -714,11 +732,11 @@ const Pool: React.FC<Props> = ({
                     isError={Boolean(errors?.liquidity_percentage)}
                     errorMessage={errors?.liquidity_percentage?.message}
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
 
               <Grid item container className={classes.formItem}>
-                <NumberInput
+                <NumberInputV2
                   onChange={() => trigger('claimable_percentage')}
                   required
                   control={control}
@@ -730,11 +748,12 @@ const Pool: React.FC<Props> = ({
                   onValueChange={(values: any) => {
                     setValue('claimable_percentage', values.floatValue);
                   }}
+                  tooltipHelp={PoolInputLabel.claimable_percentage_tooltip}
                 />
               </Grid>
 
               <Grid item className={classes.formItem}>
-                <Input
+                <InputV2
                   control={control}
                   label={PoolInputLabel.description}
                   inputProps={{ readOnly: readMode }}
@@ -743,6 +762,7 @@ const Pool: React.FC<Props> = ({
                   errorMessage={errors?.description?.message}
                   multiline
                   rows={4}
+                  tooltipHelp={PoolInputLabel.description_tooltip}
                 />
               </Grid>
 
@@ -751,7 +771,7 @@ const Pool: React.FC<Props> = ({
               </Typography>
 
               <Grid item className={classes.formItem}>
-                <Input
+                <InputV2
                   required
                   control={control}
                   label={PoolInputLabel.token_address}
@@ -774,12 +794,13 @@ const Pool: React.FC<Props> = ({
                       </CopyToClipboard>
                     ),
                   }}
+                  tooltipHelp={PoolInputLabel.token_address_tooltip}
                 />
               </Grid>
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     required
                     control={control}
                     label={PoolInputLabel.token_name}
@@ -787,6 +808,7 @@ const Pool: React.FC<Props> = ({
                     isError={Boolean(errors?.token_name)}
                     errorMessage={errors?.token_name?.message}
                     inputProps={{ readOnly: readMode }}
+                    tooltipHelp={PoolInputLabel.token_name_tooltip}
                   />
                 </Grid>
                 <Grid
@@ -794,10 +816,10 @@ const Pool: React.FC<Props> = ({
                   style={{
                     flex: 1,
                     marginLeft: theme.spacing(1),
-                    marginRight: theme.spacing(1),
+                    // marginRight: theme.spacing(1),
                   }}
                 >
-                  <Input
+                  <InputV2
                     required
                     control={control}
                     label={PoolInputLabel.token_symbol}
@@ -805,10 +827,30 @@ const Pool: React.FC<Props> = ({
                     isError={Boolean(errors?.token_symbol)}
                     errorMessage={errors?.token_symbol?.message}
                     inputProps={{ readOnly: readMode }}
+                    tooltipHelp={PoolInputLabel.token_symbol_tooltip}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid item container className={classes.formItem}>
+                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                  <NumberInputV2
+                    onChange={() => trigger('token_total_supply')}
+                    required
+                    control={control}
+                    label={PoolInputLabel.token_total_supply}
+                    name="token_total_supply"
+                    isError={Boolean(errors?.token_total_supply)}
+                    errorMessage={errors?.token_total_supply?.message}
+                    inputProps={{ readOnly: true }}
+                    onValueChange={(values: any) => {
+                      setValue('token_total_supply', values.floatValue);
+                    }}
+                    tooltipHelp={PoolInputLabel.token_total_supply_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <NumberInput
+                  <NumberInputV2
                     onChange={() => trigger('token_decimals')}
                     onValueChange={(values: any) => {
                       setValue('token_decimals', values.floatValue);
@@ -820,24 +862,9 @@ const Pool: React.FC<Props> = ({
                     isError={Boolean(errors?.token_decimals)}
                     errorMessage={errors?.token_decimals?.message}
                     inputProps={{ readOnly: true }}
+                    tooltipHelp={PoolInputLabel.token_decimals_tooltip}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid item container className={classes.formItem}>
-                <NumberInput
-                  onChange={() => trigger('token_total_supply')}
-                  required
-                  control={control}
-                  label={PoolInputLabel.token_total_supply}
-                  name="token_total_supply"
-                  isError={Boolean(errors?.token_total_supply)}
-                  errorMessage={errors?.token_total_supply?.message}
-                  inputProps={{ readOnly: true }}
-                  onValueChange={(values: any) => {
-                    setValue('token_total_supply', values.floatValue);
-                  }}
-                />
               </Grid>
 
               {toggleEditMode && (
@@ -877,7 +904,7 @@ const Pool: React.FC<Props> = ({
               {isEnabledVoting && (
                 <Grid item container className={classes.formItem}>
                   <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                    <DateInput
+                    <DateInputV2
                       required
                       control={control}
                       disabled={readMode}
@@ -885,17 +912,19 @@ const Pool: React.FC<Props> = ({
                       label={PoolInputLabel.voting_start}
                       isError={Boolean(errors.voting_start)}
                       errorMessage={errors?.voting_start?.message}
+                      tooltipHelp={PoolInputLabel.voting_start_tooltip}
                     />
                   </Grid>
                   <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                    <DateInput
+                    <DateInputV2
                       required
                       control={control}
                       name="voting_end"
                       disabled={readMode}
-                      label={`${PoolInputLabel.voting_end_1}${maxVotingDays}${PoolInputLabel.voting_end_2}`}
+                      label={PoolInputLabel.voting_end_1}
                       isError={Boolean(errors?.voting_end)}
                       errorMessage={errors?.voting_end?.message}
+                      tooltipHelp={`${PoolInputLabel.voting_end_1_tooltip}${maxVotingDays}${PoolInputLabel.voting_end_2_tooltip}`}
                     />
                   </Grid>
                 </Grid>
@@ -903,7 +932,7 @@ const Pool: React.FC<Props> = ({
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <DateInput
+                  <DateInputV2
                     required
                     control={control}
                     disabled={readMode}
@@ -911,10 +940,11 @@ const Pool: React.FC<Props> = ({
                     label={PoolInputLabel.join_pool_start}
                     isError={Boolean(errors.join_pool_start)}
                     errorMessage={errors?.join_pool_start?.message}
+                    tooltipHelp={PoolInputLabel.join_pool_start_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <DateInput
+                  <DateInputV2
                     required
                     control={control}
                     name="join_pool_end"
@@ -922,12 +952,16 @@ const Pool: React.FC<Props> = ({
                     label={PoolInputLabel.join_pool_end}
                     isError={Boolean(errors?.join_pool_end)}
                     errorMessage={errors?.join_pool_end?.message}
+                    tooltipHelp={PoolInputLabel.join_pool_end_tooltip}
                   />
                 </Grid>
               </Grid>
               <Grid item container className={classes.formItem}>
-                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <DateInput
+                <Grid
+                  item
+                  style={{ flex: 1 /* , marginRight: theme.spacing(1) */ }}
+                >
+                  <DateInputV2
                     required
                     control={control}
                     name="claim_at"
@@ -935,6 +969,7 @@ const Pool: React.FC<Props> = ({
                     label={PoolInputLabel.claim_at}
                     isError={Boolean(errors?.claim_at)}
                     errorMessage={errors?.claim_at?.message}
+                    tooltipHelp={PoolInputLabel.claim_at_tooltip}
                   />
                 </Grid>
               </Grid>
@@ -942,9 +977,9 @@ const Pool: React.FC<Props> = ({
                 <Grid
                   item
                   style={{ flex: 1, marginRight: theme.spacing(1) }}
-                  xs={6}
+                  // xs={6}
                 >
-                  <NumberInput
+                  <NumberInputV2
                     onChange={() => trigger('max_allocation_all_phases')}
                     onValueChange={(values: any) => {
                       setValue('max_allocation_all_phases', values.floatValue);
@@ -958,12 +993,20 @@ const Pool: React.FC<Props> = ({
                     isError={Boolean(errors?.max_allocation_all_phases)}
                     errorMessage={errors?.max_allocation_all_phases?.message}
                     inputProps={{ readOnly: readMode }}
+                    tooltipHelp={
+                      PoolInputLabel.max_allocation_all_phases_tooltip
+                    }
                   />
                 </Grid>
+                <Grid
+                  item
+                  style={{ flex: 1, marginRight: theme.spacing(1) }}
+                  // xs={6}
+                ></Grid>
               </Grid>
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <CheckBoxInput
+                  <CheckBoxInputV2
                     control={control}
                     disabled={readMode}
                     label={PoolInputLabel.early_phase_is_active}
@@ -984,11 +1027,12 @@ const Pool: React.FC<Props> = ({
                         );
                       }
                     }}
+                    tooltipHelp={PoolInputLabel.early_phase_is_active_tooltip}
                   />
                 </Grid>
                 {getValues('early_phase_is_active') && (
-                  <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                    <NumberInput
+                  <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                    <NumberInputV2
                       onChange={() => trigger('early_join_duration')}
                       onValueChange={(values: any) => {
                         setValue('early_join_duration', values.floatValue);
@@ -1005,7 +1049,7 @@ const Pool: React.FC<Props> = ({
                 )}
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
                   {getValues('early_phase_is_active') && (
-                    <NumberInput
+                    <NumberInputV2
                       onChange={() => trigger('early_phase_max_total_alloc')}
                       onValueChange={(values: any) => {
                         setValue(
@@ -1031,7 +1075,7 @@ const Pool: React.FC<Props> = ({
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <CheckBoxInput
+                  <CheckBoxInputV2
                     control={control}
                     disabled={readMode}
                     label={PoolInputLabel.exclusive_phase_is_active}
@@ -1058,12 +1102,15 @@ const Pool: React.FC<Props> = ({
                         event.target.checked
                       );
                     }}
+                    tooltipHelp={
+                      PoolInputLabel.exclusive_phase_is_active_tooltip
+                    }
                   />
                 </Grid>
 
                 {getValues('exclusive_phase_is_active') && (
-                  <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                    <NumberInput
+                  <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                    <NumberInputV2
                       onChange={() => trigger('exclusive_join_duration')}
                       onValueChange={(values: any) => {
                         setValue('exclusive_join_duration', values.floatValue);
@@ -1080,7 +1127,7 @@ const Pool: React.FC<Props> = ({
                 )}
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
                   {getValues('exclusive_phase_is_active') && (
-                    <NumberInput
+                    <NumberInputV2
                       onChange={() =>
                         trigger('exclusive_phase_max_total_alloc')
                       }
@@ -1109,7 +1156,7 @@ const Pool: React.FC<Props> = ({
               {isRequreidExclusivePhaseMaxTotalAlloc && (
                 <Grid item container className={classes.formItem}>
                   <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                    <CheckBoxInput
+                    <CheckBoxInputV2
                       control={control}
                       disabled={readMode}
                       label={PoolInputLabel.fcfs_stake_phase_is_active}
@@ -1124,15 +1171,18 @@ const Pool: React.FC<Props> = ({
                           event.target.checked
                         );
                       }}
+                      tooltipHelp={
+                        PoolInputLabel.fcfs_stake_phase_is_active_tooltip
+                      }
                     />
                   </Grid>
                   {isRequreidFcfsStakePhaseMaxTotalAlloc && (
                     <>
                       <Grid
                         item
-                        style={{ flex: 1, marginLeft: theme.spacing(1) }}
+                        style={{ flex: 1, marginRight: theme.spacing(1) }}
                       >
-                        <NumberInput
+                        <NumberInputV2
                           onChange={() => trigger('fcfs_stake_duration')}
                           onValueChange={(values: any) => {
                             setValue('fcfs_stake_duration', values.floatValue);
@@ -1150,7 +1200,7 @@ const Pool: React.FC<Props> = ({
                         item
                         style={{ flex: 1, marginLeft: theme.spacing(1) }}
                       >
-                        <NumberInput
+                        <NumberInputV2
                           onChange={() =>
                             trigger('fcfs_stake_phase_multiplication_rate')
                           }
@@ -1183,7 +1233,7 @@ const Pool: React.FC<Props> = ({
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <NumberInput
+                  <NumberInputV2
                     onChange={() => trigger('token_ratio')}
                     onValueChange={(values: any) => {
                       setValue('token_ratio', values.floatValue);
@@ -1195,10 +1245,11 @@ const Pool: React.FC<Props> = ({
                     isError={Boolean(errors?.token_ratio)}
                     errorMessage={errors?.token_ratio?.message}
                     inputProps={{ readOnly: readMode }}
+                    tooltipHelp={PoolInputLabel.token_ratio_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     required
                     control={control}
                     label={PoolInputLabel.token_to}
@@ -1207,17 +1258,18 @@ const Pool: React.FC<Props> = ({
                     errorMessage={errors?.token_to?.message}
                     inputProps={{ readOnly: readMode }}
                     select
+                    tooltipHelp={PoolInputLabel.token_to_tooltip}
                   >
                     {supportedTokens.map((dialect) => (
                       <MenuItem key={dialect.value} value={dialect.value}>
                         {dialect.label}
                       </MenuItem>
                     ))}
-                  </Input>
+                  </InputV2>
                 </Grid>
               </Grid>
               <Grid item container className={classes.formItem}>
-                <NumberInput
+                <NumberInputV2
                   onChange={() => trigger('public_phase_max_individual_alloc')}
                   onValueChange={(values: any) => {
                     setValue(
@@ -1236,6 +1288,9 @@ const Pool: React.FC<Props> = ({
                     errors?.public_phase_max_individual_alloc?.message
                   }
                   inputProps={{ readOnly: readMode }}
+                  tooltipHelp={
+                    PoolInputLabel.public_phase_max_individual_alloc_tooltip
+                  }
                 />
               </Grid>
               <Grid item container className={classes.formItem}>

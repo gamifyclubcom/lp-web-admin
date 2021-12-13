@@ -27,8 +27,11 @@ import {
   poolOnchainValidator,
 } from '../../utils/validators';
 import CheckBoxInput from '../common/form/CheckBoxInput';
+import CheckBoxInputV2 from '../common/form/CheckBoxInputV2';
 import DateInput from '../common/form/DateInput';
+import DateInputV2 from '../common/form/DateInputV2';
 import Input from '../common/form/Input';
+import InputV2 from '../common/form/InputV2';
 import useStyles from './styles';
 import { DEFAULT_POOL_LOGO_URL } from '../../utils/constants';
 import {
@@ -53,6 +56,7 @@ import { getTokenInfo } from '../../utils/solana-api';
 import { Backdrop } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import NumberInput from '../common/form/NumberFormatInput';
+import NumberInputV2 from '../common/form/NumberFormatInputV2';
 
 type FormOnchainValues = Types.FormOnchainValues & {
   pool_start: string;
@@ -410,13 +414,14 @@ const UpdatePool: React.FC = () => {
         <Card style={{ marginBottom: theme.spacing(2) }}>
           <CardHeader title="POOL ADMIN" />
           <CardContent>
-            <Input
+            <InputV2
               required
               control={rootAdminController}
               label={PoolInputLabel.root_admin}
               name="root_admin"
               isError={Boolean(rootAdminError.root_admin)}
               errorMessage={rootAdminError?.root_admin?.message}
+              tooltipHelp={PoolInputLabel.root_admin_tooltip}
             />
 
             <CardActions
@@ -644,23 +649,25 @@ const UpdatePool: React.FC = () => {
           <CardContent>
             <form className="pool-form">
               <Grid item className={classes.formItem}>
-                <Input
+                <InputV2
                   control={offchainController}
                   label={PoolInputLabel.logo}
                   name="logo"
                   inputProps={{}}
                   isError={Boolean(offchainError?.logo)}
                   errorMessage={offchainError?.logo?.message}
+                  tooltipHelp={PoolInputLabel.logo_tooltip}
                 />
               </Grid>
               <Grid item className={classes.formItem}>
-                <Input
+                <InputV2
                   control={offchainController}
                   label={PoolInputLabel.thumbnail}
                   name="thumbnail"
                   inputProps={{}}
                   isError={Boolean(offchainError?.thumbnail)}
                   errorMessage={offchainError?.thumbnail?.message}
+                  tooltipHelp={PoolInputLabel.thumbnail_tooltip}
                 />
               </Grid>
               {toggleEditMode && (
@@ -670,7 +677,7 @@ const UpdatePool: React.FC = () => {
                       item
                       style={{ flex: 1, marginRight: theme.spacing(1) }}
                     >
-                      <Input
+                      <InputV2
                         control={offchainController}
                         label={PoolInputLabel.contract_address}
                         name="contract_address"
@@ -701,7 +708,7 @@ const UpdatePool: React.FC = () => {
                       item
                       style={{ flex: 1, marginLeft: theme.spacing(1) }}
                     >
-                      <Input
+                      <InputV2
                         control={onchainController}
                         label={PoolInputLabel.token_y}
                         name="token_y"
@@ -735,7 +742,7 @@ const UpdatePool: React.FC = () => {
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     required
                     control={offchainController}
                     inputProps={{
@@ -747,23 +754,25 @@ const UpdatePool: React.FC = () => {
                     name="name"
                     isError={Boolean(offchainError?.name)}
                     errorMessage={offchainError?.name?.message}
+                    tooltipHelp={PoolInputLabel.name_tooltip}
                   />{' '}
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     control={offchainController}
                     label={PoolInputLabel.tag_line}
                     inputProps={{}}
                     name="tag_line"
                     isError={Boolean(offchainError?.tag_line)}
                     errorMessage={offchainError?.tag_line?.message}
+                    tooltipHelp={PoolInputLabel.tag_line_tooltip}
                   />
                 </Grid>
               </Grid>
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     required
                     control={offchainController}
                     label={PoolInputLabel.website}
@@ -775,29 +784,32 @@ const UpdatePool: React.FC = () => {
                     name="website"
                     isError={Boolean(offchainError?.website)}
                     errorMessage={offchainError?.website?.message}
+                    tooltipHelp={PoolInputLabel.website_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     control={offchainController}
                     label={PoolInputLabel.token_economic}
                     inputProps={{}}
                     name="token_economic"
                     isError={Boolean(offchainError?.token_economic)}
                     errorMessage={offchainError?.token_economic?.message}
+                    tooltipHelp={PoolInputLabel.token_economic_tooltip}
                   />
                 </Grid>
               </Grid>
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     control={offchainController}
                     label={PoolInputLabel.twitter}
                     inputProps={{}}
                     name="twitter"
                     isError={Boolean(offchainError?.twitter)}
                     errorMessage={offchainError?.twitter?.message}
+                    tooltipHelp={PoolInputLabel.twitter_tooltip}
                   />
                 </Grid>
                 <Grid
@@ -808,39 +820,45 @@ const UpdatePool: React.FC = () => {
                     marginRight: theme.spacing(1),
                   }}
                 >
-                  <Input
+                  <InputV2
                     control={offchainController}
                     label={PoolInputLabel.medium}
                     inputProps={{}}
                     name="medium"
                     isError={Boolean(offchainError?.medium)}
                     errorMessage={offchainError?.medium?.message}
+                    tooltipHelp={PoolInputLabel.medium_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     control={offchainController}
                     inputProps={{}}
                     label={PoolInputLabel.telegram}
                     name="telegram"
                     isError={Boolean(offchainError?.telegram)}
                     errorMessage={offchainError?.telegram?.message}
+                    tooltipHelp={PoolInputLabel.telegram_tooltip}
                   />
                 </Grid>
               </Grid>
 
               <Grid item container className={classes.formItem}>
-                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <DateInput
+                <Grid
+                  item
+                  style={{ flex: 1 /* , marginRight: theme.spacing(1) */ }}
+                >
+                  <DateInputV2
                     control={offchainController}
                     required
                     name="pool_start"
                     label={PoolInputLabel.pool_start}
                     isError={Boolean(offchainError?.pool_start)}
                     errorMessage={offchainError?.pool_start?.message}
+                    tooltipHelp={PoolInputLabel.pool_start_tooltip}
                   />
                 </Grid>
-                <Grid
+                {/* <Grid
                   item
                   style={{
                     flex: 1,
@@ -873,11 +891,11 @@ const UpdatePool: React.FC = () => {
                     isError={Boolean(offchainError?.liquidity_percentage)}
                     errorMessage={offchainError?.liquidity_percentage?.message}
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
 
               <Grid item container className={classes.formItem}>
-                <NumberInput
+                <NumberInputV2
                   onChange={() => offchainTrigger('claimable_percentage')}
                   required
                   control={offchainController}
@@ -888,11 +906,12 @@ const UpdatePool: React.FC = () => {
                   onValueChange={(values: any) => {
                     setOffchainValue('claimable_percentage', values.floatValue);
                   }}
+                  tooltipHelp={PoolInputLabel.claimable_percentage_tooltip}
                 />
               </Grid>
 
               <Grid item className={classes.formItem}>
-                <Input
+                <InputV2
                   control={offchainController}
                   label={PoolInputLabel.description}
                   name="description"
@@ -900,6 +919,7 @@ const UpdatePool: React.FC = () => {
                   errorMessage={offchainError?.description?.message}
                   multiline
                   rows={4}
+                  tooltipHelp={PoolInputLabel.description_tooltip}
                 />
               </Grid>
 
@@ -908,7 +928,7 @@ const UpdatePool: React.FC = () => {
               </Typography>
 
               <Grid item className={classes.formItem}>
-                <Input
+                <InputV2
                   required
                   control={offchainController}
                   label={PoolInputLabel.token_address}
@@ -930,12 +950,13 @@ const UpdatePool: React.FC = () => {
                       </CopyToClipboard>
                     ),
                   }}
+                  tooltipHelp={PoolInputLabel.token_address_tooltip}
                 />
               </Grid>
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     required
                     control={offchainController}
                     label={PoolInputLabel.token_name}
@@ -947,6 +968,7 @@ const UpdatePool: React.FC = () => {
                         new Date(getValuesOffchain('pool_start')).getTime() <
                         Date.now(),
                     }}
+                    tooltipHelp={PoolInputLabel.token_name_tooltip}
                   />
                 </Grid>
                 <Grid
@@ -954,10 +976,10 @@ const UpdatePool: React.FC = () => {
                   style={{
                     flex: 1,
                     marginLeft: theme.spacing(1),
-                    marginRight: theme.spacing(1),
+                    // marginRight: theme.spacing(1),
                   }}
                 >
-                  <Input
+                  <InputV2
                     required
                     control={offchainController}
                     label={PoolInputLabel.token_symbol}
@@ -969,10 +991,30 @@ const UpdatePool: React.FC = () => {
                         new Date(getValuesOffchain('pool_start')).getTime() <
                         Date.now(),
                     }}
+                    tooltipHelp={PoolInputLabel.token_symbol_tooltip}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid item container className={classes.formItem}>
+                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                  <NumberInputV2
+                    onChange={() => offchainTrigger('token_total_supply')}
+                    onValueChange={(values: any) => {
+                      setOffchainValue('token_total_supply', values.floatValue);
+                    }}
+                    required
+                    control={offchainController}
+                    label={PoolInputLabel.token_total_supply}
+                    name="token_total_supply"
+                    isError={Boolean(offchainError?.token_total_supply)}
+                    errorMessage={offchainError?.token_total_supply?.message}
+                    inputProps={{ readOnly: true }}
+                    tooltipHelp={PoolInputLabel.token_total_supply_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <NumberInput
+                  <NumberInputV2
                     onChange={() => offchainTrigger('token_decimals')}
                     onValueChange={(values: any) => {
                       setOffchainValue('token_decimals', values.floatValue);
@@ -984,24 +1026,9 @@ const UpdatePool: React.FC = () => {
                     isError={Boolean(offchainError?.token_decimals)}
                     errorMessage={offchainError?.token_decimals?.message}
                     inputProps={{ readOnly: true }}
+                    tooltipHelp={PoolInputLabel.token_decimals_tooltip}
                   />
                 </Grid>
-              </Grid>
-
-              <Grid item container className={classes.formItem}>
-                <NumberInput
-                  onChange={() => offchainTrigger('token_total_supply')}
-                  onValueChange={(values: any) => {
-                    setOffchainValue('token_total_supply', values.floatValue);
-                  }}
-                  required
-                  control={offchainController}
-                  label={PoolInputLabel.token_total_supply}
-                  name="token_total_supply"
-                  isError={Boolean(offchainError?.token_total_supply)}
-                  errorMessage={offchainError?.token_total_supply?.message}
-                  inputProps={{ readOnly: true }}
-                />
               </Grid>
 
               {toggleEditMode && (
@@ -1041,7 +1068,7 @@ const UpdatePool: React.FC = () => {
               {getValuesOnchain('voting_phase_is_active') && (
                 <Grid item container className={classes.formItem}>
                   <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                    <DateInput
+                    <DateInputV2
                       required
                       control={onchainController}
                       disabled={
@@ -1053,16 +1080,15 @@ const UpdatePool: React.FC = () => {
                       label={PoolInputLabel.voting_start}
                       isError={Boolean(onchainError.voting_start)}
                       errorMessage={onchainError?.voting_start?.message}
+                      tooltipHelp={PoolInputLabel.voting_start_tooltip}
                     />
                   </Grid>
                   <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                    <DateInput
+                    <DateInputV2
                       required
                       control={onchainController}
                       name="voting_end"
-                      label={`${PoolInputLabel.voting_end_1}${getValuesOnchain(
-                        'max_voting_days'
-                      )}${PoolInputLabel.voting_end_2}`}
+                      label={PoolInputLabel.voting_end_1}
                       isError={Boolean(onchainError?.voting_end)}
                       errorMessage={onchainError?.voting_end?.message}
                       disabled={
@@ -1070,6 +1096,11 @@ const UpdatePool: React.FC = () => {
                           getValuesOnchain('current_voting_end')
                         ).getTime() < Date.now()
                       }
+                      tooltipHelp={`${
+                        PoolInputLabel.voting_end_1_tooltip
+                      }${getValuesOnchain('max_voting_days')}${
+                        PoolInputLabel.voting_end_2_tooltip
+                      }`}
                     />
                   </Grid>
                 </Grid>
@@ -1077,7 +1108,7 @@ const UpdatePool: React.FC = () => {
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <DateInput
+                  <DateInputV2
                     required
                     control={onchainController}
                     name="join_pool_start"
@@ -1085,10 +1116,11 @@ const UpdatePool: React.FC = () => {
                     isError={Boolean(onchainError.join_pool_start)}
                     errorMessage={onchainError?.join_pool_start?.message}
                     disabled={getValuesOnchain('is_active')}
+                    tooltipHelp={PoolInputLabel.join_pool_start_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <DateInput
+                  <DateInputV2
                     required
                     control={onchainController}
                     name="join_pool_end"
@@ -1096,12 +1128,16 @@ const UpdatePool: React.FC = () => {
                     isError={Boolean(onchainError?.join_pool_end)}
                     errorMessage={onchainError?.join_pool_end?.message}
                     disabled={getValuesOnchain('is_active')}
+                    tooltipHelp={PoolInputLabel.join_pool_end_tooltip}
                   />
                 </Grid>
               </Grid>
               <Grid item container className={classes.formItem}>
-                <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <DateInput
+                <Grid
+                  item
+                  style={{ flex: 1 /* , marginRight: theme.spacing(1) */ }}
+                >
+                  <DateInputV2
                     required
                     control={onchainController}
                     name="claim_at"
@@ -1109,6 +1145,7 @@ const UpdatePool: React.FC = () => {
                     disabled={getValuesOnchain('is_active')}
                     isError={Boolean(onchainError?.claim_at)}
                     errorMessage={onchainError?.claim_at?.message}
+                    tooltipHelp={PoolInputLabel.claim_at_tooltip}
                   />
                 </Grid>
               </Grid>
@@ -1116,9 +1153,9 @@ const UpdatePool: React.FC = () => {
                 <Grid
                   item
                   style={{ flex: 1, marginRight: theme.spacing(1) }}
-                  xs={6}
+                  // xs={6}
                 >
-                  <NumberInput
+                  <NumberInputV2
                     onChange={() => onchainTrigger('max_allocation_all_phases')}
                     onValueChange={(values: any) => {
                       setOnchainValue(
@@ -1137,12 +1174,20 @@ const UpdatePool: React.FC = () => {
                       onchainError?.max_allocation_all_phases?.message
                     }
                     inputProps={{ readOnly: getValuesOnchain('is_active') }}
+                    tooltipHelp={
+                      PoolInputLabel.max_allocation_all_phases_tooltip
+                    }
                   />
                 </Grid>
+                <Grid
+                  item
+                  style={{ flex: 1, marginRight: theme.spacing(1) }}
+                  // xs={6}
+                ></Grid>
               </Grid>
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <CheckBoxInput
+                  <CheckBoxInputV2
                     control={onchainController}
                     label={PoolInputLabel.early_phase_is_active}
                     name="early_phase_is_active"
@@ -1161,12 +1206,13 @@ const UpdatePool: React.FC = () => {
                         setOnchainValue('fcfs_stake_phase_is_active', false);
                       }
                     }}
+                    tooltipHelp={PoolInputLabel.early_phase_is_active_tooltip}
                   />
                 </Grid>
 
                 {getValuesOnchain('early_phase_is_active') && (
-                  <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                    <NumberInput
+                  <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                    <NumberInputV2
                       onChange={() => onchainTrigger('early_join_duration')}
                       onValueChange={(values: any) => {
                         setOnchainValue(
@@ -1187,7 +1233,7 @@ const UpdatePool: React.FC = () => {
 
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
                   {getValuesOnchain('early_phase_is_active') && (
-                    <NumberInput
+                    <NumberInputV2
                       onChange={() =>
                         onchainTrigger('early_phase_max_total_alloc')
                       }
@@ -1217,7 +1263,7 @@ const UpdatePool: React.FC = () => {
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <CheckBoxInput
+                  <CheckBoxInputV2
                     control={onchainController}
                     label={PoolInputLabel.exclusive_phase_is_active}
                     name="exclusive_phase_is_active"
@@ -1241,11 +1287,14 @@ const UpdatePool: React.FC = () => {
                         event.target.checked
                       );
                     }}
+                    tooltipHelp={
+                      PoolInputLabel.exclusive_phase_is_active_tooltip
+                    }
                   />
                 </Grid>
                 {getValuesOnchain('exclusive_phase_is_active') && (
-                  <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                    <NumberInput
+                  <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
+                    <NumberInputV2
                       onChange={() => onchainTrigger('exclusive_join_duration')}
                       onValueChange={(values: any) => {
                         setOnchainValue(
@@ -1266,7 +1315,7 @@ const UpdatePool: React.FC = () => {
                 )}
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
                   {getValuesOnchain('exclusive_phase_is_active') && (
-                    <NumberInput
+                    <NumberInputV2
                       onChange={() =>
                         onchainTrigger('exclusive_phase_max_total_alloc')
                       }
@@ -1296,7 +1345,7 @@ const UpdatePool: React.FC = () => {
               {isRequreidExclusivePhaseMaxTotalAlloc && (
                 <Grid item container className={classes.formItem}>
                   <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                    <CheckBoxInput
+                    <CheckBoxInputV2
                       control={onchainController}
                       label={PoolInputLabel.fcfs_stake_phase_is_active}
                       name="fcfs_stake_phase_is_active"
@@ -1311,6 +1360,9 @@ const UpdatePool: React.FC = () => {
                           event.target.checked
                         );
                       }}
+                      tooltipHelp={
+                        PoolInputLabel.fcfs_stake_phase_is_active_tooltip
+                      }
                     />
                   </Grid>
                   {isRequreidFcfsStakePhaseMaxTotalAlloc && (
@@ -1319,7 +1371,7 @@ const UpdatePool: React.FC = () => {
                         item
                         style={{ flex: 1, marginRight: theme.spacing(1) }}
                       >
-                        <NumberInput
+                        <NumberInputV2
                           onChange={() => onchainTrigger('fcfs_stake_duration')}
                           onValueChange={(values: any) => {
                             setOnchainValue(
@@ -1344,7 +1396,7 @@ const UpdatePool: React.FC = () => {
                         item
                         style={{ flex: 1, marginLeft: theme.spacing(1) }}
                       >
-                        <NumberInput
+                        <NumberInputV2
                           onChange={() =>
                             onchainTrigger(
                               'fcfs_stake_phase_multiplication_rate'
@@ -1381,7 +1433,7 @@ const UpdatePool: React.FC = () => {
 
               <Grid item container className={classes.formItem}>
                 <Grid item style={{ flex: 1, marginRight: theme.spacing(1) }}>
-                  <NumberInput
+                  <NumberInputV2
                     onChange={() => onchainTrigger('token_ratio')}
                     onValueChange={(values: any) => {
                       setOnchainValue('token_ratio', values.floatValue);
@@ -1393,10 +1445,11 @@ const UpdatePool: React.FC = () => {
                     isError={Boolean(onchainError?.token_ratio)}
                     errorMessage={onchainError?.token_ratio?.message}
                     inputProps={{ readOnly: getValuesOnchain('is_active') }}
+                    tooltipHelp={PoolInputLabel.token_ratio_tooltip}
                   />
                 </Grid>
                 <Grid item style={{ flex: 1, marginLeft: theme.spacing(1) }}>
-                  <Input
+                  <InputV2
                     required
                     disabled
                     control={offchainController}
@@ -1405,17 +1458,18 @@ const UpdatePool: React.FC = () => {
                     isError={Boolean(offchainError?.token_to)}
                     errorMessage={offchainError?.token_to?.message}
                     select
+                    tooltipHelp={PoolInputLabel.token_to_tooltip}
                   >
                     {supportedTokens.map((dialect) => (
                       <MenuItem key={dialect.value} value={dialect.value}>
                         {dialect.label}
                       </MenuItem>
                     ))}
-                  </Input>
+                  </InputV2>
                 </Grid>
               </Grid>
               <Grid item container className={classes.formItem}>
-                <NumberInput
+                <NumberInputV2
                   onChange={() =>
                     onchainTrigger('public_phase_max_individual_alloc')
                   }
@@ -1438,6 +1492,9 @@ const UpdatePool: React.FC = () => {
                     onchainError?.public_phase_max_individual_alloc?.message
                   }
                   inputProps={{ readOnly: getValuesOnchain('is_active') }}
+                  tooltipHelp={
+                    PoolInputLabel.public_phase_max_individual_alloc_tooltip
+                  }
                 />
               </Grid>
               <Grid item container className={classes.formItem}>

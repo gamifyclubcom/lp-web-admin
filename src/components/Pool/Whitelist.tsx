@@ -18,7 +18,12 @@ import MaterialTable, { Column } from 'material-table';
 import { useState, useRef } from 'react';
 import * as poolAPI from '../../api/pool';
 import { materialTableConfig } from '../../config';
-import { useAlert, useConnection, useLocalization } from '../../hooks';
+import {
+  useAlert,
+  useConnection,
+  useLocalization,
+  useSmartContract,
+} from '../../hooks';
 import * as Types from '../../types';
 import { WhitelistUsers } from '../../types';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -47,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
   const theme = useTheme();
   const { materialTable } = useLocalization();
+  const { handleOnchainError } = useSmartContract();
   const { wallet, connected, connect, publicKey, signTransaction } =
     useWallet();
   const { connection } = useConnection();
@@ -143,9 +149,9 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
 
       preventInteractions(false);
     } catch (e) {
-      alertError('Something went wrong. Please try again');
       preventInteractions(false);
       console.log(e);
+      handleOnchainError(e);
     } finally {
       tableRef.current && tableRef.current.onQueryChange();
     }
@@ -222,7 +228,8 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
             'Exist at least address is wrong format. Please check and try again.'
           );
         }
-        return alertError('Something went wrong. Please try again later.');
+        handleOnchainError(e);
+        // return alertError('Something went wrong. Please try again later.');
       }
     }
 
@@ -252,10 +259,10 @@ const Whitelist: React.FC<Props> = ({ whitelistedUsers, poolId, pool }) => {
       preventInteractions(false);
       setOpenDialog(false);
     } catch (e) {
-      alertError('Something went wrong. Please try again');
       preventInteractions(false);
       setOpenDialog(false);
       console.log(e);
+      handleOnchainError(e);
     } finally {
       tableRef.current && tableRef.current.onQueryChange();
       setIsLoading(false);

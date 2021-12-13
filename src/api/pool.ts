@@ -205,7 +205,7 @@ export const fetchParticipants = (
 };
 
 export const exportJoinedUsersList = async (poolAddress: string) => {
-  return axios.get(`admin/pools/export-join-pool-history/${poolAddress}`);
+  return axios.get(`pool-participants/export/${poolAddress}`);
 };
 
 const tranformData = (data: any) => {

@@ -62,6 +62,8 @@ const CreatePool = () => {
       poolData.pool_token_x = poolTokenXAccount.publicKey.toBase58();
       poolData.pool_token_y = poolTokenYAccount.publicKey.toBase58();
       poolData.payer = payerPub.toBase58();
+
+      await sleep(5000);
       const result = await poolAPI.commitCreatePool(poolData);
 
       if (!result.success) {

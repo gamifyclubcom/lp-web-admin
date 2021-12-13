@@ -41,4 +41,48 @@ export const PoolInputLabel = {
   voting_start: 'Voting time start',
   voting_end_1: 'Voting time end (no more than ',
   voting_end_2: ' days)',
+  root_admin_tooltip:
+    'This field is automatically filled with the address of Admin',
+  voting_start_tooltip: 'Time that the pool becomes ready to start voting',
+  voting_end_1_tooltip: 'Time that the pool voting finishs (no more than ',
+  voting_end_2_tooltip: ' days since voting time start)',
+  join_pool_start_tooltip: 'Time that the users can start joining the pool',
+  join_pool_end_tooltip:
+    'The last time that the users can join the pool. Pool closes after this time',
+  claim_at_tooltip: 'Time that customers can start their claim',
+  max_allocation_all_phases_tooltip:
+    'The total value of coins raised during the pool',
+  claimable_percentage_tooltip:
+    'Percentage that the user can claim the first time. Set 0% for "Manual Distribution"',
+  exclusive_phase_is_active_tooltip: 'A round where token holders can stake.',
+  early_phase_is_active_tooltip:
+    'A round where creator give access only to selected addresses',
+  fcfs_stake_phase_is_active_tooltip:
+    'A round where the pool will open with First Come First Served method to the public.',
+  token_ratio_tooltip: 'The exchange rate for tokens',
+  token_to_tooltip: 'The unit for exchange',
+  public_phase_max_individual_alloc_tooltip:
+    'The maximum size a user can contribution',
+  logo_tooltip:
+    'A symbol represents the pool (the image needs to be 100KB or more)',
+  thumbnail_tooltip: 'A snapshot for preview which helps recognize the pool',
+  name_tooltip: 'A title represents the pool',
+  tag_line_tooltip: 'A short description for the pool',
+  website_tooltip: 'Link to the pool website',
+  token_economic_tooltip: 'Link to the economy of the token',
+  twitter_tooltip:
+    'Twitter link for addition contact & info of the pool creator',
+  medium_tooltip: 'Medium link for addition contact & info of the pool creator',
+  telegram_tooltip:
+    'Telegram link for addition contact & info of the pool creator',
+  pool_start_tooltip: 'Time which the pool info start showing on system',
+  description_tooltip: 'A detailed representation for the pool',
+  token_address_tooltip:
+    'Address location of the actual token contract that manages the logic for the tokens',
+  token_name_tooltip: 'The word to identify the token',
+  token_symbol_tooltip: 'The symbol by which the token contract would be known',
+  token_decimals_tooltip:
+    'The number of digits that come after the decimal place when displaying token',
+  token_total_supply_tooltip:
+    'Total amount of tokens in existence at the moment',
 };
