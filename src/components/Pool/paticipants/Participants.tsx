@@ -49,6 +49,39 @@ export const PoolParticipants: React.FC<Props> = ({
   const [poolData, setPoolData] = useState<Partial<IPoolV4ContractData>>({});
   const [tokenToDecimal, setTokenToDecimal] = useState(0);
   const [blockTime, setBlockTime] = useState(0);
+  const [verifyParticipantsProgress, setVerifyParticipantsProgress] = useState<
+    number | null
+  >(null);
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      if (!pool || !pool.contract_address) {
+        return;
+      }
+      try {
+        const progressResult: any = await poolAPI.verifyParticipantsProgress(
+          pool.contract_address
+        );
+        if (progressResult && progressResult.progress) {
+          setVerifyParticipantsProgress(progressResult.progress);
+        } else {
+          setVerifyParticipantsProgress(null);
+        }
+      } catch (err) {
+        setVerifyParticipantsProgress(null);
+      }
+    };
+
+    fetchProgress();
+
+    const interval = setInterval(() => {
+      fetchProgress();
+    }, 5 * 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const canExportParticipants = useMemo(() => {
     return moment
@@ -249,16 +282,29 @@ After downloading this file you must:
           </div>
           <Grid container justifyContent="center">
             {canExportParticipants ? (
-              <Button
-                size="large"
-                variant="contained"
-                color="primary"
-                style={{ margin: theme.spacing(2) }}
-                disabled={loading}
-                onClick={() => handleExport(pool?.contract_address as string)}
-              >
-                {loading ? 'Loading' : 'Export joined users list'}
-              </Button>
+              verifyParticipantsProgress &&
+              verifyParticipantsProgress === 100 ? (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  style={{ margin: theme.spacing(2) }}
+                  disabled={loading}
+                  onClick={() => handleExport(pool?.contract_address as string)}
+                >
+                  {loading ? 'Loading' : 'Export joined users list'}
+                </Button>
+              ) : (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  style={{ margin: theme.spacing(2) }}
+                  disabled
+                >
+                  {`Verifying... ${verifyParticipantsProgress}%`}
+                </Button>
+              )
             ) : (
               <Grid
                 container
