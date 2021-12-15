@@ -99,6 +99,24 @@ export type PoolOffchain = {
   audit_link?: string;
   liquidity_percentage?: number;
   claimable_percentage?: number;
+  flags?: {
+    /**
+     * Check pool ready join or not
+     * got this from pool version 4 or greater
+     * by pass if pool voting time is already ended and absolute vote (total vote up - total vote down > min vote)
+     */
+    is_ready?: boolean;
+
+    /**
+     * Check pool is finalize participants or not
+     */
+    is_finalize_participants?: boolean;
+
+    /**
+     * Check cron finalize participants is running or not
+     */
+    is_cron_running?: boolean;
+  };
 };
 
 export type PoolOnchain = {

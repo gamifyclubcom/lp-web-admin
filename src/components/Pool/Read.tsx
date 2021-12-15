@@ -50,6 +50,7 @@ const ReadPool: React.FC = () => {
   const [title, setTitle] = useState('');
   const [hideConfirm, setHideConfirm] = useState(false);
   const [cancelDialogText, setCancelDialogText] = useState('Cancel');
+  const [isVerified, setIsVerified] = useState<boolean>(false);
   const { wallet, connected, publicKey, connect, signTransaction } =
     useWallet();
   const { connection } = useConnection();
@@ -66,7 +67,7 @@ const ReadPool: React.FC = () => {
   }, [pool?.early_phase_is_active]);
   const poolWithdrawIndex = useMemo(() => {
     if (poolWhitelistIndex) {
-      return poolWhitelistIndex;
+      return poolWhitelistIndex + 1;
     }
 
     return poolInfoIndex + 1;
@@ -102,6 +103,27 @@ const ReadPool: React.FC = () => {
     return null;
   }, [pool, poolTimingIndex]);
 
+  useEffect(() => {
+    const fetchVerifiedInfo = async () => {
+      try {
+        if (!isVerified) {
+          const data = await api.fetchPool(id);
+          setIsVerified(Boolean(data?.flags?.is_finalize_participants));
+        }
+      } catch (err) {
+        setIsVerified(false);
+      }
+    };
+
+    const interval = setInterval(() => {
+      fetchVerifiedInfo();
+    }, 5 * 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   const fetchPool = async () => {
     try {
       if (!id) return;
@@ -116,6 +138,7 @@ const ReadPool: React.FC = () => {
 
       setPool(data);
       setPoolIsActive(data.is_active);
+      setIsVerified(Boolean(data?.flags?.is_finalize_participants));
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
@@ -365,6 +388,7 @@ const ReadPool: React.FC = () => {
           <PoolParticipants
             pool={pool}
             loading={loading}
+            isVerified={isVerified}
             setLoading={setLoading}
           />
         </TabPanel>

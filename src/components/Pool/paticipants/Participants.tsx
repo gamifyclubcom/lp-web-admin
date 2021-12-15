@@ -24,6 +24,7 @@ const { REACT_APP_API_BASE_URL } = envConfig;
 interface Props {
   pool?: Types.Pool;
   loading: boolean;
+  isVerified: boolean;
   setLoading: (state: boolean) => void;
 }
 
@@ -41,6 +42,7 @@ const convertTokenToSOL = (
 export const PoolParticipants: React.FC<Props> = ({
   pool,
   loading = false,
+  isVerified,
   setLoading,
 }) => {
   const theme = useTheme();
@@ -49,39 +51,6 @@ export const PoolParticipants: React.FC<Props> = ({
   const [poolData, setPoolData] = useState<Partial<IPoolV4ContractData>>({});
   const [tokenToDecimal, setTokenToDecimal] = useState(0);
   const [blockTime, setBlockTime] = useState(0);
-  const [verifyParticipantsProgress, setVerifyParticipantsProgress] = useState<
-    number | null
-  >(null);
-
-  useEffect(() => {
-    const fetchProgress = async () => {
-      if (!pool || !pool.contract_address) {
-        return;
-      }
-      try {
-        const progressResult: any = await poolAPI.verifyParticipantsProgress(
-          pool.contract_address
-        );
-        if (progressResult && progressResult.progress) {
-          setVerifyParticipantsProgress(progressResult.progress);
-        } else {
-          setVerifyParticipantsProgress(null);
-        }
-      } catch (err) {
-        setVerifyParticipantsProgress(null);
-      }
-    };
-
-    fetchProgress();
-
-    const interval = setInterval(() => {
-      fetchProgress();
-    }, 5 * 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   const canExportParticipants = useMemo(() => {
     return moment
@@ -282,8 +251,7 @@ After downloading this file you must:
           </div>
           <Grid container justifyContent="center">
             {canExportParticipants ? (
-              verifyParticipantsProgress &&
-              verifyParticipantsProgress === 100 ? (
+              isVerified ? (
                 <Button
                   size="large"
                   variant="contained"
@@ -302,7 +270,7 @@ After downloading this file you must:
                   style={{ margin: theme.spacing(2) }}
                   disabled
                 >
-                  {`Verifying... ${verifyParticipantsProgress}%`}
+                  {`Verifying...`}
                 </Button>
               )
             ) : (
