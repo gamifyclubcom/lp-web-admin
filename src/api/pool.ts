@@ -208,6 +208,10 @@ export const exportJoinedUsersList = async (poolAddress: string) => {
   return axios.get(`pool-participants/export/${poolAddress}`);
 };
 
+export const verifyParticipantsProgress = async (poolAddress: string) => {
+  return axios.get(`pool-participants/verify-progress/${poolAddress}`);
+};
+
 const tranformData = (data: any) => {
   return {
     ...data,

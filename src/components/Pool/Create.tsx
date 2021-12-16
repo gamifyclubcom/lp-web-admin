@@ -57,13 +57,13 @@ const CreatePool = () => {
         skipPreflight: false,
         preflightCommitment: 'confirmed',
       });
-      await sleep(2000);
+      await sleep(7000);
       poolData.pool_account = poolAccount.publicKey.toString();
       poolData.pool_token_x = poolTokenXAccount.publicKey.toBase58();
       poolData.pool_token_y = poolTokenYAccount.publicKey.toBase58();
       poolData.payer = payerPub.toBase58();
 
-      await sleep(5000);
+      await sleep(7000);
       const result = await poolAPI.commitCreatePool(poolData);
 
       if (!result.success) {

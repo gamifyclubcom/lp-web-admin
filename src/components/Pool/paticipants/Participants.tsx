@@ -24,6 +24,7 @@ const { REACT_APP_API_BASE_URL } = envConfig;
 interface Props {
   pool?: Types.Pool;
   loading: boolean;
+  isVerified: boolean;
   setLoading: (state: boolean) => void;
 }
 
@@ -41,6 +42,7 @@ const convertTokenToSOL = (
 export const PoolParticipants: React.FC<Props> = ({
   pool,
   loading = false,
+  isVerified,
   setLoading,
 }) => {
   const theme = useTheme();
@@ -249,16 +251,28 @@ After downloading this file you must:
           </div>
           <Grid container justifyContent="center">
             {canExportParticipants ? (
-              <Button
-                size="large"
-                variant="contained"
-                color="primary"
-                style={{ margin: theme.spacing(2) }}
-                disabled={loading}
-                onClick={() => handleExport(pool?.contract_address as string)}
-              >
-                {loading ? 'Loading' : 'Export joined users list'}
-              </Button>
+              isVerified ? (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  style={{ margin: theme.spacing(2) }}
+                  disabled={loading}
+                  onClick={() => handleExport(pool?.contract_address as string)}
+                >
+                  {loading ? 'Loading' : 'Export joined users list'}
+                </Button>
+              ) : (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  style={{ margin: theme.spacing(2) }}
+                  disabled
+                >
+                  {`Verifying...`}
+                </Button>
+              )
             ) : (
               <Grid
                 container

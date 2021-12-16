@@ -1,6 +1,6 @@
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import * as api from '../../api/pool';
 import ServerError from '../../components/Error/ServerError';
@@ -50,11 +50,80 @@ const ReadPool: React.FC = () => {
   const [title, setTitle] = useState('');
   const [hideConfirm, setHideConfirm] = useState(false);
   const [cancelDialogText, setCancelDialogText] = useState('Cancel');
+  const [isVerified, setIsVerified] = useState<boolean>(false);
   const { wallet, connected, publicKey, connect, signTransaction } =
     useWallet();
   const { connection } = useConnection();
 
   const { id }: URLParams = useParams();
+
+  const poolInfoIndex = useMemo(() => 0, []);
+  const poolWhitelistIndex = useMemo(() => {
+    if (Boolean(pool?.early_phase_is_active)) {
+      return 1;
+    }
+
+    return null;
+  }, [pool?.early_phase_is_active]);
+  const poolWithdrawIndex = useMemo(() => {
+    if (poolWhitelistIndex) {
+      return poolWhitelistIndex + 1;
+    }
+
+    return poolInfoIndex + 1;
+  }, [poolWhitelistIndex, poolInfoIndex]);
+  const poolAllocationIndex = useMemo(() => {
+    if (Boolean(pool?.exclusive_phase_is_active)) {
+      return poolWithdrawIndex + 1;
+    }
+
+    return null;
+  }, [poolWithdrawIndex, pool?.exclusive_phase_is_active]);
+  const poolTimingIndex = useMemo(() => {
+    if (poolIsActive) {
+      if (poolAllocationIndex) {
+        return poolAllocationIndex + 1;
+      }
+
+      return poolWithdrawIndex + 1;
+    }
+
+    return null;
+  }, [poolIsActive, poolAllocationIndex, poolWithdrawIndex]);
+  const poolParticipantsIndex = useMemo(() => {
+    if (
+      pool &&
+      pool.is_active &&
+      new Date() >= new Date(pool.join_pool_start) &&
+      poolTimingIndex
+    ) {
+      return poolTimingIndex + 1;
+    }
+
+    return null;
+  }, [pool, poolTimingIndex]);
+
+  useEffect(() => {
+    const fetchVerifiedInfo = async () => {
+      try {
+        if (!isVerified) {
+          const data = await api.fetchPool(id);
+          setIsVerified(Boolean(data?.flags?.is_finalize_participants));
+        }
+      } catch (err) {
+        setIsVerified(false);
+      }
+    };
+
+    const interval = setInterval(() => {
+      fetchVerifiedInfo();
+    }, 5 * 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   const fetchPool = async () => {
     try {
       if (!id) return;
@@ -69,6 +138,7 @@ const ReadPool: React.FC = () => {
 
       setPool(data);
       setPoolIsActive(data.is_active);
+      setIsVerified(Boolean(data?.flags?.is_finalize_participants));
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
@@ -258,23 +328,23 @@ const ReadPool: React.FC = () => {
           onChange={handleChange}
           aria-label="simple tabs example"
         >
-          <Tab label="POOL INFORMATION" {...a11yProps(0)} />
-          {pool?.early_phase_is_active && (
-            <Tab label="WHITELIST" {...a11yProps(1)} />
+          <Tab label="POOL INFORMATION" {...a11yProps(poolInfoIndex)} />
+          {poolWhitelistIndex && (
+            <Tab label="WHITELIST" {...a11yProps(poolWhitelistIndex)} />
           )}
-          <Tab label="WITHDRAWAL" {...a11yProps(2)} />
-          {pool?.exclusive_phase_is_active && (
-            <Tab label="ALLOCATION" {...a11yProps(2)} />
+          <Tab label="WITHDRAWAL" {...a11yProps(poolWithdrawIndex)} />
+          {poolAllocationIndex && (
+            <Tab label="ALLOCATION" {...a11yProps(poolAllocationIndex)} />
           )}
-          {poolIsActive && <Tab label="POOL TIMING" {...a11yProps(3)} />}
-          {pool &&
-            pool.is_active &&
-            new Date() >= new Date(pool.join_pool_start) && (
-              <Tab label="PARTICIPANTS" {...a11yProps(4)} />
-            )}
+          {poolTimingIndex && (
+            <Tab label="POOL TIMING" {...a11yProps(poolTimingIndex)} />
+          )}
+          {poolParticipantsIndex && (
+            <Tab label="PARTICIPANTS" {...a11yProps(poolParticipantsIndex)} />
+          )}
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={value} index={poolInfoIndex}>
         <Pool
           pool={pool}
           submitBtnText="Edit"
@@ -288,22 +358,22 @@ const ReadPool: React.FC = () => {
           handleSnapshot={handleSnapshot}
         />
       </TabPanel>
-      {pool?.early_phase_is_active && (
-        <TabPanel value={value} index={1}>
+      {poolWhitelistIndex && (
+        <TabPanel value={value} index={poolWhitelistIndex}>
           <Whitelist whitelistedUsers={[]} poolId={id} pool={pool} />
         </TabPanel>
       )}
 
-      <TabPanel value={value} index={pool?.early_phase_is_active ? 2 : 1}>
+      <TabPanel value={value} index={poolWithdrawIndex}>
         <PoolWithdrawal pool={pool} setLoading={setLoading} />
       </TabPanel>
-      {pool?.exclusive_phase_is_active && (
-        <TabPanel value={value} index={2}>
+      {poolAllocationIndex && (
+        <TabPanel value={value} index={poolAllocationIndex}>
           <PoolTiers pool={pool} />
         </TabPanel>
       )}
-      {poolIsActive && (
-        <TabPanel value={value} index={3}>
+      {poolTimingIndex && (
+        <TabPanel value={value} index={poolTimingIndex}>
           <PoolTiming
             pool={pool}
             loading={loading}
@@ -313,11 +383,12 @@ const ReadPool: React.FC = () => {
           />
         </TabPanel>
       )}
-      {pool && pool.is_active && new Date() >= new Date(pool.join_pool_start) && (
-        <TabPanel value={value} index={4}>
+      {poolParticipantsIndex && (
+        <TabPanel value={value} index={poolParticipantsIndex}>
           <PoolParticipants
             pool={pool}
             loading={loading}
+            isVerified={isVerified}
             setLoading={setLoading}
           />
         </TabPanel>
