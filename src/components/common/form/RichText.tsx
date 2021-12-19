@@ -27,8 +27,8 @@ Object.assign(myTheme, {
         height: '100%',
       },
       toolbar: {
-        width: '100%',
-        height: 'auto',
+        width: '100% !important',
+        height: 'auto !important',
       },
     },
   },
