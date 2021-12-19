@@ -26,6 +26,10 @@ Object.assign(myTheme, {
         bottom: 0,
         height: '100%',
       },
+      toolbar: {
+        width: '100%',
+        height: 'auto',
+      },
     },
   },
 });
