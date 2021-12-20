@@ -764,6 +764,7 @@ const Pool: React.FC<Props> = ({
                   isError={Boolean(errors?.description)}
                   errorMessage={errors?.description?.message}
                   tooltipHelp={PoolInputLabel.description_tooltip}
+                  defaultValue={getValues('description')}
                   onChange={(event) => {
                     setValue(
                       'description',
