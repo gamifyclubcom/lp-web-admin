@@ -24,7 +24,7 @@ Object.assign(myTheme, {
       placeHolder: {
         position: 'absolute',
         bottom: 0,
-        height: '100%',
+        height: '100% !important',
       },
       toolbar: {
         width: '100% !important',
