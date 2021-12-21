@@ -3,13 +3,11 @@ import { Control, Controller } from 'react-hook-form';
 import { TextFieldProps } from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import MUIRichTextEditor from 'mui-rte';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createMuiTheme, ThemeProvider } from '@mui/material/styles';
 
-const myTheme = createTheme({
-  // Set up your custom MUI theme here
-});
+const defaultTheme = createMuiTheme();
 
-Object.assign(myTheme, {
+Object.assign(defaultTheme, {
   overrides: {
     MUIRichTextEditor: {
       root: {
@@ -117,7 +115,7 @@ const RichText: React.FC<Props & TextFieldProps> = ({
               ) : null}
             </InputLabel>
 
-            <ThemeProvider theme={myTheme}>
+            <ThemeProvider theme={defaultTheme}>
               <MUIRichTextEditor
                 inlineToolbar={true}
                 error={isError}
