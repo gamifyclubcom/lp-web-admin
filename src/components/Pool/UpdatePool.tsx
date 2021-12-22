@@ -922,6 +922,7 @@ const UpdatePool: React.FC = () => {
                   errorMessage={offchainError?.description?.message}
                   tooltipHelp={PoolInputLabel.description_tooltip}
                   defaultValue={getValuesOffchain('description')}
+                  key={Math.floor(Math.random() * 3)}
                   onEditorStateChange={(editorState: EditorState) => {
                     setOffchainValue(
                       'description',

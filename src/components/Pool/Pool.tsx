@@ -765,6 +765,7 @@ const Pool: React.FC<Props> = ({
                   errorMessage={errors?.description?.message}
                   tooltipHelp={PoolInputLabel.description_tooltip}
                   defaultValue={getValues('description')}
+                  key={Math.floor(Math.random() * 3)}
                   onEditorStateChange={(editorState: EditorState) => {
                     setValue(
                       'description',

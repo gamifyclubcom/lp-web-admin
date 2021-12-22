@@ -2,38 +2,9 @@ import { Control, Controller } from 'react-hook-form';
 
 import { TextFieldProps } from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
-import MUIRichTextEditor from 'mui-rte';
-import { createMuiTheme, ThemeProvider } from '@mui/material/styles';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-
-/* const defaultTheme = createMuiTheme();
-
-Object.assign(defaultTheme, {
-  overrides: {
-    MUIRichTextEditor: {
-      root: {
-        minHeight: '120px',
-        border: '1px solid rgba(0, 0, 0, 0.23)',
-        borderRadius: 4,
-      },
-      editor: {
-        minHeight: '120px',
-        padding: '0 14px 18.5px 20px',
-      },
-      placeHolder: {
-        position: 'absolute',
-        bottom: 0,
-        height: '100% !important',
-      },
-      toolbar: {
-        width: '100% !important',
-        height: 'auto !important',
-      },
-    },
-  },
-}); */
 
 type Props = {
   control: Control | any;
@@ -114,7 +85,6 @@ const RichText: React.FC<Props & TextFieldProps> = ({
         /* const onEditorStateChange = (editorState: EditorState) => {
           onChange(JSON.stringify(convertToRaw(editorState.getCurrentContent())))
         }; */
-
         return (
           <>
             <InputLabel htmlFor={name}>
@@ -176,31 +146,6 @@ const RichText: React.FC<Props & TextFieldProps> = ({
               }}
               editorStyle={{ padding: '0 14px 18.5px', minHeight: 120 }}
             />
-            {/* <ThemeProvider theme={myTheme}>
-              <MUIRichTextEditor
-                inlineToolbar={true}
-                error={isError}
-                readOnly={readOnly}
-                defaultValue={defaultValueFormat}
-                onChange={onChange}
-              />
-            </ThemeProvider> */}
-
-            {/* <TextField
-              type={type}
-
-              fullWidth={fullWidth}
-              variant={variant}
-              autoComplete="off"
-              error={isError}
-              helperText={errorMessage}
-              id={name}
-              InputProps={{
-                endAdornment: endIcon,
-                startAdornment: startIcon,
-              }}
-              {...{ ...field, ...rest }}
-            /> */}
           </>
         );
       }}
