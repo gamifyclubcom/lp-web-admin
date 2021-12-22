@@ -37,6 +37,8 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import NumberInput from '../common/form/NumberFormatInput';
 import NumberInputV2 from '../common/form/NumberFormatInputV2';
 import { Actions } from '@gamify/onchain-program-sdk';
+import { convertToRaw, EditorState } from 'draft-js';
+import RichText from '../common/form/RichText';
 
 type FormValues = Types.Pool & { is_checked_fee_information: boolean };
 
@@ -146,7 +148,7 @@ const Pool: React.FC<Props> = ({
     reValidateMode: 'onChange',
     resolver: yupResolver(poolValidator),
   });
-  console.log(' error: ', errors);
+
   const [copied, setCopied] = useState(false);
   const { alertSuccess } = useAlert();
   const onSubmit: SubmitHandler<FormValues> = (data) => {
@@ -753,16 +755,25 @@ const Pool: React.FC<Props> = ({
               </Grid>
 
               <Grid item className={classes.formItem}>
-                <InputV2
+                <RichText
                   control={control}
                   label={PoolInputLabel.description}
-                  inputProps={{ readOnly: readMode }}
+                  readOnly={readMode}
+                  // inputProps={{ readOnly: readMode }}
                   name="description"
                   isError={Boolean(errors?.description)}
                   errorMessage={errors?.description?.message}
-                  multiline
-                  rows={4}
                   tooltipHelp={PoolInputLabel.description_tooltip}
+                  defaultValue={getValues('description')}
+                  key={Math.floor(Math.random() * 3)}
+                  onEditorStateChange={(editorState: EditorState) => {
+                    setValue(
+                      'description',
+                      JSON.stringify(
+                        convertToRaw(editorState.getCurrentContent())
+                      )
+                    );
+                  }}
                 />
               </Grid>
 
