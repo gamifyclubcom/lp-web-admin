@@ -128,7 +128,6 @@ const RichText: React.FC<Props & TextFieldProps> = ({
                   'textAlign',
                   'colorPicker',
                   'link',
-                  'embedded',
                   'emoji',
                   'image',
                   'remove',
