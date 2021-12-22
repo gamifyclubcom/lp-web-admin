@@ -37,7 +37,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import NumberInput from '../common/form/NumberFormatInput';
 import NumberInputV2 from '../common/form/NumberFormatInputV2';
 import { Actions } from '@gamify/onchain-program-sdk';
-import { convertToRaw } from 'draft-js';
+import { convertToRaw, EditorState } from 'draft-js';
 import RichText from '../common/form/RichText';
 
 type FormValues = Types.Pool & { is_checked_fee_information: boolean };
@@ -765,10 +765,12 @@ const Pool: React.FC<Props> = ({
                   errorMessage={errors?.description?.message}
                   tooltipHelp={PoolInputLabel.description_tooltip}
                   defaultValue={getValues('description')}
-                  onChange={(event) => {
+                  onEditorStateChange={(editorState: EditorState) => {
                     setValue(
                       'description',
-                      JSON.stringify(convertToRaw(event.getCurrentContent()))
+                      JSON.stringify(
+                        convertToRaw(editorState.getCurrentContent())
+                      )
                     );
                   }}
                 />

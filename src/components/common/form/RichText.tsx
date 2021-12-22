@@ -4,8 +4,11 @@ import { TextFieldProps } from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import MUIRichTextEditor from 'mui-rte';
 import { createMuiTheme, ThemeProvider } from '@mui/material/styles';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertToRaw } from 'draft-js';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-const defaultTheme = createMuiTheme();
+/* const defaultTheme = createMuiTheme();
 
 Object.assign(defaultTheme, {
   overrides: {
@@ -30,7 +33,7 @@ Object.assign(defaultTheme, {
       },
     },
   },
-});
+}); */
 
 type Props = {
   control: Control | any;
@@ -45,7 +48,7 @@ type Props = {
   endIcon?: React.ReactNode;
   tooltipHelp?: string;
   readOnly: boolean;
-  onChange?: (e: any) => void;
+  onEditorStateChange?: (e: EditorState) => void;
   defaultValue?: string;
 };
 
@@ -71,7 +74,7 @@ const RichText: React.FC<Props & TextFieldProps> = ({
   startIcon,
   endIcon,
   tooltipHelp,
-  onChange,
+  onEditorStateChange,
   readOnly,
   defaultValue,
   ...rest
@@ -79,11 +82,38 @@ const RichText: React.FC<Props & TextFieldProps> = ({
   return (
     <Controller
       render={({ field }) => {
-        const defaultValueFormat = isJSON(defaultValue)
-          ? defaultValue
-          : defaultValue
-          ? `{"blocks":[{"key":"1abic","text":"${defaultValue}","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}`
-          : '';
+        const defaultValueFormat =
+          defaultValue && isJSON(defaultValue)
+            ? JSON.parse(defaultValue)
+            : defaultValue
+            ? JSON.parse(`{
+            "entityMap":{},
+            "blocks":[{
+                "key":"1ljs",
+                "text": "${defaultValue}",
+                "type":"unstyled",
+                "depth":0,
+                "inlineStyleRanges":[],
+                "entityRanges":[],
+                "data":{}
+            }]
+        }`)
+            : JSON.parse(`{
+            "entityMap":{},
+            "blocks":[{
+                "key":"1ljs",
+                "text":"",
+                "type":"unstyled",
+                "depth":0,
+                "inlineStyleRanges":[],
+                "entityRanges":[],
+                "data":{}
+            }]
+        }`);
+
+        /* const onEditorStateChange = (editorState: EditorState) => {
+          onChange(JSON.stringify(convertToRaw(editorState.getCurrentContent())))
+        }; */
 
         return (
           <>
@@ -115,7 +145,38 @@ const RichText: React.FC<Props & TextFieldProps> = ({
               ) : null}
             </InputLabel>
 
-            <ThemeProvider theme={defaultTheme}>
+            <Editor
+              defaultContentState={defaultValueFormat}
+              onEditorStateChange={onEditorStateChange}
+              readOnly={readOnly}
+              toolbar={{
+                options: [
+                  'inline',
+                  'blockType',
+                  'fontSize',
+                  'list',
+                  'textAlign',
+                  'colorPicker',
+                  'link',
+                  'embedded',
+                  'emoji',
+                  'image',
+                  'remove',
+                  'history',
+                ],
+                inline: { inDropdown: true },
+                list: { inDropdown: true },
+                textAlign: { inDropdown: true },
+                link: { inDropdown: true },
+                history: { inDropdown: true },
+              }}
+              wrapperStyle={{
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: 4,
+              }}
+              editorStyle={{ padding: '0 14px 18.5px', minHeight: 120 }}
+            />
+            {/* <ThemeProvider theme={myTheme}>
               <MUIRichTextEditor
                 inlineToolbar={true}
                 error={isError}
@@ -123,7 +184,7 @@ const RichText: React.FC<Props & TextFieldProps> = ({
                 defaultValue={defaultValueFormat}
                 onChange={onChange}
               />
-            </ThemeProvider>
+            </ThemeProvider> */}
 
             {/* <TextField
               type={type}
