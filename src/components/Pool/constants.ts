@@ -44,7 +44,7 @@ export const PoolInputLabel = {
   root_admin_tooltip:
     'This field is automatically filled with the address of Admin',
   voting_start_tooltip: 'Time that the pool becomes ready to start voting',
-  voting_end_1_tooltip: 'Time that the pool voting finishs (no more than ',
+  voting_end_1_tooltip: 'Time that the pool voting finish (no more than ',
   voting_end_2_tooltip: ' days since voting time start)',
   join_pool_start_tooltip: 'Time that the users can start joining the pool',
   join_pool_end_tooltip:
@@ -53,7 +53,7 @@ export const PoolInputLabel = {
   max_allocation_all_phases_tooltip:
     'The total value of coins raised during the pool',
   claimable_percentage_tooltip:
-    'Percentage that the user can claim the first time. Set 0% for "Manual Distribution"',
+    'Percentage that the user can claim the first time.',
   exclusive_phase_is_active_tooltip: 'A round where token holders can stake.',
   early_phase_is_active_tooltip:
     'A round where creator give access only to selected addresses',
