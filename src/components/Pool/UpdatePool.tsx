@@ -57,6 +57,8 @@ import { Backdrop } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import NumberInput from '../common/form/NumberFormatInput';
 import NumberInputV2 from '../common/form/NumberFormatInputV2';
+import { convertToRaw, EditorState } from 'draft-js';
+import RichText from '../common/form/RichText';
 
 type FormOnchainValues = Types.FormOnchainValues & {
   pool_start: string;
@@ -911,15 +913,24 @@ const UpdatePool: React.FC = () => {
               </Grid>
 
               <Grid item className={classes.formItem}>
-                <InputV2
+                <RichText
                   control={offchainController}
                   label={PoolInputLabel.description}
+                  readOnly={false}
                   name="description"
                   isError={Boolean(offchainError?.description)}
                   errorMessage={offchainError?.description?.message}
-                  multiline
-                  rows={4}
                   tooltipHelp={PoolInputLabel.description_tooltip}
+                  defaultValue={getValuesOffchain('description')}
+                  key={Math.floor(Math.random() * 3)}
+                  onEditorStateChange={(editorState: EditorState) => {
+                    setOffchainValue(
+                      'description',
+                      JSON.stringify(
+                        convertToRaw(editorState.getCurrentContent())
+                      )
+                    );
+                  }}
                 />
               </Grid>
 
