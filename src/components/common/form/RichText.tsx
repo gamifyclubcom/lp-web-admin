@@ -53,34 +53,70 @@ const RichText: React.FC<Props & TextFieldProps> = ({
   return (
     <Controller
       render={({ field }) => {
-        const defaultValueFormat =
-          defaultValue && isJSON(defaultValue)
-            ? JSON.parse(defaultValue)
-            : defaultValue
-            ? JSON.parse(`{
-            "entityMap":{},
-            "blocks":[{
-                "key":"1ljs",
-                "text": "${defaultValue}",
-                "type":"unstyled",
-                "depth":0,
-                "inlineStyleRanges":[],
-                "entityRanges":[],
-                "data":{}
-            }]
-        }`)
-            : JSON.parse(`{
-            "entityMap":{},
-            "blocks":[{
-                "key":"1ljs",
-                "text":"",
-                "type":"unstyled",
-                "depth":0,
-                "inlineStyleRanges":[],
-                "entityRanges":[],
-                "data":{}
-            }]
-        }`);
+        let defaultValueFormat: any;
+        if (defaultValue && isJSON(defaultValue)) {
+          defaultValueFormat = JSON.parse(defaultValue);
+        } else if (defaultValue) {
+          defaultValueFormat = {
+            entityMap: {},
+            blocks: [
+              {
+                key: '1ljs',
+                text: defaultValue,
+                type: 'unstyled',
+                depth: 0,
+                inlineStyleRanges: [],
+                entityRanges: [],
+                data: {},
+              },
+            ],
+          };
+        } else {
+          defaultValueFormat = {
+            entityMap: {},
+            blocks: [
+              {
+                key: '1ljs',
+                text: '',
+                type: 'unstyled',
+                depth: 0,
+                inlineStyleRanges: [],
+                entityRanges: [],
+                data: {},
+              },
+            ],
+          };
+        }
+
+        // TODO: Why need JSON.parse entire object
+        // const defaultValueFormat =
+        //   defaultValue && isJSON(defaultValue)
+        //     ? JSON.parse(defaultValue)
+        //     : defaultValue
+        //     ? JSON.parse(`{
+        //     "entityMap":{},
+        //     "blocks":[{
+        //         "key":"1ljs",
+        //         "text": "${defaultValue}",
+        //         "type":"unstyled",
+        //         "depth":0,
+        //         "inlineStyleRanges":[],
+        //         "entityRanges":[],
+        //         "data":{}
+        //     }]
+        // }`)
+        //     : JSON.parse(`{
+        //     "entityMap":{},
+        //     "blocks":[{
+        //         "key":"1ljs",
+        //         "text":"",
+        //         "type":"unstyled",
+        //         "depth":0,
+        //         "inlineStyleRanges":[],
+        //         "entityRanges":[],
+        //         "data":{}
+        //     }]
+        // }`);
 
         /* const onEditorStateChange = (editorState: EditorState) => {
           onChange(JSON.stringify(convertToRaw(editorState.getCurrentContent())))
